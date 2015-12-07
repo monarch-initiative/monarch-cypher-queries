@@ -1,0 +1,15 @@
+query: |
+        MATCH (subject)-[:RO:0001000|GENO:0000222*1..2]->(genotype:genotype)-[:BFO:0000051!*]->(variant)-[:GENO:0000410!*0..1]->(object:gene)
+        WHERE (((variant:`sequence feature` AND NOT variant:gene) OR variant:`variant locus`) AND NOT variant:anonymous) OR variant:`reagent targeted gene`
+        RETURN DISTINCT
+        subject, object,
+        'model' AS subject_category,
+        'gene' AS object_category,
+        'indirect' AS qualifier
+        UNION
+        MATCH (subject)-[:RO:0001000]->(anonPerson)-[:GENO:0000222]->(genotype:genotype)-[:BFO:0000051!*]->(variant)-[:sameAs*0..1]-(variantEquivalent)-[:GENO:0000410!*0..1]->(geneEq)-[:equivalentClass*0..1]-(object:gene)		
+        RETURN DISTINCT
+        subject, object,
+        'model' AS subject_category,
+        'gene' AS object_category,
+        'indirect' AS qualifier

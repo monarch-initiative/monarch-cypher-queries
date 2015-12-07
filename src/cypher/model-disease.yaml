@@ -1,0 +1,7 @@
+query: |
+        MATCH (object:disease)<-[relation:RO:0003301]-(subject)
+        RETURN DISTINCT
+        subject, object, relation,
+        'model' AS subject_category,
+        'disease' AS object_category,
+        'direct' AS qualifier

@@ -1,0 +1,14 @@
+query: |
+        MATCH ()<-[:RO:0003301]-(subject)-[relation:GENO:0000222]->(object:genotype)
+        RETURN DISTINCT
+        subject, object, relation,
+        'model' AS subject_category,
+        'genotype' AS object_category,
+        'direct' AS qualifier
+        UNION
+        MATCH ()<-[:RO:0003301]-(subject)-[:RO:0001000]->(organism)-[:GENO:0000222]->(object:genotype)
+        RETURN DISTINCT
+        subject, object, NULL as relation,
+        'model' AS subject_category,
+        'genotype' AS object_category,
+        'indirect' AS qualifier

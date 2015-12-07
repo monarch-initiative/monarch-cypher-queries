@@ -1,0 +1,24 @@
+query: |
+        MATCH (subject)-[relation:RO:0002200|RO:0002610|RO:0002326!]->(object:disease)
+        WHERE (((subject:`sequence feature` AND NOT subject:gene) OR subject:`variant locus`) AND NOT subject:anonymous) OR subject:`reagent targeted gene`
+        RETURN DISTINCT
+        subject, object, relation,
+        'variant' AS subject_category,
+        'disease' AS object_category,
+        'direct' as qualifier
+        UNION
+        MATCH (subject)<-[:BFO:0000051!*]-(genotype:genotype)-[:RO:0002200|RO:0002610|RO:0002326!]->(object:disease)
+        WHERE (((subject:`sequence feature` AND NOT subject:gene) OR subject:`variant locus`) AND NOT subject:anonymous) OR subject:`reagent targeted gene`
+        RETURN DISTINCT
+        subject, object, NULL as relation,
+        'variant' AS subject_category,
+        'disease' AS object_category,
+        'inferred' as qualifier
+        UNION
+        MATCH (subject)<-[:BFO:0000051!*]-(genotype:genotype)<-[:RO:0001000|GENO:0000222*1..2]-(organism)-[:RO:0002200|RO:0002610|RO:0002326!]->(object:disease)
+        WHERE (((subject:`sequence feature` AND NOT subject:gene) OR subject:`variant locus`) AND NOT subject:anonymous) OR subject:`reagent targeted gene`
+        RETURN DISTINCT
+        subject, object, NULL as relation,
+        'variant' AS subject_category,
+        'disease' AS object_category,
+        'inferred' as qualifier

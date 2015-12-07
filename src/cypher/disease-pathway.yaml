@@ -1,0 +1,17 @@
+query: |
+        MATCH (subject:disease)<-[:RO:0002200|RO:0002610|RO:0002326!]-(variant)-[:GENO:0000410!*0..1]->(:gene)-[:RO:0002205*0..1]->()-[relation:RO:0002331]->(object:pathway)
+        WHERE (((variant:`sequence feature` AND NOT variant:gene) OR variant:`variant locus`) AND NOT variant:anonymous) OR variant:`reagent targeted gene`
+        RETURN DISTINCT
+        subject, object, relation,
+        'disease' AS subject_category,
+        'pathway' AS object_category,
+        'inferred' AS qualifier
+        UNION
+        MATCH (subject:disease)<-[relation:RO:0002418!]-(object:pathway)
+        RETURN DISTINCT
+        subject, object, relation,
+        'disease' AS subject_category,
+        'pathway' AS object_category,
+        'direct' AS qualifier
+
+

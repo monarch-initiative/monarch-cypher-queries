@@ -1,0 +1,8 @@
+query: |
+        MATCH (subject)-[:RO:0001000|GENO:0000222*1..2]->(genotype:genotype)-[:BFO:0000051!*]->(object)
+        WHERE (((object:`sequence feature` AND NOT object:gene) OR object:`variant locus`) AND NOT object:anonymous) OR object:`reagent targeted gene`
+        RETURN DISTINCT
+        subject, object,
+        'model' AS subject_category,
+        'variant' AS object_category,
+        'direct' AS qualifier

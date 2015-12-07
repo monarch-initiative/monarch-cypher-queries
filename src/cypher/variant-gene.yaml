@@ -1,0 +1,8 @@
+query: |
+        MATCH (subject)<-[optional:GENO:0000382*0..1]-()-[relation:GENO:0000410!]->(object:gene)
+        WHERE (((subject:`sequence feature` AND NOT subject:gene) OR subject:`variant locus`) AND NOT subject:anonymous) OR subject:`reagent targeted gene`
+        RETURN DISTINCT
+        subject, object, relation,
+        'variant' AS subject_category,
+        'gene' AS object_category,
+        'direct' AS qualifier

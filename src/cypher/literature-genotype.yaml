@@ -1,0 +1,36 @@
+query: |
+        MATCH (pub:publication)<-[:dc:source]-(association)-[r:OBAN:association_has_object|OBAN:association_has_subject]->(genotype:genotype)
+        RETURN DISTINCT
+            pub as subject,
+            genotype as object,
+            r as relation,
+            'publication' as subject_category,
+            'genotype' as object_category,
+            'direct' as qualifier
+        UNION
+        MATCH (pub:publication)-[r:IAO:0000142|IAO:0000136]->(genotype:genotype)
+        RETURN DISTINCT
+            pub as subject,
+            genotype as object,
+            r as relation,
+            'publication' as subject_category,
+            'genotype' as object_category,
+            'direct' as qualifier
+        UNION
+        MATCH (pub:publication)<-[:dc:source]-(association)-[r:OBAN:association_has_object|OBAN:association_has_subject]->(person)-[:GENO:0000222|RO:0001000*1..2]->(genotype:genotype)
+        RETURN DISTINCT
+            pub as subject,
+            genotype as object,
+            r as relation,
+            'publication' as subject_category,
+            'genotype' as object_category,
+            'indirect' as qualifier
+        UNION
+        MATCH (pub:publication)-[r:IAO:0000142|IAO:0000136]->(person)-[:GENO:0000222|RO:0001000*1..2]->(genotype:genotype)
+        RETURN DISTINCT
+            pub as subject,
+            genotype as object,
+            r as relation,
+            'publication' as subject_category,
+            'genotype' as object_category,
+            'inferred' as qualifier

@@ -1,0 +1,8 @@
+query: |
+        MATCH (object:genotype)-[relation:BFO:0000051!*]->(subject)
+        WHERE (((subject:`sequence feature` AND NOT subject:gene) OR subject:`variant locus`) AND NOT subject:anonymous) OR subject:`reagent targeted gene`
+        RETURN DISTINCT
+        subject, object, relation,
+        'variant' AS subject_category,
+        'genotype' AS object_category,
+        'inferred' AS qualifier
