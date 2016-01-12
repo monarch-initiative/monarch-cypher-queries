@@ -1,0 +1,105 @@
+graphConfiguration:
+    location: /var/scigraph-services/graph
+    neo4jConfig:
+      dump_configuration : true
+      dbms.pagecache.memory : 2G
+
+    indexedNodeProperties:
+      - label
+    exactNodeProperties:
+      - label
+
+    INJECT_CURIES
+
+ontologies:
+  - url: http://purl.obolibrary.org/obo/upheno/monarch.owl
+    reasonerConfiguration:
+      factory: org.semanticweb.elk.owlapi.ElkReasonerFactory
+      addDirectInferredEdges: true
+      addInferredEquivalences: true
+      removeUnsatisfiableClasses: true
+  - url: http://nif-crawler.neuinfo.org/monarch/ttl/mgi_test.ttl
+  - url: http://nif-crawler.neuinfo.org/monarch/ttl/panther_test.ttl
+  - url: http://nif-crawler.neuinfo.org/monarch/ttl/clinvar_test.ttl
+  - url: http://nif-crawler.neuinfo.org/monarch/ttl/ncbigene_test.ttl
+  - url: http://nif-crawler.neuinfo.org/monarch/ttl/biogrid_test.ttl
+  - url: http://nif-crawler.neuinfo.org/monarch/ttl/zfin_test.ttl
+  - url: http://nif-crawler.neuinfo.org/monarch/ttl/ctd_test.ttl
+  - url: http://nif-crawler.neuinfo.org/monarch/ttl/hpoa_test.ttl
+  - url: http://nif-crawler.neuinfo.org/monarch/ttl/omim_test.ttl
+  - url: http://nif-crawler.neuinfo.org/monarch/ttl/coriell_test.ttl
+  - url: http://nif-crawler.neuinfo.org/monarch/ttl/hgnc_test.ttl
+  - url: http://nif-crawler.neuinfo.org/monarch/ttl/kegg_test.ttl
+  - url: http://nif-crawler.neuinfo.org/monarch/ttl/impc_test.ttl
+  - url: http://nif-crawler.neuinfo.org/monarch/ttl/ucscbands_test.ttl
+  - url: http://nif-crawler.neuinfo.org/monarch/ttl/monochrom.ttl
+  - url: http://nif-crawler.neuinfo.org/monarch/ttl/eom_test.ttl
+  - url: http://nif-crawler.neuinfo.org/monarch/ttl/genereviews_test.ttl
+  - url: http://nif-crawler.neuinfo.org/monarch/ttl/ensembl_test.ttl
+  - url: http://nif-crawler.neuinfo.org/monarch/ttl/orphanet_test.ttl
+  - url: http://nif-crawler.neuinfo.org/monarch/ttl/animalqtldb_test.ttl
+
+  - url: http://biohackathon.org/resource/faldo.ttl
+  - url: http://evidenceontology.googlecode.com/svn/trunk/eco.owl
+  - url: http://purl.obolibrary.org/obo/iao.owl
+  - url: https://raw.githubusercontent.com/monarch-initiative/GENO-ontology/develop/src/ontology/geno.owl
+  - url: http://purl.obolibrary.org/obo/ero.owl
+  - url: http://purl.obolibrary.org/obo/pw.owl
+  - url: https://raw.githubusercontent.com/jamesmalone/OBAN/master/ontology/oban_core.ttl
+  # clo.owl is missing and import
+  #- url: http://purl.obolibrary.org/obo/clo.owl
+  - url: http://purl.obolibrary.org/obo/pco.owl
+  - url: http://purl.obolibrary.org/obo/xco.owl
+  - url: http://xmlns.com/foaf/spec/index.rdf
+  - url: http://purl.org/dc/elements/1.1/
+  - url: http://xmlns.com/foaf/0.1/
+
+categories:
+    http://purl.obolibrary.org/obo/CL_0000000 : cell
+    http://purl.obolibrary.org/obo/UBERON_0001062 : anatomical entity
+    #http://purl.obolibrary.org/obo/UBERON_0000468 : multi-cellular organism
+    http://purl.obolibrary.org/obo/PATO_0000001 : quality
+    #http://purl.obolibrary.org/obo/GO_0005623 : cell
+    http://purl.obolibrary.org/obo/DOID_4 : disease
+    #http://purl.obolibrary.org/obo/PATO_0000003 : assay
+    #http://purl.obolibrary.org/obo/PATO_0000006 : process
+    #http://purl.obolibrary.org/obo/PATO_0000011 : age
+    #http://purl.obolibrary.org/obo/CHEBI_23367 : molecular entity
+    http://purl.obolibrary.org/obo/CHEBI_23888 : drug
+    http://purl.obolibrary.org/obo/UPHENO_0001001 : Phenotype
+    #http://purl.obolibrary.org/obo/GO_0008150 : biological process
+    #http://purl.obolibrary.org/obo/GO_0005575 : cellular component
+    http://purl.obolibrary.org/obo/SO_0000704 : gene
+    http://purl.obolibrary.org/obo/GENO_0000536 : genotype
+    http://purl.obolibrary.org/obo/GENO_0000504 : reagent targeted gene
+    #http://purl.obolibrary.org/obo/GENO_0000000 : intrinsic genotype
+    #http://purl.obolibrary.org/obo/GENO_0000524 : extrinsic genotype
+    #http://purl.obolibrary.org/obo/GENO_0000525 : effective genotype
+    http://purl.obolibrary.org/obo/GENO_0000002 : variant locus
+    http://purl.obolibrary.org/obo/SO_0001059 : sequence alteration
+    http://purl.obolibrary.org/obo/SO_0000110 : sequence feature
+    http://purl.obolibrary.org/obo/ECO_0000000 : evidence
+    http://purl.obolibrary.org/obo/PW_0000001 : pathway
+
+mappedProperties:
+  - name: label
+    properties:
+    - http://www.w3.org/2000/01/rdf-schema#label
+  - name: synonym
+    properties:
+    - http://www.geneontology.org/formats/oboInOwl#hasExactSynonym
+    - http://www.geneontology.org/formats/oboInOwl#hasNarrowSynonym
+    - http://www.geneontology.org/formats/oboInOwl#hasBroadSynonym
+    - http://www.geneontology.org/formats/oboInOwl#hasRelatedSynonym
+    - http://purl.obolibrary.org/obo/go#systematic_synonym
+    - http://ontology.neuinfo.org/NIF/Backend/OBO_annotation_properties.owl#synonym
+  - name: acronym
+    properties:
+    - http://ontology.neuinfo.org/NIF/Backend/OBO_annotation_properties.owl#acronym
+  - name: abbreviation
+    properties:
+    - http://ontology.neuinfo.org/NIF/Backend/OBO_annotation_properties.owl#abbrev
+  - name: definition
+    properties:
+    - http://purl.obolibrary.org/obo/IAO_0000115
+    - http://www.w3.org/2004/02/skos/core#definition

@@ -1,0 +1,16 @@
+<assembly>
+  <id>resources</id>
+  <formats>
+    <format>zip</format>
+  </formats>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <fileSets>
+    <fileSet>
+      <directory>src/main/cypher/dynamic-queries</directory>
+      <outputDirectory></outputDirectory>
+      <includes>
+        <include>cypher.yaml*</include>
+      </includes>
+    </fileSet>
+  </fileSets>
+</assembly>

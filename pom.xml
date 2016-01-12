@@ -1,0 +1,182 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.monarchinitiative</groupId>
+	<artifactId>scigraph-monarch-queries</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.2</version>
+				<configuration>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>unpack-shared-resources</id>
+						<goals>
+							<goal>unpack-dependencies</goal>
+						</goals>
+						<phase>generate-test-sources</phase>
+						<configuration>
+							<outputDirectory>${project.build.directory}/generated-resources</outputDirectory>
+							<includeArtifacIds>curie-mapping</includeArtifacIds>
+							<includeGroupIds>org.monarchinitiative</includeGroupIds>
+							<excludeTransitive>true</excludeTransitive>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.8</version>
+				<executions>
+					<execution>
+						<phase>generate-test-sources</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<target>
+								 <property name="curieOriginalFileName" value="curie_map.yaml"/>
+ 								 <property name="queriesOriginalFileName" value="cypher.yaml"/>
+
+								<!-- add indentation to the curie mapping -->
+								<replaceregexp file="${project.build.directory}/generated-resources/${curieOriginalFileName}"
+									match="^" replace="        " byline="true" />
+								<!-- add the header curie: for yaml synthax -->
+								<concat destfile="${project.build.directory}/generated-resources/curie_map_formatted.yaml">
+									<header>curies:${line.separator}</header>
+									<filelist dir="${project.build.directory}/generated-resources/" files="${curieOriginalFileName}" />
+								</concat>
+								<!-- copy the template load file to the build directory -->
+								<copy file="${basedir}/src/test/resources/test-load.yaml.tmpl" tofile="${project.build.directory}/generated-resources/final-test-config.yaml" />
+								<!-- load the curie file ant and injecting the curie in the right
+									placeholder -->
+								<property name="curie-filename"
+									value="${project.build.directory}/generated-resources/curie_map_formatted.yaml" />
+								<loadfile property="curie-file" srcfile="${curie-filename}" />
+								<replace file="${project.build.directory}/generated-resources/final-test-config.yaml">
+									<replacefilter token="INJECT_CURIES" value="${curie-file}" />
+								</replace>
+
+								<!-- copy the queries file to work with -->
+								<copy file="${basedir}/src/main/cypher/dynamic-queries/${queriesOriginalFileName}" tofile="${project.build.directory}/generated-resources/queries_copy.yaml" />
+								<!-- add indentation to the queries -->
+								<replaceregexp file="${project.build.directory}/generated-resources/queries_copy.yaml" match="^" replace="    " byline="true" />
+								<!-- add the header cypherResources: for yaml synthax -->
+								<concat destfile="${project.build.directory}/generated-resources/queries_monarch.yaml">
+									<header>cypherResources:${line.separator}</header>
+									<filelist dir="${project.build.directory}/generated-resources/" files="queries_copy.yaml" />
+								</concat>
+							</target>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>add-test-resource</id>
+						<phase>generate-test-sources</phase>
+						<goals>
+							<goal>add-test-resource</goal>
+						</goals>
+						<configuration>
+							<resources>
+								<resource>
+									<directory>${project.build.directory}/generated-resources</directory>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>make shared resources</id>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<phase>package</phase>
+						<configuration>
+							<descriptors>
+								<descriptor>src/main/assembly/assembly.xml</descriptor>
+							</descriptors>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+
+	</build>
+
+	<dependencies>
+		<dependency>
+			<groupId>io.scigraph</groupId>
+			<artifactId>scigraph-core</artifactId>
+			<version>1.5-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>io.scigraph</groupId>
+			<artifactId>scigraph-services</artifactId>
+			<version>1.5-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.hamcrest</groupId>
+			<artifactId>hamcrest-library</artifactId>
+			<version>1.3</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.monarchinitiative</groupId>
+			<artifactId>curie-mapping</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+			<classifier>resources</classifier>
+			<type>zip</type>
+			<!-- Make sure this isn't included on any classpath -->
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+
+	<profiles>
+		<profile>
+			<id>Java8</id>
+			<activation>
+				<jdk>1.8</jdk>
+			</activation>
+			<properties>
+				<java.version>1.8</java.version>
+			</properties>
+		</profile>
+		<profile>
+			<id>Java7</id>
+			<activation>
+				<jdk>1.7</jdk>
+			</activation>
+			<properties>
+				<java.version>1.7</java.version>
+			</properties>
+		</profile>
+	</profiles>
+</project>

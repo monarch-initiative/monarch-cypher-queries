@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="maven-antrun-" default="main"  >
+<target name="main">
+  <property name="curieOriginalFileName" value="curie_map.yaml"/>
+  <property name="queriesOriginalFileName" value="cypher.yaml"/>
+  <replaceregexp file="/home/jnguyenxuan/workspace/monarch-cypher-queries/target/generated-resources/${curieOriginalFileName}" match="^" replace="        " byline="true"/>
+  <concat destfile="/home/jnguyenxuan/workspace/monarch-cypher-queries/target/generated-resources/curie_map_formatted.yaml">
+    <header>curies:
+</header>
+    <filelist files="${curieOriginalFileName}" dir="/home/jnguyenxuan/workspace/monarch-cypher-queries/target/generated-resources/"/>
+  </concat>
+  <copy file="/home/jnguyenxuan/workspace/monarch-cypher-queries/src/test/resources/test-load.yaml.tmpl" tofile="/home/jnguyenxuan/workspace/monarch-cypher-queries/target/generated-resources/final-test-config.yaml"/>
+  <property name="curie-filename" value="/home/jnguyenxuan/workspace/monarch-cypher-queries/target/generated-resources/curie_map_formatted.yaml"/>
+  <loadfile property="curie-file" srcfile="${curie-filename}"/>
+  <replace file="/home/jnguyenxuan/workspace/monarch-cypher-queries/target/generated-resources/final-test-config.yaml">
+    <replacefilter value="${curie-file}" token="INJECT_CURIES"/>
+  </replace>
+  <copy file="/home/jnguyenxuan/workspace/monarch-cypher-queries/src/main/cypher/dynamic-queries/${queriesOriginalFileName}" tofile="/home/jnguyenxuan/workspace/monarch-cypher-queries/target/generated-resources/queries_copy.yaml"/>
+  <replaceregexp file="/home/jnguyenxuan/workspace/monarch-cypher-queries/target/generated-resources/queries_copy.yaml" match="^" replace="    " byline="true"/>
+  <concat destfile="/home/jnguyenxuan/workspace/monarch-cypher-queries/target/generated-resources/queries_monarch.yaml">
+    <header>cypherResources:
+</header>
+    <filelist files="queries_copy.yaml" dir="/home/jnguyenxuan/workspace/monarch-cypher-queries/target/generated-resources/"/>
+  </concat>
+</target>
+</project>
