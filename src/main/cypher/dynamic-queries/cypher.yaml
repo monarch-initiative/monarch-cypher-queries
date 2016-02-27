@@ -255,9 +255,6 @@ cypherResources:
               description: The relation set to traverse
               paramType: query
 
-    ##################
-    ### Graph Algorithms
-    ##################
 
     ##################
     ### Graph Algorithms
@@ -296,7 +293,7 @@ cypherResources:
     - path: /dynamic/cliqueLeader/{id}
       query: |
               START start = node:node_auto_index(iri={id})
-              MATCH (start)-[:equivalentClass|:sameAs*0..1]-(leader:cliqueLeader)
+              MATCH (start)-[:equivalentClass|sameAs*0..1]-(leader:cliqueLeader)
               RETURN leader
       operations:
         - summary: Returns the clique leader.
