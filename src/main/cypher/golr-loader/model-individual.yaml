@@ -1,7 +1,7 @@
 query: |
         START person = node:node_auto_index(iri="http://xmlns.com/foaf/0.1/person")
-        MATCH (subject)-[:RO:0001000]->(object)-[:type]->(person)
-        RETURN DISTINCT
+        MATCH path=(subject)-[:RO:0001000]->(object)-[:type]->(person)
+        RETURN DISTINCT path,
         subject, object,
         'model' AS subject_category,
         'individual' AS object_category,

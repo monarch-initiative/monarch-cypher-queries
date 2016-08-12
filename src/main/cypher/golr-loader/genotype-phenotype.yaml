@@ -1,22 +1,22 @@
 ## TODO: Add inferred associations from variants
 
 query: |
-        MATCH (subject:genotype)-[relation:RO:0002200|RO:0002610|RO:0002326!]->(object:Phenotype)
-        RETURN DISTINCT
+        MATCH path=(subject:genotype)-[relation:RO:0002200|RO:0002610|RO:0002326|RO:0003302!]->(object:Phenotype)
+        RETURN DISTINCT path,
         subject, object, relation,
         'genotype' AS subject_category,
         'phenotype' AS object_category,
         'direct' as qualifier
         UNION
-        MATCH (subject:genotype)-[:RO:0002200|RO:0002610|RO:0002326!*2..]->(object:Phenotype)
-        RETURN DISTINCT
+        MATCH path=(subject:genotype)-[:RO:0002200|RO:0002610|RO:0002326|RO:0003302!*2..]->(object:Phenotype)
+        RETURN DISTINCT path,
         subject, object, NULL as relation,
         'genotype' AS subject_category,
         'phenotype' AS object_category,
         'inferred' as qualifier
         UNION
-        MATCH (subject:genotype)<-[:GENO:0000222|RO:0001000*1..2]-(s)-[:RO:0002200|RO:0002610|RO:0002326!*1..2]->(object:Phenotype)
-        RETURN DISTINCT
+        MATCH path=(subject:genotype)<-[:GENO:0000222|RO:0001000*1..2]-(s)-[:RO:0002200|RO:0002610|RO:0002326|RO:0003302!*1..2]->(object:Phenotype)
+        RETURN DISTINCT path,
         subject, object, NULL as relation,
         'genotype' AS subject_category,
         'phenotype' AS object_category,

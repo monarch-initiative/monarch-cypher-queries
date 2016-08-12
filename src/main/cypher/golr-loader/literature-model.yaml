@@ -1,18 +1,16 @@
 query: |
-        MATCH (pub:publication)-[r:IAO:0000142|IAO:0000136]->(model)-[:RO:0003301]->()
-        RETURN DISTINCT
+        MATCH path=(pub:publication)-[r:IAO:0000142|IAO:0000136]->(model)-[:RO:0003301]->()
+        RETURN DISTINCT path,
             pub as subject,
             model as object,
-            r as relation,
             'publication' as subject_category,
             'model' as object_category,
             'direct' as qualifier 
         UNION
-        MATCH (pub:publication)<-[:dc:source]-(association)-[r:OBAN:association_has_object|OBAN:association_has_subject]->(model)-[:RO:0003301]->()
-        RETURN DISTINCT
+        MATCH path=(pub:publication)<-[:dc:source]-(association)-[r:OBAN:association_has_object|OBAN:association_has_subject]->(model)-[:RO:0003301]->()
+        RETURN DISTINCT path,
             pub as subject,
             model as object,
-            r as relation,
             'publication' as subject_category,
             'model' as object_category,
             'direct' as qualifier

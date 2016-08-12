@@ -1,6 +1,6 @@
 query: |
-        MATCH (subject:disease)-[relation:RO:0002200|RO:0002610|RO:0002326!]->(object:Phenotype)
-        RETURN DISTINCT
+        MATCH path=(subject:disease)-[relation:RO:0002200|RO:0002610|RO:0002326!]->(object:Phenotype)
+        RETURN DISTINCT path,
         subject, object, relation,
         'disease' AS subject_category,
         'phenotype' AS object_category,
