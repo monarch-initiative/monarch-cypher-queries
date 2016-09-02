@@ -25,3 +25,17 @@ MATCH (hp)-[:`http://purl.obolibrary.org/obo/BFO_0000051`]->(eq_bnode)
 OPTIONAL MATCH (eq_bnode)-[:`http://purl.obolibrary.org/obo/RO_0002573`|operand]->(quality)
 OPTIONAL MATCH (eq_bnode)-[:`http://purl.obolibrary.org/obo/RO_0002314`|`http://purl.obolibrary.org/obo/RO_0000079`|`http://purl.obolibrary.org/obo/RO_0000052`|`http://purl.obolibrary.org/obo/RO_0002502`|`http://purl.obolibrary.org/obo/RO_0000092`|`http://purl.obolibrary.org/obo/RO_0002503`|`http://purl.obolibrary.org/obo/RO_0000081`|`http://purl.obolibrary.org/obo/RO_0000080`]->(entity)
 RETURN DISTINCT hp.iri, hp.category,hp.label, quality.label, entity.label;
+
+// Find paths between two classes in HPO
+MATCH path=shortestPath((macular_degeneration{iri:'http://purl.obolibrary.org/obo/HP_0007754'})-[rel:subClassOf*]->(cardio{iri:'http://purl.obolibrary.org/obo/HP_0001626'}))
+WHERE ALL (relation in rel where relation.isDefinedBy='http://purl.obolibrary.org/obo/hp.owl')
+RETURN path
+
+// Find paths between two HPO classes via namespace (allows edges from upheno)
+MATCH path=(macular_degeneration{iri:'http://purl.obolibrary.org/obo/HP_0007754'})-[rel:subClassOf*]->(cardio{iri:'http://purl.obolibrary.org/obo/HP_0001626'})
+WHERE ALL (node IN nodes(path) WHERE node.`http://www.geneontology.org/formats/oboInOwl#hasOBONamespace`='human_phenotype')
+RETURN path
+
+// Find paths between two classes with no filter
+MATCH path=(macular_degeneration{iri:'http://purl.obolibrary.org/obo/HP_0007754'})-[rel:subClassOf*]->(cardio{iri:'http://purl.obolibrary.org/obo/HP_0001626'})
+RETURN path
