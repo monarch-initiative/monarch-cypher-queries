@@ -1,0 +1,12 @@
+query: |
+        START chromosomeClass = node:node_auto_index(iri='http://purl.obolibrary.org/obo/SO_0000340')
+        MATCH (chromosomeClass)<-[:type]-(chromosome)
+        MATCH (chromosome)<-[:faldo:reference]-(start_pos)<-[:faldo:begin|faldo:location*1..2]-(feature:`sequence feature`)
+        MATCH (chromosome)<-[:faldo:reference]-(end_pos)<-[:faldo:end|faldo:location*1..2]-(feature),
+              (chromosome)-[:RO:0002350]->(assembly)-[:RO:0002162]->(taxon)
+        RETURN chromosome, feature, start_pos, end_pos,
+        start_pos.`http://biohackathon.org/resource/faldo#position` as start,
+        end_pos.`http://biohackathon.org/resource/faldo#position` as end,
+        assembly.iri as assembly_uri,
+        assembly.label as assembly_label,
+        taxon

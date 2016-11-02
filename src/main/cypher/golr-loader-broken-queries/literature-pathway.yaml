@@ -1,0 +1,93 @@
+query: |
+        MATCH (pub)-[r:IAO:0000142|IAO:0000136]->(x:pathway)
+        RETURN DISTINCT
+            pub as subject,
+            x as object,
+            r as relation,
+            'publication' as subject_category,
+            'pathway' as object_category,
+            'direct' as qualifier
+        UNION
+        MATCH (pub)<-[:dc:source]-(association)-[r:OBAN:association_has_subject|OBAN:association_has_object]->(pathway:pathway)
+        RETURN DISTINCT
+            pub as subject,
+            pathway as object,
+            r as relation,
+            'publication' as subject_category,
+            'pathway' as object_category,
+            'direct' as qualifier
+        UNION
+        MATCH (pub)<-[:dc:source]-(association)-[r:OBAN:association_has_subject|OBAN:association_has_object]->(gene:gene)-[:RO:0002205*0..1]->()-[relation:RO:0002331]->(pathway:pathway)
+        RETURN DISTINCT
+            pub as subject,
+            pathway as object,
+            r as relation,
+            'publication' as subject_category,
+            'pathway' as object_category,
+            'inferred' as qualifier
+        UNION
+        MATCH (pub)-[r:IAO:0000142|IAO:0000136]->(gene:gene)-[:RO:0002205*0..1]->()-[relation:RO:0002331]->(pathway:pathway)
+        RETURN DISTINCT
+            pub as subject,
+            pathway as object,
+            r as relation,
+            'publication' as subject_category,
+            'pathway' as object_category,
+            'inferred' as qualifier
+        UNION
+        MATCH (pub)<-[:dc:source]-(association)-[r:OBAN:association_has_object|OBAN:association_has_subject]->(genotype:genotype)-[:BFO:0000051!*]->(variant)-[:GENO:0000410!*0..1]->(gene:gene)-[:RO:0002205*0..1]->()-[relation:RO:0002331]->(pathway:pathway)
+        WHERE (((variant:`sequence feature` AND NOT variant:gene) OR variant:`variant locus`) AND NOT variant:anonymous) OR variant:`reagent targeted gene`
+        RETURN DISTINCT
+            pub as subject,
+            pathway as object,
+            r as relation,
+            'publication' as subject_category,
+            'pathway' as object_category,
+            'inferred' as qualifier
+        UNION
+        MATCH (pub)-[r:IAO:0000142|IAO:0000136]->(genotype:genotype)-[:BFO:0000051!*]->(variant)-[:GENO:0000410!*0..1]->(gene:gene)-[:RO:0002205*0..1]->()-[relation:RO:0002331]->(pathway:pathway)
+        RETURN DISTINCT
+            pub as subject,
+            pathway as object,
+            r as relation,
+            'publication' as subject_category,
+            'pathway' as object_category,
+            'inferred' as qualifier
+        UNION
+        MATCH (pub)<-[:dc:source]-(association)-[r:OBAN:association_has_subject|OBAN:association_has_object]->(variant)-[:GENO:0000410!*0..1]->(gene:gene)-[:RO:0002205*0..1]->()-[relation:RO:0002331]->(pathway:pathway)
+        WHERE (((variant:`sequence feature` AND NOT variant:gene) OR variant:`variant locus`) AND NOT variant:anonymous) OR variant:`reagent targeted gene`
+        RETURN DISTINCT
+            pub as subject,
+            pathway as object,
+            r as relation,
+            'publication' as subject_category,
+            'pathway' as object_category,
+            'inferred' as qualifier
+        UNION
+        MATCH (pub)-[r:IAO:0000142|IAO:0000136]->(variant)-[:GENO:0000410!*0..1]->(gene:gene)-[:RO:0002205*0..1]->()-[relation:RO:0002331]->(pathway:pathway)
+        RETURN DISTINCT
+            pub as subject,
+            pathway as object,
+            r as relation,
+            'publication' as subject_category,
+            'pathway' as object_category,
+            'inferred' as qualifier
+        UNION
+        MATCH (pub)<-[:dc:source]-(association)-[r:OBAN:association_has_subject|OBAN:association_has_object]->(person)-[:GENO:0000222]->(genotype:genotype)-[:BFO:0000051!*]->(variant)-[:GENO:0000410!*0..1]->(gene:gene)-[:RO:0002205*0..1]->()-[relation:RO:0002331]->(pathway:pathway)
+        WHERE (((variant:`sequence feature` AND NOT variant:gene) OR variant:`variant locus`) AND NOT variant:anonymous) OR variant:`reagent targeted gene`
+        RETURN DISTINCT
+            pub as subject,
+            pathway as object,
+            r as relation,
+            'publication' as subject_category,
+            'pathway' as object_category,
+            'inferred' as qualifier
+        UNION
+        MATCH (pub)-[r:IAO:0000142|IAO:0000136]->(person)-[:GENO:0000222]->(genotype:genotype)-[:BFO:0000051!*]->(variant)-[:GENO:0000410!*0..1]->(gene:gene)-[:RO:0002205*0..1]->()-[relation:RO:0002331]->(pathway:pathway)
+        RETURN DISTINCT
+            pub as subject,
+            pathway as object,
+            r as relation,
+            'publication' as subject_category,
+            'pathway' as object_category,
+            'inferred' as qualifier

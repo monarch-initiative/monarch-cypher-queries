@@ -1,7 +1,0 @@
-query: |
-        MATCH path=(model)-[:RO:0001000*0..1]->(subject:person)-[:GENO:0000222]->(genotype)-[:BFO:0000051!*]->(variant)-[:GENO:0000418|RO:0002566!*0..1]->(object:gene)
-        RETURN DISTINCT path,
-        subject, object,
-        'case' AS subject_category,
-        'gene' AS object_category,
-        'indirect' AS qualifier
