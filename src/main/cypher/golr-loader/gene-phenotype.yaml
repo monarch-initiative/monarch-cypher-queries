@@ -1,4 +1,22 @@
 query: |
+        MATCH (locus:gene)<-[:GENO:0000418!]-(feature)
+        WITH feature, COUNT(DISTINCT(locus)) as gene_count
+        WHERE gene_count = 1
+        AND NOT feature:snv
+        MATCH path=(subject:gene)<-[geno:GENO:0000418!]-(feature)-[:RO:0002200|RO:0002326|RO:0003302!]->(object:Phenotype)
+        RETURN DISTINCT path,
+        subject, object,
+        'gene' AS subject_category,
+        'phenotype' AS object_category,
+        'direct' as qualifier
+        UNION
+        MATCH path=(subject:gene)<-[geno:GENO:0000418!]-(feature:snv)-[:RO:0002200|RO:0002326|RO:0003302!]->(object:Phenotype)
+        RETURN DISTINCT path,
+        subject, object,
+        'gene' AS subject_category,
+        'phenotype' AS object_category,
+        'direct' as qualifier
+        UNION
         MATCH path=(subject:gene)<-[geno:GENO:0000418!*0..1]-(feature)-[:RO:0002200|RO:0002326|RO:0003302!]->(object:Phenotype)
         WHERE NOT ANY (relation in geno where relation.isDefinedBy="http://data.monarchinitiative.org/ttl/mgi.ttl")
         AND NOT ANY (relation in geno where "http://data.monarchinitiative.org/ttl/mgi.ttl" in relation.isDefinedBy)
