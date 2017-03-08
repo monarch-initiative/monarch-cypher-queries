@@ -1,0 +1,7 @@
+query: |
+        MATCH path=(subject:gene)-[relation:RO:0002206]->(object:`anatomical entity`)
+        RETURN DISTINCT path,
+        subject, object, relation,
+        'gene' AS subject_category,
+        'anatomy' AS object_category,
+        'direct' AS qualifier
