@@ -1,8 +1,5 @@
 query: |
-        MATCH (chromosomeClass:Node{iri:"http://purl.obolibrary.org/obo/SO_0000340"})<-[:type]-(chromosome)
-        MATCH (chromosome)<-[:faldo:reference]-(start_pos)<-[:faldo:begin|faldo:location*1..2]-(feature:`sequence feature`)
-        MATCH (chromosome)<-[:faldo:reference]-(end_pos)<-[:faldo:end|faldo:location*1..2]-(feature),
-              (chromosome)-[:RO:0002350]->(assembly)-[:RO:0002162]->(taxon)
+        MATCH (chromosome:chromosome)<-[:faldo:reference]-(start_pos)<-[:faldo:begin|faldo:location*1..2]-(feature:`sequence feature`)-[:faldo:end|faldo:location*1..2]->(end_pos)-[:faldo:reference]->(chromosome:chromosome)-[:RO:0002350]->(assembly)-[:RO:0002162]->(taxon)
         RETURN chromosome, feature,
         start_pos.`http://biohackathon.org/resource/faldo#position` as start,
         end_pos.`http://biohackathon.org/resource/faldo#position` as end,
