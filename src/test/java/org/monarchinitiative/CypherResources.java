@@ -1,14 +1,14 @@
 package org.monarchinitiative;
 
-import io.scigraph.services.swagger.beans.resource.Apis;
-
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.common.base.Optional;
+
+import io.scigraph.services.swagger.beans.resource.Apis;
 
 public class CypherResources {
   @Valid
@@ -16,7 +16,7 @@ public class CypherResources {
   private List<Apis> cypherResources = Collections.emptyList();
 
   public Optional<String> getCypherResource(String path) {
-    Optional<String> hit = Optional.absent();
+    Optional<String> hit = Optional.empty();
     for (Apis api : cypherResources) {
       if (api.getPath().equals(path)) {
         hit = Optional.of(api.getQuery());
