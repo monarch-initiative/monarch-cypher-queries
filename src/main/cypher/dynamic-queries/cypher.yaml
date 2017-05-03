@@ -308,7 +308,7 @@ cypherResources:
               MATCH path = (start)-[:equivalentClass|sameAs*]-(eq:Node)
               RETURN path
       operations:
-        - summary: Returns the id and all it's equivalents
+        - summary: Returns the id and all its equivalents
           parameters:
             - name: id
               description: Curie formatted identifier
@@ -317,7 +317,7 @@ cypherResources:
     - path: /dynamic/candidateClique/{id}
       query: |
               START start = node:node_auto_index(iri={id})
-              MATCH path = (start)-[:equivalentClass|sameAs|xrefs|OIO:hasDbXref*]-(eq:Node)
+              MATCH path = (start)-[:equivalentClass|sameAs|OIO:hasDbXref*]-(eq:Node)
               RETURN path
       operations:
         - summary: Returns ids that are equivalent and potentially equivalent (xrefs)
