@@ -300,3 +300,27 @@ cypherResources:
           parameters:
             - name: id
               description: The node to start from.
+
+    ## Clique service
+    - path: /dynamic/clique/{id}
+      query: |
+              START start = node:node_auto_index(iri={id})
+              MATCH path = (start)-[:equivalentClass|sameAs*]-(eq:Node)
+              RETURN path
+      operations:
+        - summary: Returns the id and all it's equivalents
+          parameters:
+            - name: id
+              description: Curie formatted identifier
+
+    ## Candidate Clique Service
+    - path: /dynamic/candidateClique/{id}
+      query: |
+              START start = node:node_auto_index(iri={id})
+              MATCH path = (start)-[:equivalentClass|sameAs|xrefs*]-(eq:Node)
+              RETURN path
+      operations:
+        - summary: Returns ids that are equivalent and potentially equivalent (xrefs)
+          parameters:
+            - name: id
+              description: Curie formatted identifier
