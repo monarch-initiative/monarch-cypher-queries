@@ -19,6 +19,7 @@ cypherResources:
           parameters:
             - name: phenotype_id
               description: The ID of the phenotype # try HP:0000528
+              paramType: path
 
     ## Diseases from phenotype
     - path: /dynamic/phenotypes/{phenotype_id}/diseases
@@ -31,6 +32,7 @@ cypherResources:
           parameters:
             - name: phenotype_id
               description: The ID of the phenotype # HP:0000963
+              paramType: path
 
     ## Features from phenotype
     - path: /dynamic/phenotypes/{phenotype_id}/features
@@ -51,6 +53,7 @@ cypherResources:
           parameters:
             - name: phenotype_id
               description: The ID of the phenotype
+              paramType: path
 
     ## Genotypes from phenotype
     - path: /dynamic/phenotypes/{phenotype_id}/genotypes
@@ -71,6 +74,7 @@ cypherResources:
           parameters:
             - name: phenotype_id
               description: The ID of the phenotype
+              paramType: path
 
 
     ##################
@@ -88,6 +92,7 @@ cypherResources:
           parameters:
             - name: genotype_id
               description: The ID of the genotype
+              paramType: path
 
     ## Phenotypes from genotype
     - path: /dynamic/genotypes/{genotype_id}/phenotypes
@@ -100,6 +105,7 @@ cypherResources:
           parameters:
             - name: genotype_id
               description: The ID of the genotype
+              paramType: path
 
 
 
@@ -118,6 +124,8 @@ cypherResources:
           parameters:
             - name: disease_id
               description: The ID of the disease # DOID:2490
+              paramType: path
+              type: string
 
     ##################
     ### GENES
@@ -167,6 +175,7 @@ cypherResources:
           parameters:
             - name: gene_id
               description: The ID of the gene # NCBIGene:6469
+              paramType: path
             - name: homolog_id
               description: The homolog relationship # RO:HOM0000017
               paramType: query
@@ -189,6 +198,7 @@ cypherResources:
           parameters:
             - name: feature_id
               description: The ID of the feature
+              paramType: path
 
     ## Genotypes from feature
     - path: /dynamic/features/{feature_id}/genotypes
@@ -201,6 +211,7 @@ cypherResources:
           parameters:
             - name: feature_id
               description: The ID of the feature
+              paramType: path
 
     ##################
     ### EVIDENCE
@@ -222,8 +233,10 @@ cypherResources:
           parameters:
             - name: subject_id
               description: The subject of the evidence # DOID:2490
+              paramType: path
             - name: object_id
               description: The object of the evidence # HP:0002060
+              paramType: path
             - name: evidence_code
               description: The type of evidence to include # ECO:0000501
               paramType: query
@@ -249,8 +262,10 @@ cypherResources:
           parameters:
             - name: taxonomy_class
               description: The taxonomy class to test
+              paramType: path
             - name: ontology_class
               description: The ontology class to test
+              paramType: path
             - name: relation_set
               description: The relation set to traverse
               paramType: query
@@ -300,6 +315,7 @@ cypherResources:
           parameters:
             - name: id
               description: The node to start from.
+              paramType: path
 
     ## Clique service
     - path: /dynamic/clique/{id}
@@ -312,6 +328,7 @@ cypherResources:
           parameters:
             - name: id
               description: Curie formatted identifier
+              paramType: path
 
     ## Candidate Clique Service
     - path: /dynamic/candidateClique/{id}
@@ -324,3 +341,4 @@ cypherResources:
           parameters:
             - name: id
               description: Curie formatted identifier
+              paramType: path
