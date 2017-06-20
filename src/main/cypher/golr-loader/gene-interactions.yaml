@@ -5,4 +5,11 @@ query: |
         'gene' AS subject_category,
         'gene' AS object_category,
         'direct' AS qualifier
-
+        UNION
+        MATCH path=(subject:gene)-[relation:RO:0002434!]-(object:gene)
+        RETURN DISTINCT path,
+        subject, object, relation,
+        'gene' AS subject_category,
+        'gene' AS object_category,
+        'direct' AS qualifier
+        
