@@ -24,7 +24,7 @@ query: |
         'inferred' as qualifier
         UNION
         MATCH path=(subject)<-[:BFO:0000051!*]-(genotype)<-[:RO:0001000|GENO:0000222*1..2]-(organism)-[rel:RO:0002200|RO:0002610|RO:0002326!]->(object:Phenotype)
-        WHERE NOT rel.isDefinedBy="http://data.monarchinitiative.org/ttl/udp.ttl"
+        WHERE NOT rel.isDefinedBy="https://data.monarchinitiative.org/ttl/udp.ttl"
         AND (((subject:`sequence feature` AND NOT subject:gene) OR subject:`variant locus`) AND NOT subject:anonymous) OR subject:`reagent targeted gene`
         RETURN DISTINCT path,
         subject, object, NULL as relation,
