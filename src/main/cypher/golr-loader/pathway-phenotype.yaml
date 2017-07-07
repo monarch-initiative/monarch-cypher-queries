@@ -1,4 +1,5 @@
 query: |
+        CALL apoc.cypher.run("
         MATCH path=(pathway:pathway)<-[:RO:0002331]-()<-[:RO:0002205*0..1]-(:gene)-[:RO:HOM0000017!*0..1]-(gene:gene)<-[:GENO:0000418!]-(variant)-[r:RO:0002200|RO:0002610|RO:0002326!*2..]->(phenotype:Phenotype)
         WHERE (((variant:`sequence feature` AND NOT variant:gene) OR variant:`variant locus`) AND NOT variant:anonymous) OR variant:`reagent targeted gene`
         RETURN DISTINCT path,
@@ -28,3 +29,9 @@ query: |
         'pathway' as subject_category,
         'phenotype' as object_category,
         'inferred' as qualifier
+        ", {}) yield value
+        RETURN value.path as path, value.subject as subject, value.object as object,
+        value.subject_category as subject_category, value.object_category as object_category,
+        value.qualifier as qualifier, value.relation as relation
+        ORDER BY value.subject.id
+ordered_by: subject

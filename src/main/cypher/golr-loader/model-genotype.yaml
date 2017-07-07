@@ -1,4 +1,5 @@
 query: |
+        CALL apoc.cypher.run("
         MATCH path=()<-[:RO:0003301]-(subject)-[relation:GENO:0000222]->(object:genotype)
         RETURN DISTINCT path,
         subject, object, relation,
@@ -12,3 +13,9 @@ query: |
         'model' AS subject_category,
         'genotype' AS object_category,
         'indirect' AS qualifier
+        ", {}) yield value
+        RETURN value.path as path, value.subject as subject, value.object as object,
+        value.subject_category as subject_category, value.object_category as object_category,
+        value.qualifier as qualifier, value.relation as relation
+        ORDER BY value.subject.id
+ordered_by: subject

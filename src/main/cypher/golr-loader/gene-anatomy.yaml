@@ -5,5 +5,7 @@ query: |
         'gene' AS subject_category,
         'anatomy' AS object_category,
         'direct' AS qualifier
+        ORDER BY subject.id
 object_closure: "rdfs:subClassOf|BFO:0000050"
+ordered_by: subject
 

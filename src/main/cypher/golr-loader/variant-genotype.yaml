@@ -6,3 +6,5 @@ query: |
         'variant' AS subject_category,
         'genotype' AS object_category,
         'inferred' AS qualifier
+        ORDER BY subject.id
+ordered_by: subject

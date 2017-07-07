@@ -1,5 +1,5 @@
 query: |
-        MATCH path=(subject:gene)-[relation:RO:0002323!]-(object:gene)
+        MATCH path=(subject:gene)-[relation:RO:0002528|RO:0002529!]-(object:gene)
         RETURN DISTINCT path,
         subject, object, relation,
         'gene' AS subject_category,

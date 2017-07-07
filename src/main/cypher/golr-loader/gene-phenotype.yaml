@@ -1,4 +1,5 @@
 query: |
+        CALL apoc.cypher.run("
         MATCH (locus:gene)<-[:GENO:0000418!]-(feature)
         WITH feature, COUNT(DISTINCT(locus)) as gene_count
         WHERE gene_count = 1
@@ -18,8 +19,8 @@ query: |
         'direct' as qualifier
         UNION
         MATCH path=(subject:gene)<-[geno:GENO:0000418!*0..1]-(feature)-[:RO:0002200|RO:0002326|RO:0003302!]->(object:Phenotype)
-        WHERE NOT ANY (relation in geno where relation.isDefinedBy="https://data.monarchinitiative.org/ttl/mgi.ttl")
-        AND NOT ANY (relation in geno where "https://data.monarchinitiative.org/ttl/mgi.ttl" in relation.isDefinedBy)
+        WHERE NOT ANY (relation in geno where relation.isDefinedBy='https://data.monarchinitiative.org/ttl/mgi.ttl')
+        AND NOT ANY (relation in geno where 'https://data.monarchinitiative.org/ttl/mgi.ttl' in relation.isDefinedBy)
         RETURN DISTINCT path,
         subject, object,
         'gene' AS subject_category,
@@ -34,7 +35,7 @@ query: |
         'inferred' as qualifier
         UNION
         MATCH path=(subject:gene)<-[:GENO:0000418|GENO:0000639!*0..1]-(feature)<-[:BFO:0000051!*]-(genotype:genotype)-[rel:RO:0002200|RO:0002326|RO:0003302!*]->(object:Phenotype)
-        WHERE NOT ANY (relation in rel where relation.isDefinedBy="https://data.monarchinitiative.org/ttl/mgi.ttl" OR relation.isDefinedBy="https://data.monarchinitiative.org/ttl/zfin.ttl")
+        WHERE NOT ANY (relation in rel where relation.isDefinedBy='https://data.monarchinitiative.org/ttl/mgi.ttl' OR relation.isDefinedBy='https://data.monarchinitiative.org/ttl/zfin.ttl')
         RETURN DISTINCT path,
         subject, object,
         'gene' AS subject_category,
@@ -49,9 +50,16 @@ query: |
         'inferred' as qualifier
         UNION
         MATCH path=(subject:gene)<-[:GENO:0000418|GENO:0000639!*0..1]-(feature)<-[:BFO:0000051!*]-(genotype:genotype)<-[:GENO:0000222|RO:0001000*1..2]-(person)-[rel:RO:0002200|RO:0002326!*]->(object:Phenotype)
-        WHERE NOT ANY (relation in rel where relation.isDefinedBy="https://data.monarchinitiative.org/ttl/udp.ttl")
+        WHERE NOT ANY (relation in rel where relation.isDefinedBy='https://data.monarchinitiative.org/ttl/udp.ttl')
         RETURN DISTINCT path,
         subject, object,
         'gene' AS subject_category,
         'phenotype' AS object_category,
         'inferred' as qualifier
+        ", {}) yield value
+        RETURN value.path as path, value.subject as subject, value.object as object, value.subject_category as subject_category,
+        value.object_category as object_category, value.qualifier as qualifier
+        ORDER BY value.subject.id
+ordered_by: subject
+
+

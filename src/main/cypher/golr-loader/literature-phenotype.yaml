@@ -1,4 +1,5 @@
 query: |
+        CALL apoc.cypher.run("
         MATCH path=(pub:publication)<-[:dc:source]-(association)-[r:OBAN:association_has_object|OBAN:association_has_subject]->(phenotype:Phenotype)
         RETURN DISTINCT path,
             pub as subject,
@@ -14,3 +15,9 @@ query: |
             'publication' as subject_category,
             'phenotype' as object_category,
             'direct' as qualifier
+        ", {}) yield value
+        RETURN value.path as path, value.subject as subject, value.object as object,
+        value.subject_category as subject_category, value.object_category as object_category,
+        value.qualifier as qualifier
+        ORDER BY value.subject.id
+ordered_by: subject

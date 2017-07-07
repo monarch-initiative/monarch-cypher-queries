@@ -1,9 +1,9 @@
 query: |
-        MATCH path=(object:disease)<-[relation:RO:0003301]-(subject)
+        MATCH path=(subject:gene)-[relation:RO:0002501!]-(object:gene)
         RETURN DISTINCT path,
         subject, object, relation,
-        'model' AS subject_category,
-        'disease' AS object_category,
+        'gene' AS subject_category,
+        'gene' AS object_category,
         'direct' AS qualifier
         ORDER BY subject.id
 ordered_by: subject

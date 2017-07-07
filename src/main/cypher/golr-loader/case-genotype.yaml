@@ -5,3 +5,5 @@ query: |
         'case' AS subject_category,
         'genotype' AS object_category,
         'indirect' AS qualifier
+        ORDER BY subject.id
+ordered_by: subject

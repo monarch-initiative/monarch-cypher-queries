@@ -1,4 +1,5 @@
 query: |
+        CALL apoc.cypher.run("
         MATCH path=(pub:publication)<-[:dc:source]-(association)-[r:OBAN:association_has_object|OBAN:association_has_subject]->(genotype:genotype)-[:BFO:0000051!*]->(variant)
         WHERE (((variant:`sequence feature` AND NOT variant:gene) OR variant:`variant locus`) AND NOT variant:anonymous) OR variant:`reagent targeted gene`
         RETURN DISTINCT path,
@@ -50,3 +51,9 @@ query: |
             'publication' as subject_category,
             'variant' as object_category,
             'inferred' as qualifier
+        ", {}) yield value
+        RETURN value.path as path, value.subject as subject, value.object as object,
+        value.subject_category as subject_category, value.object_category as object_category,
+        value.qualifier as qualifier
+        ORDER BY value.subject.id
+ordered_by: subject

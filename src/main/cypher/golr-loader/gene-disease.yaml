@@ -1,4 +1,5 @@
 query: |
+        CALL apoc.cypher.run("
         MATCH (locus:gene)<-[:GENO:0000418|GENO:0000639!]-(feature)
         WITH feature, COUNT(DISTINCT(locus)) as gene_count
         WHERE gene_count = 1
@@ -25,9 +26,15 @@ query: |
         'inferred' as qualifier
         UNION
         MATCH path=(subject:gene)<-[:GENO:0000418|GENO:0000639!]-(variant)<-[:BFO:0000051!*]-(genotype:genotype)<-[:GENO:0000222|RO:0001000*1..2]-(person)-[rel:RO:0002200!]->(object:disease)
-        WHERE NOT rel.isDefinedBy="https://data.monarchinitiative.org/ttl/udp.ttl"
+        WHERE NOT rel.isDefinedBy='https://data.monarchinitiative.org/ttl/udp.ttl'
         RETURN DISTINCT path,
         subject, object,
         'gene' AS subject_category,
         'disease' AS object_category,
         'inferred' as qualifier
+        ", {}) yield value
+        RETURN value.path as path, value.subject as subject, value.object as object,
+        value.subject_category as subject_category, value.object_category as object_category,
+        value.qualifier as qualifier
+        ORDER BY value.subject.id
+ordered_by: subject

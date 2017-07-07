@@ -6,3 +6,5 @@ query: |
         'variant' AS subject_category,
         'gene' AS object_category,
         'direct' AS qualifier
+        ORDER BY subject.id
+ordered_by: subject

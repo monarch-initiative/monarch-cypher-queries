@@ -1,6 +1,7 @@
 ## TODO: Add inferred associations from variants
 
 query: |
+        CALL apoc.cypher.run("
         MATCH path=(subject:genotype)-[relation:RO:0002200|RO:0002610|RO:0002326|RO:0003302!]->(object:Phenotype)
         RETURN DISTINCT path,
         subject, object, relation,
@@ -16,9 +17,16 @@ query: |
         'inferred' as qualifier
         UNION
         MATCH path=(subject:genotype)<-[:GENO:0000222|RO:0001000*1..2]-(s)-[rel:RO:0002200|RO:0002610|RO:0002326|RO:0003302!*1..2]->(object:Phenotype)
-        WHERE NOT ANY (relation in rel where relation.isDefinedBy="https://data.monarchinitiative.org/ttl/udp.ttl")
+        WHERE NOT ANY (relation in rel where relation.isDefinedBy='https://data.monarchinitiative.org/ttl/udp.ttl')
         RETURN DISTINCT path,
         subject, object, NULL as relation,
         'genotype' AS subject_category,
         'phenotype' AS object_category,
         'inferred' as qualifier
+        ", {}) yield value
+        RETURN value.path as path, value.subject as subject, value.object as object,
+        value.subject_category as subject_category, value.object_category as object_category,
+        value.qualifier as qualifier, value.relation as relation
+        ORDER BY value.subject.id
+ordered_by: subject
+

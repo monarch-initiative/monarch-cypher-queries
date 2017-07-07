@@ -1,8 +1,9 @@
 query: |
-        MATCH path=(pub:publication)-[r:IAO:0000142|IAO:0000136]->(x:gene)
+        CALL apoc.cypher.run("
+        MATCH path=(pub:publication)-[r:IAO:0000142|IAO:0000136]->(gene:gene)
         RETURN DISTINCT path,
             pub as subject,
-            x as object,
+            gene as object,
             'publication' as subject_category,
             'gene' as object_category,
             'direct' as qualifier
@@ -64,4 +65,10 @@ query: |
             gene as object,
             'publication' as subject_category,
             'gene' as object_category,
-            'inferred' as qualifier 
+            'inferred' as qualifier
+        ", {}) yield value
+        RETURN value.path as path, value.subject as subject, value.object as object,
+        value.subject_category as subject_category, value.object_category as object_category,
+        value.qualifier as qualifier
+        ORDER BY value.subject.id
+ordered_by: subject

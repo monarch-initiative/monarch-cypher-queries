@@ -6,3 +6,5 @@ query: |
         'case' AS subject_category,
         'variant' AS object_category,
         'direct' AS qualifier
+        ORDER BY subject.id
+ordered_by: subject

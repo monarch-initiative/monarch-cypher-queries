@@ -5,3 +5,5 @@ query: |
         'disease' AS subject_category,
         'phenotype' AS object_category,
         'direct' as qualifier
+        ORDER BY subject.id
+ordered_by: subject
