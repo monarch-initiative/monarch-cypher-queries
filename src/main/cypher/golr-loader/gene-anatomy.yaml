@@ -3,7 +3,7 @@ query: |
         RETURN DISTINCT path,
         subject, object, relation,
         'gene' AS subject_category,
-        'anatomy' AS object_category,
+        'anatomical entity' AS object_category,
         'direct' AS qualifier
 object_closure: "rdfs:subClassOf|BFO:0000050"
 
