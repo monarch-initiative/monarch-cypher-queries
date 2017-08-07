@@ -1,6 +1,6 @@
 query: |
         MATCH path=(pub:publication)<-[:dc:source]-(association)-[r:OBAN:association_has_object|OBAN:association_has_subject]->(genotype:genotype)-[:BFO:0000051!*]->(variant:`sequence feature`)
-        WHERE (NOT variant:anonymous AND NOT object:gene) OR variant:`reagent targeted gene`
+        WHERE (NOT variant:anonymous AND NOT variant:gene) OR variant:`reagent targeted gene`
         RETURN DISTINCT path,
             pub as subject,
             variant as object,

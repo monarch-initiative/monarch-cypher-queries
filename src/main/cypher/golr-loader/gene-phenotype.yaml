@@ -28,7 +28,7 @@ query: |
         UNION
         MATCH path=(subject:gene)<-[:GENO:0000418|GENO:0000639!*0..1]-(feature:`sequence feature`)-[:RO:0002200|RO:0002326|RO:0003302!*2]->(object:Phenotype)
         RETURN DISTINCT path,
-        subject, object,
+        subject, object, NULL as relation,
         'gene' AS subject_category,
         'phenotype' AS object_category,
         'inferred' as qualifier
@@ -37,7 +37,7 @@ query: |
         MATCH (subject)-[:RO:0002162]->(taxon:organism)<-[:RO:0002162]-(genotype)
         WHERE NOT ANY (relation in rel where relation.isDefinedBy="https://data.monarchinitiative.org/ttl/mgi.ttl" OR relation.isDefinedBy="https://data.monarchinitiative.org/ttl/zfin.ttl")
         RETURN DISTINCT path,
-        subject, object,
+        subject, object, NULL as relation,
         'gene' AS subject_category,
         'phenotype' AS object_category,
         'inferred' as qualifier
