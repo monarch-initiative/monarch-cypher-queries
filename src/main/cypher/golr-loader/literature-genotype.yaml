@@ -1,5 +1,5 @@
 query: |
-        MATCH path=(pub:publication)<-[:dc:source]-(association)-[r:OBAN:association_has_object|OBAN:association_has_subject]->(genotype:genotype)
+        MATCH path=(pub:publication)<-[:dc:source]-(association:association)-[r:OBAN:association_has_object|OBAN:association_has_subject]->(genotype:genotype)
         RETURN DISTINCT path,
             pub as subject,
             genotype as object,
@@ -15,7 +15,7 @@ query: |
             'genotype' as object_category,
             'direct' as qualifier
         UNION
-        MATCH path=(pub:publication)<-[:dc:source]-(association)-[r:OBAN:association_has_object|OBAN:association_has_subject]->(person)-[:GENO:0000222|RO:0001000*1..2]->(genotype:genotype)
+        MATCH path=(pub:publication)<-[:dc:source]-(association:association)-[r:OBAN:association_has_object|OBAN:association_has_subject]->(person)-[:GENO:0000222|RO:0001000*1..2]->(genotype:genotype)
         RETURN DISTINCT path,
             pub as subject,
             genotype as object,

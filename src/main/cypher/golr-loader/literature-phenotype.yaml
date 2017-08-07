@@ -1,5 +1,5 @@
 query: |
-        MATCH path=(pub:publication)<-[:dc:source]-(association)-[r:OBAN:association_has_object|OBAN:association_has_subject]->(phenotype:Phenotype)
+        MATCH path=(pub:publication)<-[:dc:source]-(association:association)-[r:OBAN:association_has_object|OBAN:association_has_subject]->(phenotype:Phenotype)
         RETURN DISTINCT path,
             pub as subject,
             phenotype as object,
