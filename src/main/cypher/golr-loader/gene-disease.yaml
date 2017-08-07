@@ -17,7 +17,7 @@ query: |
         'disease' AS object_category,
         'inferred' as qualifier
         UNION
-        MATCH path=(subject:gene)<-[:GENO:0000418|GENO:0000639!]-(variant)<-[:BFO:0000051!*..1]-(genotype:genotype)-[:RO:0002200|RO:0002610|RO:0002326|RO:0003302!]->(object:disease)
+        MATCH path=(subject:gene)<-[:GENO:0000418|GENO:0000639!]-(variant)<-[:BFO:0000051!*..11]-(genotype:genotype)-[:RO:0002200|RO:0002610|RO:0002326|RO:0003302!]->(object:disease)
         RETURN DISTINCT path,
         subject, object,
         'gene' AS subject_category,
