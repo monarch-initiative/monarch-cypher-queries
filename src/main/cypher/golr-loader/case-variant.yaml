@@ -1,6 +1,6 @@
 query: |
-        MATCH path=(model)-[:RO:0001000*0..1]->(subject:case)-[:GENO:0000222]->(genotype:genotype)-[:BFO:0000051!*]->(object)
-        WHERE ((object:`sequence feature` AND NOT object:gene) OR object:`variant locus`) OR object:`reagent targeted gene`
+        MATCH path=(model)-[:RO:0001000*0..1]->(subject:case)-[:GENO:0000222]->(genotype:genotype)-[:BFO:0000051!*]->(object:`sequence feature`)
+        WHERE (NOT object:anonymous AND NOT object:gene) OR object:`reagent targeted gene`
         RETURN DISTINCT path,
         subject, object,
         'case' AS subject_category,
