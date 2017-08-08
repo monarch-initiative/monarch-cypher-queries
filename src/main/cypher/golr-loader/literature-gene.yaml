@@ -16,7 +16,7 @@ query: |
             'direct' as qualifier
         UNION
         MATCH path=(pub:publication)<-[:dc:source]-(association:association)-[r:OBAN:association_has_object|OBAN:association_has_subject]->(genotype:genotype)-[:BFO:0000051!*]->(variant:`sequence feature`)-[:GENO:0000418!*0..1]->(gene:gene)
-        WHERE (NOT variant:anonymous AND NOT variant:gene) OR variant:`reagent targeted gene`
+        WHERE NOT variant:gene OR variant:`reagent targeted gene`
         RETURN DISTINCT path,
             pub as subject,
             gene as object,
@@ -33,7 +33,7 @@ query: |
             'inferred' as qualifier
         UNION
         MATCH path=(pub:publication)<-[:dc:source]-(association:association)-[r:OBAN:association_has_subject|OBAN:association_has_object]->(variant:`sequence feature`)-[:GENO:0000418!*0..1]->(gene:gene)
-        WHERE (NOT variant:anonymous AND NOT variant:gene) OR variant:`reagent targeted gene`
+        WHERE NOT variant:gene OR variant:`reagent targeted gene`
         RETURN DISTINCT path,
             pub as subject,
             gene as object,
@@ -50,7 +50,7 @@ query: |
             'inferred' as qualifier
         UNION
         MATCH path=(pub:publication)<-[:dc:source]-(association:association)-[r:OBAN:association_has_subject|OBAN:association_has_object]->(person)-[:GENO:0000222]->(genotype:genotype)-[:BFO:0000051!*..11]->(variant:`sequence feature`)-[:GENO:0000418!*0..1]->(gene:gene)
-        WHERE (NOT variant:anonymous AND NOT variant:gene) OR variant:`reagent targeted gene`
+        WHERE NOT variant:gene OR variant:`reagent targeted gene`
         RETURN DISTINCT path,
             pub as subject,
             gene as object,

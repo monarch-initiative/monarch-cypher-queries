@@ -1,7 +1,6 @@
 query: |
         MATCH path=(subject)-[:RO:0001000|GENO:0000222*1..2]->(genotype:genotype)-[:BFO:0000051!*..15]->(variant:`sequence feature`)-[rel:GENO:0000418|GENO:0000639!*0..1]->(object:gene)
-        WHERE NOT ANY (relation in rel where relation.isDefinedBy="https://data.monarchinitiative.org/ttl/udp.ttl")
-        AND ((NOT variant:anonymous AND NOT variant:gene) OR variant:`reagent targeted gene`)
+        WHERE NOT variant:gene OR variant:`reagent targeted gene`
         RETURN DISTINCT path,
         subject, object,
         'model' AS subject_category,

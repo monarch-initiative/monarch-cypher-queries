@@ -1,6 +1,6 @@
 query: |
         MATCH path=(pathway:pathway)<-[:RO:0002331]-()<-[:RO:0002205*0..1]-(:gene)-[:RO:HOM0000017!*0..1]-(gene:gene)<-[:GENO:0000418!]-(variant:`sequence feature`)-[r:RO:0002200|RO:0002610|RO:0002326!*1..2]->(phenotype:Phenotype)
-        WHERE (NOT variant:anonymous AND NOT variant:gene) OR variant:`reagent targeted gene`
+        WHERE NOT variant:gene OR variant:`reagent targeted gene`
         RETURN DISTINCT path,
         pathway as subject,
         phenotype as object,
@@ -10,7 +10,7 @@ query: |
         'inferred' as qualifier
         UNION
         MATCH path=(pathway:pathway)<-[:RO:0002331]-()<-[:RO:0002205*0..1]-(:gene)-[:RO:HOM0000017!*0..1]-(gene:gene)<-[:GENO:0000418!]-(variant:`sequence feature`)<-[:BFO:0000051!*..15]-(genotype:genotype)-[r:RO:0002200|RO:0002610|RO:0002326!*1..2]->(phenotype:Phenotype)
-        WHERE (NOT variant:anonymous AND NOT variant:gene) OR variant:`reagent targeted gene`
+        WHERE NOT variant:gene OR variant:`reagent targeted gene`
         RETURN DISTINCT path,
         pathway as subject,
         phenotype as object,
@@ -20,7 +20,7 @@ query: |
         'inferred' as qualifier
         UNION
         MATCH path=(pathway:pathway)<-[:RO:0002331]-()<-[:RO:0002205*0..1]-(:gene)-[:RO:HOM0000017!*0..1]-(gene:gene)<-[:GENO:0000418!]-(variant:`sequence feature`)<-[:BFO:0000051!*..15]-(genotype:genotype)<-[:GENO:0000222|RO:0001000*1..2]-(person)-[r:RO:0002200|RO:0002610|RO:0002326!*1..2]->(phenotype:Phenotype)
-        WHERE (NOT variant:anonymous AND NOT variant:gene) OR variant:`reagent targeted gene`
+        WHERE NOT variant:gene OR variant:`reagent targeted gene`
         RETURN DISTINCT path,
         pathway as subject,
         phenotype as object,

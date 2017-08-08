@@ -1,6 +1,6 @@
 query: |
         MATCH path=(subject:disease)<-[:RO:0002200|RO:0002610|RO:0002326!]-(variant:`sequence feature`)-[:GENO:0000418!*0..1]->(:gene)-[:RO:0002205*0..1]->()-[relation:RO:0002331]->(object:pathway)
-        WHERE (NOT variant:anonymous AND NOT variant:gene) OR variant:`reagent targeted gene`
+        WHERE NOT variant:gene OR variant:`reagent targeted gene`
         RETURN DISTINCT path,
         subject, object, relation,
         'disease' AS subject_category,
