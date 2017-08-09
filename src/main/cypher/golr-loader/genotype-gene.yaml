@@ -1,7 +1,7 @@
 query: |
-        MATCH path=(subject:genotype)-[:BFO:0000051!*]->(variant)-[:GENO:0000418|GENO:0000639!*0..1]->(object:gene)
-        WHERE ((variant:`sequence feature` AND NOT variant:gene) OR variant:`variant locus`) OR variant:`reagent targeted gene`
-        RETURN DISTINCT path,
+        MATCH path=(subject:genotype)-[:BFO:0000051!*..15]->(variant:`sequence feature`)-[:GENO:0000418|GENO:0000639!*0..1]->(object:gene)
+        WHERE NOT variant:gene OR variant:`reagent targeted gene`
+        RETURN  path,
         subject, object,
         'genotype' AS subject_category,
         'gene' AS object_category,

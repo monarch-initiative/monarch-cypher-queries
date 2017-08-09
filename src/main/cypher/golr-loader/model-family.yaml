@@ -1,7 +1,7 @@
 query: |
         START pco = node:node_auto_index(iri="https://purl.obolibrary.org/obo/PCO_0000020")
         MATCH path=(subject)-[:RO:0001000]->(person)-[:RO:0002350]->(object)-[:type]->(pco)
-        RETURN DISTINCT path,
+        RETURN  path,
         subject, object,
         'model' AS subject_category,
         'family' AS object_category,

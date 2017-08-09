@@ -1,13 +1,13 @@
 query: |
         MATCH path=(subject:gene)-[:RO:0002205*0..1]->(prot1:protein)-[relation:RO:0002434!]-(prot2:protein)<-[:RO:0002205*0..1]-(object:gene)
-        RETURN DISTINCT path,
+        RETURN  path,
         subject, object, relation,
         'gene' AS subject_category,
         'gene' AS object_category,
         'direct' AS qualifier
-        UNION
+        UNION ALL
         MATCH path=(subject:gene)-[relation:RO:0002434!]-(object:gene)
-        RETURN DISTINCT path,
+        RETURN  path,
         subject, object, relation,
         'gene' AS subject_category,
         'gene' AS object_category,
