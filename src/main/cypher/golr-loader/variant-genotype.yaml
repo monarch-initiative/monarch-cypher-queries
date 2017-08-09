@@ -1,7 +1,7 @@
 query: |
         MATCH path=(object:genotype)-[relation:BFO:0000051!*]->(subject:`sequence feature`)
         WHERE (NOT subject:anonymous AND NOT subject:gene) OR subject:`reagent targeted gene`
-        RETURN DISTINCT path,
+        RETURN  path,
         subject, object, relation,
         'variant' AS subject_category,
         'genotype' AS object_category,

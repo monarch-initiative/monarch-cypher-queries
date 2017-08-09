@@ -1,13 +1,13 @@
 query: |
         MATCH path=()<-[:RO:0003301]-(subject)-[relation:GENO:0000222]->(object:genotype)
-        RETURN DISTINCT path,
+        RETURN  path,
         subject, object, relation,
         'model' AS subject_category,
         'genotype' AS object_category,
         'direct' AS qualifier
         UNION
         MATCH path=()<-[:RO:0003301]-(subject)-[:RO:0001000]->(organism)-[:GENO:0000222]->(object:genotype)
-        RETURN DISTINCT path,
+        RETURN  path,
         subject, object, NULL as relation,
         'model' AS subject_category,
         'genotype' AS object_category,

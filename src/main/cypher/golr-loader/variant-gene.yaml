@@ -1,7 +1,7 @@
 query: |
         MATCH path=(subject:`sequence feature`)<-[optional:GENO:0000382*0..1]-()-[relation:GENO:0000418|GENO:0000639!]->(object:gene)
         WHERE (NOT subject:anonymous AND NOT subject:gene) OR subject:`reagent targeted gene`
-        RETURN DISTINCT path,
+        RETURN  path,
         subject, object, relation,
         'variant' AS subject_category,
         'gene' AS object_category,

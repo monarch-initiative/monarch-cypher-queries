@@ -1,6 +1,6 @@
 query: |
         MATCH path=(pub:publication)-[r:IAO:0000142|IAO:0000136]->(gene:gene)
-        RETURN DISTINCT path,
+        RETURN  path,
             pub as subject,
             gene as object,
             'publication' as subject_category,
@@ -8,7 +8,7 @@ query: |
             'direct' as qualifier
         UNION
         MATCH path=(pub:publication)<-[:dc:source]-(association:association)-[r:OBAN:association_has_subject|OBAN:association_has_object]->(gene:gene)
-        RETURN DISTINCT path,
+        RETURN  path,
             pub as subject,
             gene as object,
             'publication' as subject_category,
@@ -17,7 +17,7 @@ query: |
         UNION
         MATCH path=(pub:publication)<-[:dc:source]-(association:association)-[r:OBAN:association_has_object|OBAN:association_has_subject]->(genotype:genotype)-[:BFO:0000051!*]->(variant:`sequence feature`)-[:GENO:0000418!*0..1]->(gene:gene)
         WHERE NOT variant:gene OR variant:`reagent targeted gene`
-        RETURN DISTINCT path,
+        RETURN  path,
             pub as subject,
             gene as object,
             'publication' as subject_category,
@@ -25,7 +25,7 @@ query: |
             'indirect' as qualifier
         UNION
         MATCH path=(pub:publication)-[r:IAO:0000142|IAO:0000136]->(genotype:genotype)-[:BFO:0000051!*]->(variant)-[:GENO:0000418!*0..1]->(gene:gene)
-        RETURN DISTINCT path,
+        RETURN  path,
             pub as subject,
             gene as object,
             'publication' as subject_category,
@@ -34,7 +34,7 @@ query: |
         UNION
         MATCH path=(pub:publication)<-[:dc:source]-(association:association)-[r:OBAN:association_has_subject|OBAN:association_has_object]->(variant:`sequence feature`)-[:GENO:0000418!*0..1]->(gene:gene)
         WHERE NOT variant:gene OR variant:`reagent targeted gene`
-        RETURN DISTINCT path,
+        RETURN  path,
             pub as subject,
             gene as object,
             'publication' as subject_category,
@@ -42,7 +42,7 @@ query: |
             'direct' as qualifier
         UNION
         MATCH path=(pub:publication)-[r:IAO:0000142|IAO:0000136]->(variant:`sequence feature`)-[:GENO:0000418!*0..1]->(gene:gene)
-        RETURN DISTINCT path,
+        RETURN  path,
             pub as subject,
             gene as object,
             'publication' as subject_category,
@@ -51,7 +51,7 @@ query: |
         UNION
         MATCH path=(pub:publication)<-[:dc:source]-(association:association)-[r:OBAN:association_has_subject|OBAN:association_has_object]->(person)-[:GENO:0000222]->(genotype:genotype)-[:BFO:0000051!*..11]->(variant:`sequence feature`)-[:GENO:0000418!*0..1]->(gene:gene)
         WHERE NOT variant:gene OR variant:`reagent targeted gene`
-        RETURN DISTINCT path,
+        RETURN  path,
             pub as subject,
             gene as object,
             'publication' as subject_category,
@@ -59,7 +59,7 @@ query: |
             'indirect' as qualifier
         UNION
         MATCH path=(pub:publication)-[r:IAO:0000142|IAO:0000136]->(person)-[:GENO:0000222]->(genotype:genotype)-[:BFO:0000051!*..11]->(variant:`sequence feature`)-[:GENO:0000418!*0..1]->(gene:gene)
-        RETURN DISTINCT path,
+        RETURN  path,
             pub as subject,
             gene as object,
             'publication' as subject_category,

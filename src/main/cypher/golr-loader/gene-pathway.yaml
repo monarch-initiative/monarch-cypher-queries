@@ -1,6 +1,6 @@
 query: |
         MATCH path=(subject:gene)-[:RO:0002205*0..1]->()-[relation:RO:0002331]->(object:pathway)
-        RETURN DISTINCT path,
+        RETURN  path,
         subject, object, relation,
         'gene' AS subject_category,
         'pathway' AS object_category,
