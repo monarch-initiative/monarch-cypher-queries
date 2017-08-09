@@ -6,7 +6,7 @@ query: |
             'publication' as subject_category,
             'phenotype' as object_category,
             'direct' as qualifier
-        UNION
+        UNION ALL
         MATCH path=(pub:publication)-[r:IAO:0000142|IAO:0000136]->(phenotype:Phenotype)
         RETURN  path,
             pub as subject,

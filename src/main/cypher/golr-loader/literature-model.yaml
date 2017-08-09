@@ -6,7 +6,7 @@ query: |
             'publication' as subject_category,
             'model' as object_category,
             'direct' as qualifier 
-        UNION
+        UNION ALL
         MATCH path=(pub:publication)<-[:dc:source]-(association:association)-[r:OBAN:association_has_object|OBAN:association_has_subject]->(model)-[:RO:0003301]->()
         RETURN  path,
             pub as subject,

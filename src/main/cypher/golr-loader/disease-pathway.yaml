@@ -6,7 +6,7 @@ query: |
         'disease' AS subject_category,
         'pathway' AS object_category,
         'inferred' AS qualifier
-        UNION
+        UNION ALL
         MATCH path=(subject:disease)<-[relation:RO:0002418!]-(object:pathway)
         RETURN  path,
         subject, object, relation,

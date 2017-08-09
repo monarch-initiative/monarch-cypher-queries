@@ -7,7 +7,7 @@ query: |
             'publication' as subject_category,
             'variant' as object_category,
             'indirect' as qualifier
-        UNION
+        UNION ALL
         MATCH path=(pub:publication)-[r:IAO:0000142|IAO:0000136]->(genotype:genotype)-[:BFO:0000051!*..15]->(variant:`sequence feature`)
         WHERE (NOT variant:anonymous AND NOT variant:gene) OR variant:`reagent targeted gene`
         RETURN  path,
@@ -16,7 +16,7 @@ query: |
             'publication' as subject_category,
             'variant' as object_category,
             'inferred' as qualifier
-        UNION
+        UNION ALL
         MATCH path=(pub:publication)<-[:dc:source]-(association:association)-[r:OBAN:association_has_subject|OBAN:association_has_object]->(variant:`sequence feature`)
         WHERE (NOT variant:anonymous AND NOT variant:gene) OR variant:`reagent targeted gene`
         RETURN  path,
@@ -25,7 +25,7 @@ query: |
             'publication' as subject_category,
             'variant' as object_category,
             'direct' as qualifier
-        UNION
+        UNION ALL
         MATCH path=(pub:publication)-[r:IAO:0000142|IAO:0000136]->(variant:`sequence feature`)
         WHERE (NOT variant:anonymous AND NOT variant:gene) OR variant:`reagent targeted gene`
         RETURN  path,
@@ -34,7 +34,7 @@ query: |
             'publication' as subject_category,
             'variant' as object_category,
             'inferred' as qualifier
-        UNION
+        UNION ALL
         MATCH path=(pub:publication)<-[:dc:source]-(association:association)-[r:OBAN:association_has_subject|OBAN:association_has_object]->(person)-[:GENO:0000222|RO:0001000*1..2]->(genotype:genotype)-[:BFO:0000051!*..15]->(variant:`sequence feature`)
         WHERE (NOT variant:anonymous AND NOT variant:gene) OR variant:`reagent targeted gene`
         RETURN  path,
@@ -43,7 +43,7 @@ query: |
             'publication' as subject_category,
             'variant' as object_category,
             'indirect' as qualifier
-        UNION
+        UNION ALL
         MATCH path=(pub:publication)-[r:IAO:0000142|IAO:0000136]->(person)-[:GENO:0000222|RO:0001000*1..2]->(genotype:genotype)-[:BFO:0000051!*..15]->(variant:`sequence feature`)
         WHERE (NOT variant:anonymous AND NOT variant:gene) OR variant:`reagent targeted gene`
         RETURN  path,

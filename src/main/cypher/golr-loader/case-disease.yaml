@@ -5,7 +5,7 @@ query: |
         'case' AS subject_category,
         'disease' AS object_category,
         'indirect' AS qualifier
-        UNION
+        UNION ALL
         MATCH path=(object:disease)<-[:RO:0002200]-(subject:case)
         RETURN  path,
         subject, object,
