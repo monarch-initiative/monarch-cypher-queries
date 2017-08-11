@@ -1,6 +1,6 @@
 query: |
         MATCH path=(object:disease)<-[relation:RO:0003301]-(subject)
-        RETURN DISTINCT path,
+        RETURN path,
         subject, object, relation,
         'model' AS subject_category,
         'disease' AS object_category,

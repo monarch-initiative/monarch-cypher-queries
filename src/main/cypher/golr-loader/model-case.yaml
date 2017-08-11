@@ -1,6 +1,6 @@
 query: |
         MATCH path=(subject)-[:RO:0001000]->(object:case)
-        RETURN DISTINCT path,
+        RETURN path,
         subject, object,
         'model' AS subject_category,
         'case' AS object_category,
