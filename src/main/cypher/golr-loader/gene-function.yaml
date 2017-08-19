@@ -1,20 +1,20 @@
 query: |
         MATCH path=(subject:gene)-[relation:RO:0002331]->(object:`biological process`)
-        RETURN DISTINCT path,
+        RETURN path,
         subject, object, relation,
         'gene' AS subject_category,
         'biological process' AS object_category,
         'direct' AS qualifier
-        UNION
+        UNION ALL
         MATCH path=(subject:gene)-[relation:RO:0002327]->(object:`molecular function`)
-        RETURN DISTINCT path,
+        RETURN path,
         subject, object, relation,
         'gene' AS subject_category,
         'biological process' AS object_category,
         'direct' AS qualifier
-        UNION
+        UNION ALL
         MATCH path=(subject:gene)-[relation:BFO:0000050]->(object:`cellular component`)
-        RETURN DISTINCT path,
+        RETURN path,
         subject, object, relation,
         'gene' AS subject_category,
         'biological process' AS object_category,

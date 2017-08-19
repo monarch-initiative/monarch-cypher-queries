@@ -1,6 +1,6 @@
 query: |
         MATCH path=(model)-[:RO:0001000*0..1]->(subject:case)-[:GENO:0000222]->(object:genotype)
-        RETURN DISTINCT path,
+        RETURN path,
         subject, object, NULL as relation,
         'case' AS subject_category,
         'genotype' AS object_category,

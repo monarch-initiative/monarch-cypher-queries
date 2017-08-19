@@ -1,30 +1,30 @@
 query: |
         MATCH path=(pub:publication)<-[:dc:source]-(association)-[r:OBAN:association_has_object|OBAN:association_has_subject]->(disease:disease)
-        RETURN DISTINCT path,
+        RETURN path,
             pub as subject,
             disease as object,
             'publication' as subject_category,
             'disease' as object_category,
             'direct' as qualifier
-        UNION
+        UNION ALL
         MATCH path=(pub:publication)-[r:IAO:0000142|IAO:0000136]->(disease:disease)
-        RETURN DISTINCT path,
+        RETURN path,
             pub as subject,
             disease as object,
             'publication' as subject_category,
             'disease' as object_category,
             'direct' as qualifier
-        UNION
+        UNION ALL
         MATCH path=(pub:publication)-[r:IAO:0000142|IAO:0000136]->(model)-[:RO:0003301]->(disease:disease)
-        RETURN DISTINCT path,
+        RETURN path,
             pub as subject,
             disease as object,
             'publication' as subject_category,
             'disease' as object_category,
             'indirect' as qualifier
-        UNION
+        UNION ALL
         MATCH path=(pub:publication)<-[:dc:source]-(association)-[r:OBAN:association_has_object|OBAN:association_has_subject]->(model)-[:RO:0003301]->(disease:disease)
-        RETURN DISTINCT path,
+        RETURN path,
             pub as subject,
             disease as object,
             'publication' as subject_category,
