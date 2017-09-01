@@ -1,6 +1,15 @@
 query: |
         MATCH path=(subject:disease)-[relation:RO:0002200|RO:0002610|RO:0002326!]->(object:Phenotype)
-        RETURN path,
+        OPTIONAL MATCH (assoc:association)-[:OBAN:association_has_subject]->(subject),
+                       (assoc)-[:OBAN:association_has_object]->(object),
+                       (assoc)-[:OBAN:association_has_predicate]->(has_pheno),
+                       (assoc)-[::onset]->(onset)
+        OPTIONAL MATCH (assoc:association)-[:OBAN:association_has_subject]->(subject),
+                       (assoc)-[:OBAN:association_has_object]->(object),
+                       (assoc)-[:OBAN:association_has_predicate]->(has_pheno),
+                       (assoc)-[::frequencyOfPhenotype]->(frequency)
+        WHERE has_pheno.iri = relation.iri
+        RETURN path, onset, frequency,
         subject, object, relation,
         'disease' AS subject_category,
         'phenotype' AS object_category,
