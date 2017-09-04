@@ -4,6 +4,7 @@ query: |
                        (assoc)-[:OBAN:association_has_object]->(object),
                        (assoc)-[:OBAN:association_has_predicate]->(has_pheno:ObjectProperty{iri:'http://purl.obolibrary.org/obo/RO_0002200'}),
                        (assoc)-[::onset]->(onset)
+        WITH path, subject, relation, object, onset
         OPTIONAL MATCH (assoc:association)-[:OBAN:association_has_subject]->(subject),
                        (assoc)-[:OBAN:association_has_object]->(object),
                        (assoc)-[:OBAN:association_has_predicate]->(has_pheno:ObjectProperty{iri:'http://purl.obolibrary.org/obo/RO_0002200'}),
