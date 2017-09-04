@@ -3,25 +3,25 @@ query: |
         WITH feature, COUNT(DISTINCT(locus)) as gene_count
         WHERE gene_count = 1
         AND NOT feature:snv
-        MATCH path=(subject:gene)<-[geno:GENO:0000418!]-(feature)-[:RO:0002200|RO:0002326|RO:0003302!]->(object:Phenotype)
+        MATCH path=(subject:gene)<-[geno:GENO:0000418!]-(feature)-[relation:RO:0002200|RO:0002326|RO:0003302!]->(object:Phenotype)
         RETURN path,
-        subject, object,
+        subject, object, relation,
         'gene' AS subject_category,
         'phenotype' AS object_category,
         'direct' as qualifier
         UNION ALL
-        MATCH path=(subject:gene)<-[geno:GENO:0000418!]-(feature:snv)-[:RO:0002200|RO:0002326|RO:0003302!]->(object:Phenotype)
+        MATCH path=(subject:gene)<-[geno:GENO:0000418!]-(feature:snv)-[relation:RO:0002200|RO:0002326|RO:0003302!]->(object:Phenotype)
         RETURN path,
-        subject, object,
+        subject, object, relation,
         'gene' AS subject_category,
         'phenotype' AS object_category,
         'direct' as qualifier
         UNION ALL
-        MATCH path=(subject:gene)<-[geno:GENO:0000418!*0..1]-(feature)-[:RO:0002200|RO:0002326|RO:0003302!]->(object:Phenotype)
-        WHERE NOT ANY (relation in geno where relation.isDefinedBy="https://data.monarchinitiative.org/ttl/mgi.ttl")
-        AND NOT ANY (relation in geno where "https://data.monarchinitiative.org/ttl/mgi.ttl" in relation.isDefinedBy)
+        MATCH path=(subject:gene)<-[geno:GENO:0000418!*0..1]-(feature)-[relation:RO:0002200|RO:0002326|RO:0003302!]->(object:Phenotype)
+        WHERE NOT ANY (rel in geno where rel.isDefinedBy="https://data.monarchinitiative.org/ttl/mgi.ttl")
+        AND NOT ANY (rel in geno where "https://data.monarchinitiative.org/ttl/mgi.ttl" in rel.isDefinedBy)
         RETURN path,
-        subject, object,
+        subject, object, relation,
         'gene' AS subject_category,
         'phenotype' AS object_category,
         'direct' as qualifier
@@ -29,6 +29,7 @@ query: |
         MATCH path=(subject:gene)<-[:GENO:0000418!*0..1]-(feature)-[:RO:0002200|RO:0002326|RO:0003302!*2..]->(object:Phenotype)
         RETURN path,
         subject, object,
+        NULL as relation,
         'gene' AS subject_category,
         'phenotype' AS object_category,
         'inferred' as qualifier
@@ -37,13 +38,14 @@ query: |
         WHERE NOT ANY (relation in rel where relation.isDefinedBy="https://data.monarchinitiative.org/ttl/mgi.ttl" OR relation.isDefinedBy="https://data.monarchinitiative.org/ttl/zfin.ttl")
         RETURN path,
         subject, object,
+        NULL as relation,
         'gene' AS subject_category,
         'phenotype' AS object_category,
         'inferred' as qualifier
         UNION ALL
-        MATCH path=(subject:gene)<-[:GENO:0000418]-(allele)-[:BFO:0000051!*]->(feature)-[:RO:0002200|RO:0002326|RO:0002610|RO:0003302!]->(object:Phenotype)
+        MATCH path=(subject:gene)<-[:GENO:0000418]-(allele)-[:BFO:0000051!*]->(feature)-[relation:RO:0002200|RO:0002326|RO:0002610|RO:0003302!]->(object:Phenotype)
         RETURN path,
-        subject, object,
+        subject, object, relation,
         'gene' AS subject_category,
         'phenotype' AS object_category,
         'inferred' as qualifier
@@ -52,6 +54,7 @@ query: |
         WHERE NOT ANY (relation in rel where relation.isDefinedBy="https://data.monarchinitiative.org/ttl/udp.ttl")
         RETURN path,
         subject, object,
+        NULL as relation,
         'gene' AS subject_category,
         'phenotype' AS object_category,
         'inferred' as qualifier
