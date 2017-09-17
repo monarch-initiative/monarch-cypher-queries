@@ -26,16 +26,18 @@ query: |
         'phenotype' AS object_category,
         'direct' as qualifier
         UNION ALL
-        MATCH path=(subject:gene)<-[:GENO:0000418!*0..1]-(feature)-[:RO:0002200|RO:0002326|RO:0003302!*2..]->(object:Phenotype)
         MATCH (relation:ObjectProperty{iri:'http://purl.obolibrary.org/obo/RO_0002200'})
+        WITH relation
+        MATCH path=(subject:gene)<-[:GENO:0000418!*0..1]-(feature)-[:RO:0002200|RO:0002326|RO:0003302!*2..]->(object:Phenotype)
         RETURN path,
         subject, object, relation,
         'gene' AS subject_category,
         'phenotype' AS object_category,
         'inferred through variant' as qualifier
         UNION ALL
-        MATCH path=(subject:gene)<-[:GENO:0000418!*0..1]-(feature)<-[:BFO:0000051!*]-(genotype:genotype)-[rel:RO:0002200|RO:0002326|RO:0003302!*]->(object:Phenotype)
         MATCH (relation:ObjectProperty{iri:'http://purl.obolibrary.org/obo/RO_0002200'})
+        WITH relation
+        MATCH path=(subject:gene)<-[:GENO:0000418!*0..1]-(feature)<-[:BFO:0000051!*]-(genotype:genotype)-[rel:RO:0002200|RO:0002326|RO:0003302!*]->(object:Phenotype)
         WHERE NOT ANY (pheno_rel in rel where pheno_rel.isDefinedBy="https://data.monarchinitiative.org/ttl/mgi.ttl" OR pheno_rel.isDefinedBy="https://data.monarchinitiative.org/ttl/zfin.ttl")
         RETURN path,
         subject, object, relation,
@@ -50,8 +52,9 @@ query: |
         'phenotype' AS object_category,
         'inferred' as qualifier
         UNION ALL
-        MATCH path=(subject:gene)<-[:GENO:0000418!*0..1]-(feature)<-[:BFO:0000051!*]-(genotype:genotype)<-[:GENO:0000222|RO:0001000*1..2]-(person)-[rel:RO:0002200|RO:0002326!*]->(object:Phenotype)
         MATCH (relation:ObjectProperty{iri:'http://purl.obolibrary.org/obo/RO_0002200'})
+        WITH relation
+        MATCH path=(subject:gene)<-[:GENO:0000418!*0..1]-(feature)<-[:BFO:0000051!*]-(genotype:genotype)<-[:GENO:0000222|RO:0001000*1..2]-(person)-[rel:RO:0002200|RO:0002326!*]->(object:Phenotype)
         WHERE NOT ANY (pheno_rel in rel where pheno_rel.isDefinedBy="https://data.monarchinitiative.org/ttl/udp.ttl")
         RETURN path,
         subject, object, relation,
