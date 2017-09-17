@@ -7,7 +7,7 @@ query: |
         'phenotype' AS object_category,
         'direct' as qualifier
         UNION ALL
-        MATCH (relation:ObjectProperty{iri:'http://purl.obolibrary.org/obo/RO_0002200'})
+        MATCH (relation:Node{iri:'http://purl.obolibrary.org/obo/RO_0002200'})
         WITH relation
         MATCH path=(subject)-[:RO:0002200|RO:0002610|RO:0002326|RO:0003302!*2..2]->(object:Phenotype)
         WHERE (((subject:`sequence feature` AND NOT subject:gene) OR subject:`variant locus`) AND NOT subject:anonymous) OR subject:`reagent targeted gene`
