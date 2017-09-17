@@ -1,14 +1,14 @@
 query: |
         MATCH path=(object:disease)<-[relation:RO:0003301]-(model)-[:RO:0001000]->(subject:case)
         RETURN path,
-        subject, object,
+        subject, object, relation,
         'case' AS subject_category,
         'disease' AS object_category,
-        'indirect' AS qualifier
+        'direct' AS qualifier
         UNION ALL
-        MATCH path=(object:disease)<-[:RO:0002200]-(subject:case)
+        MATCH path=(object:disease)<-[relation:RO:0002200]-(subject:case)
         RETURN path,
-        subject, object,
+        subject, object, relation,
         'case' AS subject_category,
         'disease' AS object_category,
-        'indirect' AS qualifier
+        'direct' AS qualifier

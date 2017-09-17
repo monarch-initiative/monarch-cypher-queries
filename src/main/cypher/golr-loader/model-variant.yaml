@@ -1,8 +1,9 @@
 query: |
         MATCH path=(subject)-[rel:RO:0001000|GENO:0000222*1..2]->(genotype:genotype)-[:BFO:0000051!*]->(object)
-        WHERE NOT ANY (relation in rel where relation.isDefinedBy="https://data.monarchinitiative.org/ttl/udp.ttl")
+        MATCH (relation:ObjectProperty{iri:'http://purl.obolibrary.org/obo/GENO_0000222'})
+        WHERE NOT ANY (geno_rel in rel where geno_rel.isDefinedBy="https://data.monarchinitiative.org/ttl/udp.ttl")
         AND (((object:`sequence feature` AND NOT object:gene) OR object:`variant locus`) AND NOT object:anonymous) OR object:`reagent targeted gene`
-        RETURN path,
+        RETURN path, relation,
         subject, object,
         'model' AS subject_category,
         'variant' AS object_category,

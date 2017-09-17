@@ -6,9 +6,9 @@ query: |
         'genotype' AS object_category,
         'direct' AS qualifier
         UNION ALL
-        MATCH path=()<-[:RO:0003301]-(subject)-[:RO:0001000]->(organism)-[:GENO:0000222]->(object:genotype)
+        MATCH path=()<-[:RO:0003301]-(subject)-[:RO:0001000]->(organism)-[relation:GENO:0000222]->(object:genotype)
         RETURN path,
-        subject, object, NULL as relation,
+        subject, object, relation,
         'model' AS subject_category,
         'genotype' AS object_category,
-        'indirect' AS qualifier
+        'direct' AS qualifier
