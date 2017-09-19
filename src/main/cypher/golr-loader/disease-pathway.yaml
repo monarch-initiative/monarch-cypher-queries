@@ -5,7 +5,7 @@ query: |
         subject, object, relation,
         'disease' AS subject_category,
         'pathway' AS object_category,
-        'inferred' AS qualifier
+        'inferred through joining gene disease and gene pathway associations' AS qualifier
         UNION ALL
         MATCH path=(subject:disease)<-[relation:RO:0002418!]-(object:pathway)
         RETURN path,

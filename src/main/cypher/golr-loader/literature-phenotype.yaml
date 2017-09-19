@@ -1,15 +1,15 @@
 query: |
-        MATCH path=(pub:publication)<-[:dc:source]-(association)-[r:OBAN:association_has_object|OBAN:association_has_subject]->(phenotype:Phenotype)
+        MATCH path=(pub:publication)<-[relation:dc:source]-(association)-[r:OBAN:association_has_object|OBAN:association_has_subject]->(phenotype:Phenotype)
         RETURN path,
-            pub as subject,
+            pub as subject, relation,
             phenotype as object,
             'publication' as subject_category,
             'phenotype' as object_category,
             'direct' as qualifier
         UNION ALL
-        MATCH path=(pub:publication)-[r:IAO:0000142|IAO:0000136]->(phenotype:Phenotype)
+        MATCH path=(pub:publication)-[relation:IAO:0000142|IAO:0000136]->(phenotype:Phenotype)
         RETURN path,
-            pub as subject,
+            pub as subject, relation,
             phenotype as object,
             'publication' as subject_category,
             'phenotype' as object_category,

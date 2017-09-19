@@ -1,8 +1,8 @@
 query: |
-        MATCH path=(model)-[:RO:0001000*0..1]->(subject:case)-[:GENO:0000222]->(genotype:genotype)-[:BFO:0000051!*]->(object)
+        MATCH path=(model)-[:RO:0001000*0..1]->(subject:case)-[relation:GENO:0000222]->(genotype:genotype)-[:BFO:0000051!*]->(object)
         WHERE ((object:`sequence feature` AND NOT object:gene) OR object:`variant locus`) OR object:`reagent targeted gene`
         RETURN path,
-        subject, object,
+        subject, object, relation,
         'case' AS subject_category,
         'variant' AS object_category,
-        'direct' AS qualifier
+        'inferred through intrinsic genotype' AS qualifier
