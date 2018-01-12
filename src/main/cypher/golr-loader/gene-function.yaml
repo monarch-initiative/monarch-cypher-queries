@@ -19,3 +19,4 @@ query: |
         'gene' AS subject_category,
         'biological process' AS object_category,
         'direct' AS qualifier
+object_closure: "rdfs:subClassOf|BFO:0000050"
