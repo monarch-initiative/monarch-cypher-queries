@@ -167,8 +167,7 @@ cypherResources:
     ## Homologs from gene
     - path: /dynamic/genes/{gene_id}/homologs
       query: |
-              START gene = node:node_auto_index(iri={gene_id})
-              MATCH (gene)-[e:equivalentClass*0..2]-(ge:gene)-[homology:${homolog_id}!]-(homolog)
+              MATCH (gene:Node{iri:'${gene_id}'})-[e:equivalentClass*0..2]-(ge:gene)-[homology:${homolog_id}!]-(homolog)
               RETURN distinct gene, e, ge, homology, homolog
       operations:
         - summary: Get homologs for a gene
