@@ -1,5 +1,5 @@
 query: |
-        MATCH path=(subject:disease)-[relation:RO:0002200|RO:0002610|RO:0002326!]->(object:Phenotype)
+        MATCH path=(subject:disease)-[relation:RO:0002200|RO:0002610|RO:0002326!]->(object:phenotype)
         OPTIONAL MATCH (assoc:association)-[:OBAN:association_has_subject]->(subject),
                        (assoc)-[:OBAN:association_has_object]->(object),
                        (assoc)-[:OBAN:association_has_predicate]->(has_pheno:Node{iri:'http://purl.obolibrary.org/obo/RO_0002200'}),
