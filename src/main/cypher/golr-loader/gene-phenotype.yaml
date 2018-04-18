@@ -28,7 +28,7 @@ query: |
         UNION ALL
         MATCH (relation:Node{iri:'http://purl.obolibrary.org/obo/RO_0002200'})
         WITH relation
-        MATCH path=(subject:gene)<-[:GENO:0000418!*0..1]-(feature)-[:RO:0002200|RO:0003302!*2..]->(object:phenotype)
+        MATCH path=(subject:gene)<-[:GENO:0000418!*0..1]-(feature)-[:RO:0002200|GENO:0000840!*2..]->(object:phenotype)
         RETURN path,
         subject, object, relation,
         'gene' AS subject_category,
