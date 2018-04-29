@@ -32,7 +32,7 @@ CALL apoc.periodic.iterate(
 );
 
 // Remove the eq edges
-// Note setting parallel to true causes deadlock exceptions
+// Note setting parallel:true causes deadlock exceptions
 CALL apoc.periodic.iterate(
   "MATCH (node:cliqueLeader)-[r:equivalentClass|sameAs]-(eqNode)
    WHERE NOT eqNode:cliqueLeader
@@ -43,11 +43,19 @@ CALL apoc.periodic.iterate(
 
 // Add inheritance as node properties
 CALL apoc.periodic.iterate(
-   "MATCH (n:disease)-[:`http://purl.obolibrary.org/obo/RO_0000091`]->(inheritance:inheritance)
-    RETURN n, inheritance",
-   "SET n.inheritance_label = inheritance.label",
-    {batchSize:1000, parallel:true, iterateList:true}
+  "MATCH (disease:disease)-[:`http://purl.obolibrary.org/obo/RO_0000091`]->(inheritance:inheritance)
+   RETURN DISTINCT disease, inheritance",
+  "SET disease.inheritance =
+      CASE
+        WHEN (EXISTS (disease.inheritance) AND NOT inheritance.label IN disease.inheritance)
+          THEN disease.inheritance + inheritance.label
+        WHEN NOT (EXISTS (disease.inheritance))
+          THEN [inheritance.label]
+        ELSE disease.inheritance
+      END",
+  {batchSize:1000, parallel:false, iterateList:true}
 );
+
 
 // Make isDefinedBy a node property
 // Currently commenting this out as it is not very useful
@@ -60,9 +68,9 @@ CALL apoc.periodic.iterate(
 //    RETURN n, ontology",
 //    "SET n.isDefinedBy = 
 //      CASE
-//        WHEN (EXISTS (n.isDefinedBy) AND ontology.iri NOT IN n.isDefinedBy)
+//        WHEN (EXISTS (n.isDefinedBy) AND NOT ontology.iri IN n.isDefinedBy)
 //          THEN n.isDefinedBy + ontology.iri
-//        WHEN NOT (EXISTS (n.isDefinedBy)
+//        WHEN NOT (EXISTS (n.isDefinedBy))
 //          THEN [ontology.iri]
 //        ELSE n.isDefinedBy          
 //      END",
@@ -77,14 +85,12 @@ CALL apoc.periodic.iterate(
 //    RETURN n, course",
 //   "SET n.clinical_course = 
 //      CASE
-//        WHEN (EXISTS (n.clinical_course) AND course.label NOT IN n.clinical_course)
+//        WHEN (EXISTS (n.clinical_course) AND NOT course.label IN n.clinical_course)
 //          THEN n.clinical_course + course.label
-//        WHEN NOT (EXISTS (n.clinical_course)
+//        WHEN NOT (EXISTS (n.clinical_course) )
 //          THEN [course.label]
 //        ELSE n.clinical_course
 //      END",
 //    {batchSize:1000, parallel:false, , iterateList:false}
 //);
-
-
 
