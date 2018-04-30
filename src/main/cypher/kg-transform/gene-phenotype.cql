@@ -1,10 +1,6 @@
 // Human gene to phenotype inference, we join a gene-variant-disease, and disease-phenotype relations
 // Leverages the prejoin of gene to disease through a variant from gene-disease.cql
 
-// The merge statement is not very DRY, but I can't find a way to
-// make this a templated query, maybe https://github.com/neo4j-contrib/neo4j-apoc-procedures/issues/163
-// Or a user defined procedure, or inject them into these text files (similar to how we build curie maps)
-
 CALL apoc.periodic.iterate(
   "MATCH path=(subject:gene)-[contributes_to:`http://purl.obolibrary.org/obo/RO_0002326`]->(disease:disease),
          (disease)-[predicate:`http://purl.obolibrary.org/obo/RO_0002200`]->(object:phenotype)
