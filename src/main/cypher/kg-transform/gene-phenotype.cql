@@ -2,8 +2,8 @@
 // Leverages the prejoin of gene to disease through a variant from gene-disease.cql
 
 CALL apoc.periodic.iterate(
-  "MATCH path=(subject:gene)-[contributes_to:`http://purl.obolibrary.org/obo/RO_0002326`*0..1]->(disease:disease),
-         (disease)-[predicate:`http://purl.obolibrary.org/obo/RO_0002200`]->(object:phenotype)
+  "MATCH path=(subject:gene)-[contributes_to:`http://purl.obolibrary.org/obo/RO_0002326`*0..1]->(disease:disease)
+                            -[predicate:`http://purl.obolibrary.org/obo/RO_0002200`]->(object:phenotype)
   WHERE NOT EXISTS(predicate.frequency) OR predicate.frequency <> 'http://purl.obolibrary.org/obo/HP_0040284'
   UNWIND relationships(path) as edges
   UNWIND (CASE edges.evidence WHEN NULL THEN [NULL] ELSE edges.evidence END) as evidence
