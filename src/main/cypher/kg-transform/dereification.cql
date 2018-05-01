@@ -35,15 +35,15 @@ CALL apoc.periodic.iterate(
          (assoc)-[:`http://purl.org/oban/association_has_predicate`]->(edge)
    WHERE edge.iri = predicate.iri
    WITH predicate, assoc
-   MATCH (assoc)-[:`http://purl.org/dc/elements/1.1/source`]->(source)
-   RETURN predicate, source",
-  "SET predicate.sources =
+   MATCH (assoc)-[:`http://purl.org/dc/elements/1.1/source`]->(publication)
+   RETURN predicate, publication",
+  "SET predicate.publications =
       CASE
-        WHEN (EXISTS (predicate.sources) AND NOT source.iri IN predicate.sources)
-          THEN predicate.sources + source.iri
-        WHEN NOT (EXISTS (predicate.sources))
-          THEN [source.iri]
-        ELSE predicate.sources
+        WHEN (EXISTS (predicate.publications) AND NOT publication.iri IN predicate.publications)
+          THEN predicate.publications + publication.iri
+        WHEN NOT (EXISTS (predicate.publications))
+          THEN [publication.iri]
+        ELSE predicate.publications
       END",
   {batchSize:1000, parallel:false, iterateList:true}
 );
@@ -69,4 +69,17 @@ CALL apoc.periodic.iterate(
       END",
   {batchSize:1000, parallel:false, iterateList:true}
 );
+
+
+// Make isDefinedBy an array, change name to sources
+// This takes a really long time, will think of a different
+// strategy
+//CALL apoc.periodic.iterate(
+//  "MATCH (subject:cliqueLeader)-[predicate]->(object:cliqueLeader)
+//   WHERE EXISTS(predicate.isDefinedBy)
+//   RETURN predicate",
+//  "SET predicate.sources = [predicate.isDefinedBy]
+//   REMOVE predicate.isDefinedBy",
+//  {batchSize:1000, parallel:true, iterateList:true}
+//);
 

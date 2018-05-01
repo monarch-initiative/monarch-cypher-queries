@@ -10,15 +10,16 @@ CALL apoc.periodic.iterate(
                                                                                                         `http://purl.obolibrary.org/obo/GENO_0000840`|
                                                                                                         `http://purl.obolibrary.org/obo/GENO_0000841`]->(object:disease)
   UNWIND relationships(path) as edges
-  UNWIND edges.sources as sources
-  UNWIND edges.evidence as evidence
-  RETURN subject, object, COLLECT(DISTINCT sources) as sources, 
-         COLLECT(DISTINCT evidence) as evidence
+  UNWIND (CASE edges.evidence WHEN NULL THEN [NULL] ELSE edges.evidence END) as evidence
+  UNWIND (CASE edges.publications WHEN NULL THEN [NULL] ELSE edges.publications END) as publications
+  RETURN subject, object, COLLECT(DISTINCT edges.isDefinedBy) as sources,
+         COLLECT(DISTINCT evidence) as evidence,
+         COLLECT(DISTINCT publications) as publications
   ",
   "
   MERGE (subject)-[edge:`http://purl.obolibrary.org/obo/RO_0002326`]->(object)
   ON CREATE SET edge = {qualifer: 'inferred', lbl: 'contributes_to'}
   AGGREGATE_EVIDENCE_SOURCE_PROPS
   ",
-    {batchSize:1000, parallel:false, iterateList:true}
+  {batchSize:1000, parallel:false, iterateList:true}
 );
