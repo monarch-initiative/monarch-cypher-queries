@@ -17,8 +17,12 @@ CALL apoc.periodic.iterate(
          COLLECT(DISTINCT publications) as publications
   ",
   "
-  MERGE (subject)-[edge:`http://purl.obolibrary.org/obo/RO_0002326`]->(object)
-  ON CREATE SET edge = {qualifer: 'inferred', lbl: 'contributes_to'}
+  MERGE (subject)-[edge:contributes_to]->(object)
+  ON CREATE SET edge = {
+    qualifier: 'direct',
+    relation: 'RO:0002326',
+    is_defined_by: 'Monarch'
+  }
   AGGREGATE_EVIDENCE_SOURCE_PROPS
   ",
   {batchSize:1000, parallel:false, iterateList:true}

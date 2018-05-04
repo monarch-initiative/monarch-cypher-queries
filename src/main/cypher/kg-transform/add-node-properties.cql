@@ -18,6 +18,13 @@ CALL apoc.periodic.iterate(
   {batchSize:1000, parallel:true, iterateList:true}
 );
 
+// Add name property (copy from label)
+CALL apoc.periodic.iterate(
+  "MATCH (node:cliqueLeader) RETURN node",
+  "SET node.name = node.label",
+  {batchSize:1000, parallel:true, iterateList:true}
+);
+
 // Add non-leader iris to the clique property
 CALL apoc.periodic.iterate(
   "MATCH (node:cliqueLeader)-[r:equivalentClass|sameAs]-(eqNode)
