@@ -38,6 +38,19 @@ CALL apoc.periodic.iterate(
   {batchSize:1000, parallel:false, iterateList:false}
 );
 
+// Add proteins to gene clique
+CALL apoc.periodic.iterate(
+  "MATCH (node:gene)-[r:`http://purl.obolibrary.org/obo/RO_0002205`]-(protein:protein)
+   RETURN node, protein",
+  "SET node.clique =
+      CASE
+        WHEN NOT (protein.iri IN node.clique)
+          THEN node.clique + protein.iri
+        ELSE node.clique
+      END",
+  {batchSize:1000, parallel:false, iterateList:false}
+);
+
 // Remove the eq edges
 // Note setting parallel:true causes deadlock exceptions
 CALL apoc.periodic.iterate(

@@ -1,10 +1,10 @@
-ON CREATE SET edge.sources = sources
+ON CREATE SET edge.provided_by = sources
 ON CREATE SET edge.evidence = evidence
 ON CREATE SET edge.publications = publications
-ON MATCH SET edge.sources =
+ON MATCH SET edge.provided_by =
   CASE
-    WHEN (EXISTS (edge.sources))
-      THEN edge.sources + FILTER(src in sources WHERE NOT src IN edge.sources)
+    WHEN (EXISTS (edge.provided_by))
+      THEN edge.provided_by + FILTER(src in sources WHERE NOT src IN edge.provided_by)
       ELSE sources
   END
 ON MATCH SET edge.evidence =

@@ -7,4 +7,11 @@ YIELD file, source, format, nodes, relationships, properties, time
 RETURN nodes, relationships, time;
 
 
+// Export as csv
+CALL apoc.export.csv.query("MATCH (p1:cliqueLeader)-[r{qualifier:'direct'}]->(p2:cliqueLeader) RETURN p1,r,p2" ,"export-kg.csv",{});
+
+
+
+
+
 

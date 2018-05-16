@@ -10,9 +10,12 @@ CALL apoc.periodic.iterate(
                                                                                                         `http://purl.obolibrary.org/obo/GENO_0000840`|
                                                                                                         `http://purl.obolibrary.org/obo/GENO_0000841`]->(object:disease)
   UNWIND relationships(path) as edges
+  UNWIND (CASE edges.isDefinedBy WHEN NULL THEN [NULL] ELSE edges.isDefinedBy END) as sources
   UNWIND (CASE edges.evidence WHEN NULL THEN [NULL] ELSE edges.evidence END) as evidence
   UNWIND (CASE edges.publications WHEN NULL THEN [NULL] ELSE edges.publications END) as publications
-  RETURN subject, object, COLLECT(DISTINCT edges.isDefinedBy) as sources,
+  RETURN subject,
+         object,
+         COLLECT(DISTINCT sources) as sources,
          COLLECT(DISTINCT evidence) as evidence,
          COLLECT(DISTINCT publications) as publications
   ",
