@@ -1,16 +1,5 @@
 query: |
-        MATCH (locus:gene)<-[:GENO:0000418|GENO:0000639!]-(feature)
-        WITH feature, COUNT(DISTINCT(locus)) as gene_count
-        WHERE gene_count = 1
-        AND NOT feature:snv
-        MATCH path=(subject:gene)<-[geno:GENO:0000418|GENO:0000639!]-(feature)-[relation:RO:0002200|RO:0002610|RO:0002326|RO:0003302!]->(object:disease)
-        RETURN path,
-        subject, object, relation,
-        'gene' AS subject_category,
-        'disease' AS object_category,
-        'inferred through variant' as qualifier
-        UNION ALL
-        MATCH path=(subject:gene)<-[geno:GENO:0000418|GENO:0000639!]-(feature:snv)-[relation:RO:0002200|RO:0002610|RO:0002326|RO:0003302!]->(object:disease)
+        MATCH path=(subject:gene)<-[geno:GENO:0000418|GENO:0000639!*0..1]-(feature)-[relation:RO:0002200|RO:0002610|RO:0002326|RO:0003302!]->(object:disease)
         RETURN path,
         subject, object, relation,
         'gene' AS subject_category,
