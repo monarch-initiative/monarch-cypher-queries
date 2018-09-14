@@ -8,7 +8,7 @@ query: |
         'phenotype' AS object_category,
         'direct' as qualifier
         UNION ALL
-        MATCH path=(subject:gene)<-[:GENO:0000418!*0..1]-(feature)-[:RO:0002200|GENO:0000840]->(disease)-[relation:RO:0002200]->(object:Phenotype)
+        MATCH path=(subject:gene)<-[:GENO:0000418!*0..1]-(feature)-[:RO:0002200|GENO:0000840|RO:0003303]->(disease)-[relation:RO:0002200]->(object:Phenotype)
         MATCH (assoc:association)-[:OBAN:association_has_subject]->(disease),
               (assoc)-[:OBAN:association_has_object]->(object),
               (assoc)-[:OBAN:association_has_predicate]->(has_pheno:Node{iri:'http://purl.obolibrary.org/obo/RO_0002200'})
