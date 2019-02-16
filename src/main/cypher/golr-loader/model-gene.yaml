@@ -4,6 +4,7 @@ query: |
         AND ((variant:`sequence feature` AND NOT variant:gene) OR variant:`variant locus`) OR variant:`reagent targeted gene`
         RETURN path,
         subject, object,
+        'model_gene' as association_type,
         'model' AS subject_category,
         'gene' AS object_category,
         'inferred through genotype' AS qualifier

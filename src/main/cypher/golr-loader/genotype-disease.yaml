@@ -2,6 +2,7 @@ query: |
         MATCH path=(object:disease)<-[relation:RO:0002200|RO:0002610|RO:0002326!]-(person)-[:GENO:0000222|RO:0001000*0..2]->(subject:genotype)
         RETURN path,
         subject, object, relation,
+        'genotype_disease' as association_type,
         'genotype' AS subject_category,
         'disease' AS object_category,
         'direct' AS qualifier

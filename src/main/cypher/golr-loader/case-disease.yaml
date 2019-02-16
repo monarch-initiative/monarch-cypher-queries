@@ -9,6 +9,7 @@ query: |
         MATCH path=(object:disease)<-[relation:RO:0002200]-(subject:case)
         RETURN path,
         subject, object, relation,
+        'case_disease' as association_type,
         'case' AS subject_category,
         'disease' AS object_category,
         'direct' AS qualifier

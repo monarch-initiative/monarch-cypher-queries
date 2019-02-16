@@ -3,6 +3,7 @@ query: |
         RETURN path,
             pub as subject, relation,
             phenotype as object,
+            'publication_phenotype' as association_type,
             'publication' as subject_category,
             'phenotype' as object_category,
             'direct' as qualifier
@@ -11,6 +12,7 @@ query: |
         RETURN path,
             pub as subject, relation,
             phenotype as object,
+            'publication_phenotype' as association_type,
             'publication' as subject_category,
             'phenotype' as object_category,
             'direct' as qualifier

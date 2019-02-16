@@ -6,6 +6,7 @@ query: |
         AND (((object:`sequence feature` AND NOT object:gene) OR object:`variant locus`) AND NOT object:anonymous) OR object:`reagent targeted gene`
         RETURN path, relation,
         subject, object,
+        'model_variant' as association_type,
         'model' AS subject_category,
         'variant' AS object_category,
         'direct' AS qualifier

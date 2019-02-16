@@ -3,6 +3,7 @@ query: |
         RETURN path, relation,
             pub as subject,
             genotype as object,
+            'publication_genotype' as association_type,
             'publication' as subject_category,
             'genotype' as object_category,
             'direct' as qualifier
@@ -11,6 +12,7 @@ query: |
         RETURN path, relation,
             pub as subject,
             genotype as object,
+            'publication_genotype' as association_type,
             'publication' as subject_category,
             'genotype' as object_category,
             'direct' as qualifier
@@ -19,6 +21,7 @@ query: |
         RETURN path, relation,
             pub as subject,
             genotype as object,
+            'publication_genotype' as association_type,
             'publication' as subject_category,
             'genotype' as object_category,
             'indirect' as qualifier
@@ -27,6 +30,7 @@ query: |
         RETURN path, relation,
             pub as subject,
             genotype as object,
+            'publication_genotype' as association_type,
             'publication' as subject_category,
             'genotype' as object_category,
             'inferred' as qualifier

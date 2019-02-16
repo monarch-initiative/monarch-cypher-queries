@@ -2,6 +2,7 @@ query: |
         MATCH path=(subject:gene)-[relation:RO:0002331]->(object:`biological process`)
         RETURN path,
         subject, object, relation,
+        'gene_function' as association_type,
         'gene' AS subject_category,
         'biological process' AS object_category,
         'direct' AS qualifier
@@ -9,6 +10,7 @@ query: |
         MATCH path=(subject:gene)-[relation:RO:0002327]->(object:`molecular function`)
         RETURN path,
         subject, object, relation,
+        'gene_function' as association_type,
         'gene' AS subject_category,
         'biological process' AS object_category,
         'direct' AS qualifier
@@ -16,6 +18,7 @@ query: |
         MATCH path=(subject:gene)-[relation:BFO:0000050]->(object:`cellular component`)
         RETURN path,
         subject, object, relation,
+        'gene_function' as association_type,
         'gene' AS subject_category,
         'biological process' AS object_category,
         'direct' AS qualifier

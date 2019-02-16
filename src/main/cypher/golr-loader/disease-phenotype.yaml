@@ -11,6 +11,7 @@ query: |
                        (assoc)-[::frequencyOfPhenotype]->(frequency)
         RETURN path, onset, frequency,
         subject, object, relation,
+        'disease_phenotype' as association_type,
         'disease' AS subject_category,
         'phenotype' AS object_category,
         'direct' as qualifier

@@ -2,6 +2,7 @@ query: |
         MATCH path=(subject)-[:RO:0001000]->(person)-[relation:RO:0002350]->(object)-[:type]->(pco:Node{iri:'https://purl.obolibrary.org/obo/PCO_0000020'})
         RETURN path, relation,
         subject, object,
+        'model_family' as association_type,
         'model' AS subject_category,
         'family' AS object_category,
         'direct' AS qualifier

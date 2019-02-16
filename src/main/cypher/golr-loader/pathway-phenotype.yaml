@@ -5,6 +5,7 @@ query: |
         pathway as subject,
         phenotype as object,
         r as relation,
+        'pathway_phenotype' as association_type,
         'pathway' as subject_category,
         'phenotype' as object_category,
         'inferred through joining gene pathway, gene disease, and homology associations' as qualifier
@@ -15,6 +16,7 @@ query: |
         pathway as subject,
         phenotype as object,
         r as relation,
+        'pathway_phenotype' as association_type,
         'pathway' as subject_category,
         'phenotype' as object_category,
         'inferred through joining gene pathway, gene disease, and homology associations' as qualifier
@@ -25,6 +27,7 @@ query: |
         pathway as subject,
         phenotype as object,
         r as relation,
+        'pathway_phenotype' as association_type,
         'pathway' as subject_category,
         'phenotype' as object_category,
         'inferred through joining gene pathway, gene disease, and homology associations' as qualifier

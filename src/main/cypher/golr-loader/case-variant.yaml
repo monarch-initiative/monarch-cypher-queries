@@ -3,6 +3,7 @@ query: |
         WHERE ((object:`sequence feature` AND NOT object:gene) OR object:`variant locus`) OR object:`reagent targeted gene`
         RETURN path,
         subject, object, relation,
+        'case_variant' as association_type,
         'case' AS subject_category,
         'variant' AS object_category,
         'inferred through intrinsic genotype' AS qualifier

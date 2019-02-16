@@ -2,6 +2,7 @@ query: |
         MATCH path=(object:disease)<-[relation:RO:0003301]-(subject)
         RETURN path,
         subject, object, relation,
+        'model_disease' as association_type,
         'model' AS subject_category,
         'disease' AS object_category,
         'direct' AS qualifier

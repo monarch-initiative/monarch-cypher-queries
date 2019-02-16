@@ -3,6 +3,7 @@ query: |
         WHERE (((variant:`sequence feature` AND NOT variant:gene) OR variant:`variant locus`) AND NOT variant:anonymous) OR variant:`reagent targeted gene`
         RETURN path,
         subject, object, relation,
+        'disease_pathway' as association_type,
         'disease' AS subject_category,
         'pathway' AS object_category,
         'inferred through joining gene disease and gene pathway associations' AS qualifier
@@ -10,6 +11,7 @@ query: |
         MATCH path=(subject:disease)<-[relation:RO:0002418!]-(object:pathway)
         RETURN path,
         subject, object, relation,
+        'disease_pathway' as association_type,
         'disease' AS subject_category,
         'pathway' AS object_category,
         'direct' AS qualifier

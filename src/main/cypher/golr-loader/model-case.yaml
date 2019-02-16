@@ -2,6 +2,7 @@ query: |
         MATCH path=(subject)-[relation:RO:0001000]->(object:case)
         RETURN path,
         subject, object, relation,
+        'model_case' as association_type,
         'model' AS subject_category,
         'case' AS object_category,
         'direct' AS qualifier

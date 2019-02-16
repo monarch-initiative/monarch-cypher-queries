@@ -3,6 +3,7 @@ query: |
         WHERE (((subject:`sequence feature` AND NOT subject:gene) OR subject:`variant locus`) AND NOT subject:anonymous) OR subject:`reagent targeted gene`
         RETURN path,
         subject, object, relation,
+        'variant_gene' as association_type,
         'variant' AS subject_category,
         'gene' AS object_category,
         'direct' AS qualifier

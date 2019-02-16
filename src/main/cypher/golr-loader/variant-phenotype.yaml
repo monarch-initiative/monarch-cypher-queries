@@ -3,6 +3,7 @@ query: |
         WHERE (((subject:`sequence feature` AND NOT subject:gene) OR subject:`variant locus`) AND NOT subject:anonymous) OR subject:`reagent targeted gene`
         RETURN path,
         subject, object, relation,
+        'variant_phenotype' as association_type,
         'variant' AS subject_category,
         'phenotype' AS object_category,
         'direct' as qualifier
@@ -13,6 +14,7 @@ query: |
         WHERE (((subject:`sequence feature` AND NOT subject:gene) OR subject:`variant locus`) AND NOT subject:anonymous) OR subject:`reagent targeted gene`
         RETURN path,
         subject, object, relation,
+        'variant_phenotype' as association_type,
         'variant' AS subject_category,
         'phenotype' AS object_category,
         'inferred through disease' as qualifier
@@ -21,6 +23,7 @@ query: |
         WHERE (((subject:`sequence feature` AND NOT subject:gene) OR subject:`variant locus`) AND NOT subject:anonymous) OR subject:`reagent targeted gene`
         RETURN path,
         subject, object, relation,
+        'variant_phenotype' as association_type,
         'variant' AS subject_category,
         'phenotype' AS object_category,
         'inferred through genotype' as qualifier
@@ -30,6 +33,7 @@ query: |
         AND (((subject:`sequence feature` AND NOT subject:gene) OR subject:`variant locus`) AND NOT subject:anonymous) OR subject:`reagent targeted gene`
         RETURN path,
         subject, object, relation,
+        'variant_phenotype' as association_type,
         'variant' AS subject_category,
         'phenotype' AS object_category,
         'inferred through model' as qualifier

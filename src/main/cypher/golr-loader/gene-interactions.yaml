@@ -2,6 +2,7 @@ query: |
         MATCH path=(subject:gene)-[:RO:0002205*0..1]->(prot1:protein)-[relation:RO:0002434!]-(prot2:protein)<-[:RO:0002205*0..1]-(object:gene)
         RETURN path,
         subject, object, relation,
+        'gene_interaction' as association_type,
         'gene' AS subject_category,
         'gene' AS object_category,
         'direct' AS qualifier
@@ -9,6 +10,7 @@ query: |
         MATCH path=(subject:gene)-[relation:RO:0002434!]-(object:gene)
         RETURN path,
         subject, object, relation,
+        'gene_interaction' as association_type,
         'gene' AS subject_category,
         'gene' AS object_category,
         'direct' AS qualifier

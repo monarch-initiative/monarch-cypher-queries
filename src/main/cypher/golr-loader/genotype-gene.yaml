@@ -3,6 +3,7 @@ query: |
         WHERE ((variant:`sequence feature` AND NOT variant:gene) OR variant:`variant locus`) OR variant:`reagent targeted gene`
         RETURN path,
         subject, object,
+        'genotype_gene' as association_type,
         'genotype' AS subject_category,
         'gene' AS object_category,
         'direct' AS qualifier

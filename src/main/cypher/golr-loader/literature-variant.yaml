@@ -4,6 +4,7 @@ query: |
         RETURN path,
             pub as subject, relation,
             variant as object,
+            'publication_variant' as association_type,
             'publication' as subject_category,
             'variant' as object_category,
             'indirect' as qualifier
@@ -13,6 +14,7 @@ query: |
         RETURN path,
             pub as subject, relation,
             variant as object,
+            'publication_variant' as association_type,
             'publication' as subject_category,
             'variant' as object_category,
             'inferred' as qualifier
@@ -22,6 +24,7 @@ query: |
         RETURN path,
             pub as subject, relation,
             variant as object,
+            'publication_variant' as association_type,
             'publication' as subject_category,
             'variant' as object_category,
             'direct' as qualifier
@@ -30,6 +33,7 @@ query: |
         RETURN path,
             pub as subject, relation,
             variant as object,
+            'publication_variant' as association_type,
             'publication' as subject_category,
             'variant' as object_category,
             'inferred' as qualifier
@@ -39,6 +43,7 @@ query: |
         RETURN path,
             pub as subject, relation,
             variant as object,
+            'publication_variant' as association_type,
             'publication' as subject_category,
             'variant' as object_category,
             'indirect' as qualifier
@@ -47,6 +52,7 @@ query: |
         RETURN path,
             pub as subject, relation,
             variant as object,
+            'publication_variant' as association_type,
             'publication' as subject_category,
             'variant' as object_category,
             'inferred' as qualifier

@@ -2,6 +2,7 @@ query: |
         MATCH path=(subject:gene)<-[geno:GENO:0000418|GENO:0000639!*0..1]-(feature)-[relation:RO:0002200|RO:0002610|RO:0002326|RO:0003302!]->(object:disease)
         RETURN path,
         subject, object, relation,
+        'gene_disease' as association_type,
         'gene' AS subject_category,
         'disease' AS object_category,
         'inferred through variant' as qualifier
@@ -9,6 +10,7 @@ query: |
         MATCH path=(subject:gene)<-[:GENO:0000418|GENO:0000639!]-(variant)<-[:BFO:0000051!*]-(genotype:genotype)-[relation:RO:0002200|RO:0002610|RO:0002326|RO:0003302!]->(object:disease)
         RETURN path,
         subject, object, relation,
+        'gene_disease' as association_type,
         'gene' AS subject_category,
         'disease' AS object_category,
         'inferred through genotype' as qualifier
@@ -17,6 +19,7 @@ query: |
         WHERE NOT relation.isDefinedBy="https://data.monarchinitiative.org/ttl/udp.ttl"
         RETURN path,
         subject, object, relation,
+        'gene_disease' as association_type,
         'gene' AS subject_category,
         'disease' AS object_category,
         'inferred through disease model' as qualifier

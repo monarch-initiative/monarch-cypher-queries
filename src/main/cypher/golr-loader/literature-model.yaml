@@ -3,6 +3,7 @@ query: |
         RETURN path,
             pub as subject, relation,
             model as object,
+            'publication_model' as association_type,
             'publication' as subject_category,
             'model' as object_category,
             'direct' as qualifier 
@@ -11,6 +12,7 @@ query: |
         RETURN path,
             pub as subject, relation,
             model as object,
+            'publication_model' as association_type,
             'publication' as subject_category,
             'model' as object_category,
             'direct' as qualifier
