@@ -17,8 +17,7 @@ query: |
             'gene' as object_category,
             'direct' as qualifier
         UNION ALL
-        MATCH path=(pub:publication)<-[relation:dc:source]-(association)-[r:OBAN:association_has_object|OBAN:association_has_subject]->(genotype:genotype)-[:BFO:0000051!*]->(variant)-[:GENO:0000418!*0..1]->(gene:gene)
-        WHERE ((variant:`sequence feature` AND NOT variant:gene) OR variant:`variant locus`) OR variant:`reagent targeted gene`
+        MATCH path=(pub:publication)<-[relation:dc:source]-(association)-[r:OBAN:association_has_object|OBAN:association_has_subject]->(genotype:genotype)-[:BFO:0000051!*]->(variant:variant)-[:GENO:0000418!*0..1]->(gene:gene)
         RETURN path, relation,
             pub as subject,
             gene as object,
@@ -36,8 +35,7 @@ query: |
             'gene' as object_category,
             'inferred' as qualifier
         UNION ALL
-        MATCH path=(pub:publication)<-[relation:dc:source]-(association)-[r:OBAN:association_has_subject|OBAN:association_has_object]->(variant)-[:GENO:0000418!*0..1]->(gene:gene)
-        WHERE ((variant:`sequence feature` AND NOT variant:gene) OR variant:`variant locus`) OR variant:`reagent targeted gene`
+        MATCH path=(pub:publication)<-[relation:dc:source]-(association)-[r:OBAN:association_has_subject|OBAN:association_has_object]->(variant:variant)-[:GENO:0000418!*0..1]->(gene:gene)
         RETURN path, relation,
             pub as subject,
             gene as object,
@@ -55,8 +53,7 @@ query: |
             'gene' as object_category,
             'inferred' as qualifier
         UNION ALL
-        MATCH path=(pub:publication)<-[relation:dc:source]-(association)-[r:OBAN:association_has_subject|OBAN:association_has_object]->(person)-[:GENO:0000222]->(genotype:genotype)-[:BFO:0000051!*]->(variant)-[:GENO:0000418!*0..1]->(gene:gene)
-        WHERE ((variant:`sequence feature` AND NOT variant:gene) OR variant:`variant locus`) OR variant:`reagent targeted gene`
+        MATCH path=(pub:publication)<-[relation:dc:source]-(association)-[r:OBAN:association_has_subject|OBAN:association_has_object]->(person)-[:GENO:0000222]->(genotype:genotype)-[:BFO:0000051!*]->(variant:variant)-[:GENO:0000418!*0..1]->(gene:gene)
         RETURN path, relation,
             pub as subject,
             gene as object,
@@ -65,7 +62,7 @@ query: |
             'gene' as object_category,
             'indirect' as qualifier
         UNION ALL
-        MATCH path=(pub:publication)-[relation:IAO:0000142|IAO:0000136]->(person)-[:GENO:0000222]->(genotype:genotype)-[:BFO:0000051!*]->(variant)-[:GENO:0000418!*0..1]->(gene:gene)
+        MATCH path=(pub:publication)-[relation:IAO:0000142|IAO:0000136]->(person)-[:GENO:0000222]->(genotype:genotype)-[:BFO:0000051!*]->(variant:variant)-[:GENO:0000418!*0..1]->(gene:gene)
         RETURN path, relation,
             pub as subject,
             gene as object,

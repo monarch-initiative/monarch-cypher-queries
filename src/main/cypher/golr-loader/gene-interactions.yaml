@@ -7,7 +7,7 @@ query: |
         'gene' AS object_category,
         'direct' AS qualifier
         UNION ALL
-        MATCH path=(subject:gene)-[relation:RO:0002434!]-(object:gene)
+        MATCH path=(subject:gene)-[relation:RO:0002434!]->(object:gene)
         RETURN path,
         subject, object, relation,
         'gene_interaction' as association_type,
