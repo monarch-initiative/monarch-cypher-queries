@@ -3,7 +3,7 @@ query: |
         WHERE NOT (feature)-[:RO:0002200|RO:0003303|GENO:0000840]->(object)
         RETURN path,
             subject, object, relation,
-            'gene_disease' as association_type,
+            'marker_disease' as association_type,
             'gene' AS subject_category,
             'disease' AS object_category,
             'inferred through variant' as qualifier
@@ -14,7 +14,7 @@ query: |
         WHERE NOT (genotype)-[:RO:0002200|RO:0003303|GENO:0000840]->(object)
         RETURN path,
             subject, object, relation,
-            'gene_disease' as association_type,
+            'marker_disease' as association_type,
             'gene' AS subject_category,
             'disease' AS object_category,
             'inferred through genotype' as qualifier
@@ -23,7 +23,7 @@ query: |
         WHERE NOT (genotype)-[:RO:0002200|RO:0003303|GENO:0000840]->(object)
         RETURN path,
              subject, object, relation,
-             'gene_disease' as association_type,
+             'marker_disease' as association_type,
              'gene' AS subject_category,
              'disease' AS object_category,
-             'inferred through cell line' as qualifier
+             'inferred through case' as qualifier
