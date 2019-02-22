@@ -8,8 +8,6 @@ query: |
             'disease' AS object_category,
             'inferred through variant' as qualifier
         UNION ALL
-        MATCH (relation:Node{iri:'http://purl.obolibrary.org/obo/RO_0003303'})
-        WITH relation
         MATCH path=(subject:gene)<-[:GENO:0000418|GENO:0000639!]-(variant)<-[:BFO:0000051!*]-(genotype:genotype)-[relation:RO:0002200|RO:0002610|RO:0002326|RO:0003302!]->(object:disease)
         WHERE NOT (genotype)-[:RO:0002200|RO:0003303|GENO:0000840]->(object)
         RETURN path,
