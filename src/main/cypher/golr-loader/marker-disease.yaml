@@ -1,24 +1,27 @@
 query: |
-        MATCH path=(subject:gene)<-[geno:GENO:0000418|GENO:0000639!*0..1]-(feature)-[relation:RO:0003304|RO:0002326|RO:0002610!]->(object:disease)
+        MATCH path=(subject:gene)<-[geno:GENO:0000418|GENO:0000639!*0..1]-(feature)-[relation:RO:0002200|RO:0002610|RO:0002326|RO:0003302!]->(object:disease)
+        WHERE NOT (feature)-[:RO:0002200|RO:0003303|GENO:0000840]->(object)
         RETURN path,
-        subject, object, relation,
-        'marker_disease' as association_type,
-        'gene' AS subject_category,
-        'disease' AS object_category,
-        'inferred through variant' as qualifier
+            subject, object, relation,
+            'marker_disease' as association_type,
+            'gene' AS subject_category,
+            'disease' AS object_category,
+            'inferred through variant' as qualifier
         UNION ALL
-        MATCH path=(subject:gene)<-[:GENO:0000418|GENO:0000639!]-(variant)<-[:BFO:0000051!*]-(genotype:genotype)-[relation:RO:0003304|RO:0002326|RO:0002610!]->(object:disease)
+        MATCH path=(subject:gene)<-[:GENO:0000418|GENO:0000639!]-(variant)<-[:BFO:0000051!*]-(genotype:genotype)-[relation:RO:0002200|RO:0002610|RO:0002326|RO:0003302!]->(object:disease)
+        WHERE NOT (genotype)-[:RO:0002200|RO:0003303|GENO:0000840]->(object)
         RETURN path,
-        subject, object, relation,
-        'marker_disease' as association_type,
-        'gene' AS subject_category,
-        'disease' AS object_category,
-        'inferred through genotype' as qualifier
+            subject, object, relation,
+            'marker_disease' as association_type,
+            'gene' AS subject_category,
+            'disease' AS object_category,
+            'inferred through genotype' as qualifier
         UNION ALL
         MATCH path=(subject:gene)<-[:GENO:0000418|GENO:0000639!]-(variant)<-[:BFO:0000051!*]-(genotype:genotype)<-[:GENO:0000222|RO:0001000*1..2]-(person)-[relation:RO:0002200!]->(object:disease)
+        WHERE NOT (genotype)-[:RO:0002200|RO:0003303|GENO:0000840]->(object)
         RETURN path,
-        subject, object, relation,
-        'marker_disease' as association_type,
-        'gene' AS subject_category,
-        'disease' AS object_category,
-        'inferred through disease model' as qualifier
+             subject, object, relation,
+             'marker_disease' as association_type,
+             'gene' AS subject_category,
+             'disease' AS object_category,
+             'inferred through case' as qualifier
