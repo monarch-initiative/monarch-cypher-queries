@@ -1,6 +1,5 @@
 query: |
-        MATCH path=(subject)-[relation:RO:0002200|RO:0002610|RO:0002326|RO:0003302!]->(object:disease)
-        WHERE (((subject:`sequence feature` AND NOT subject:gene) OR subject:`variant locus`) AND NOT subject:anonymous) OR subject:`reagent targeted gene`
+        MATCH path=(subject:variant)-[relation:RO:0002200|RO:0002610|RO:0002326|RO:0003302!]->(object:disease)
         RETURN path,
         subject, object, relation,
         'variant_disease' as association_type,
@@ -8,8 +7,7 @@ query: |
         'disease' AS object_category,
         'direct' as qualifier
         UNION ALL
-        MATCH path=(subject)<-[:BFO:0000051!*]-(genotype:genotype)-[relation:RO:0002200|RO:0002610|RO:0002326|RO:0003302!]->(object:disease)
-        WHERE (((subject:`sequence feature` AND NOT subject:gene) OR subject:`variant locus`) AND NOT subject:anonymous) OR subject:`reagent targeted gene`
+        MATCH path=(subject:variant)<-[:BFO:0000051!*]-(genotype:genotype)-[relation:RO:0002200|RO:0002610|RO:0002326|RO:0003302!]->(object:disease)
         RETURN path,
         subject, object, relation,
         'variant_disease' as association_type,
@@ -17,8 +15,7 @@ query: |
         'disease' AS object_category,
         'inferred' as qualifier
         UNION ALL
-        MATCH path=(subject)<-[:BFO:0000051!*]-(genotype:genotype)<-[:RO:0001000|GENO:0000222*1..2]-(organism)-[relation:RO:0002200|RO:0002610|RO:0002326!]->(object:disease)
-        WHERE (((subject:`sequence feature` AND NOT subject:gene) OR subject:`variant locus`) AND NOT subject:anonymous) OR subject:`reagent targeted gene`
+        MATCH path=(subject:variant)<-[:BFO:0000051!*]-(genotype:genotype)<-[:RO:0001000|GENO:0000222*1..2]-(organism)-[relation:RO:0002200|RO:0002610|RO:0002326!]->(object:disease)
         RETURN path,
         subject, object, relation,
         'variant_disease' as association_type,
