@@ -1,5 +1,5 @@
 query: |
-        MATCH path=(subject:case)-[relation:RO:0002200]->(object:Phenotype)
+        MATCH path=(subject:case)-[relation:RO:0002200]->(object:phenotype)
         RETURN path,
         subject, object, relation,
         'case_phenotype' as association_type,

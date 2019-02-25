@@ -1,5 +1,5 @@
 query: |
-        MATCH path=(subject:variant)-[relation:RO:0002200|RO:0002610|RO:0002326|RO:0003302!]->(object:Phenotype)
+        MATCH path=(subject:variant)-[relation:RO:0002200|RO:0002610|RO:0002326|RO:0003302!]->(object:phenotype)
         RETURN path,
         subject, object, relation,
         'variant_phenotype' as association_type,
@@ -9,7 +9,7 @@ query: |
         UNION ALL
         MATCH (relation:Node{iri:'http://purl.obolibrary.org/obo/RO_0002200'})
         WITH relation
-        MATCH path=(subject:variant)-[:RO:0002200|RO:0002610|RO:0002326|RO:0003302!*2..2]->(object:Phenotype)
+        MATCH path=(subject:variant)-[:RO:0002200|RO:0002610|RO:0002326|RO:0003302!*2..2]->(object:phenotype)
         RETURN path,
         subject, object, relation,
         'variant_phenotype' as association_type,
@@ -17,7 +17,7 @@ query: |
         'phenotype' AS object_category,
         'inferred through disease' as qualifier
         UNION ALL
-        MATCH path=(subject:variant)<-[:BFO:0000051!*]-(genotype)-[relation:RO:0002200|RO:0002610|RO:0002326|RO:0003302!]->(object:Phenotype)
+        MATCH path=(subject:variant)<-[:BFO:0000051!*]-(genotype)-[relation:RO:0002200|RO:0002610|RO:0002326|RO:0003302!]->(object:phenotype)
         RETURN path,
         subject, object, relation,
         'variant_phenotype' as association_type,
@@ -25,7 +25,7 @@ query: |
         'phenotype' AS object_category,
         'inferred through genotype' as qualifier
         UNION ALL
-        MATCH path=(subject:variant)<-[:BFO:0000051!*]-(genotype)<-[:RO:0001000|GENO:0000222*1..2]-(organism)-[relation:RO:0002200|RO:0002610|RO:0002326!]->(object:Phenotype)
+        MATCH path=(subject:variant)<-[:BFO:0000051!*]-(genotype)<-[:RO:0001000|GENO:0000222*1..2]-(organism)-[relation:RO:0002200|RO:0002610|RO:0002326!]->(object:phenotype)
         WHERE NOT relation.isDefinedBy="https://data.monarchinitiative.org/ttl/udp.ttl"
         RETURN path,
         subject, object, relation,
