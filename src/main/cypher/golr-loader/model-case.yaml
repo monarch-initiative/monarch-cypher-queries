@@ -6,3 +6,5 @@ query: |
         'model' AS subject_category,
         'case' AS object_category,
         'direct' AS qualifier
+subject_closure: "equivalentClass|sameAs|type"
+object_closure: "equivalentClass|sameAs|type"

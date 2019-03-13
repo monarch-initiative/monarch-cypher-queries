@@ -25,3 +25,4 @@ query: |
         'genotype' AS subject_category,
         'phenotype' AS object_category,
         'inferred' as qualifier
+subject_closure: "equivalentClass|sameAs|type"

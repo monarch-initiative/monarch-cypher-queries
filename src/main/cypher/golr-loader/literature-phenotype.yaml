@@ -16,3 +16,4 @@ query: |
             'publication' as subject_category,
             'phenotype' as object_category,
             'direct' as qualifier
+subject_closure: "equivalentClass|sameAs|type"

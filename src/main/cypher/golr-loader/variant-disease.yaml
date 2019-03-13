@@ -22,3 +22,4 @@ query: |
         'variant' AS subject_category,
         'disease' AS object_category,
         'inferred' as qualifier
+subject_closure: "equivalentClass|sameAs|type"

@@ -6,3 +6,5 @@ query: |
         'case' AS subject_category,
         'genotype' AS object_category,
         'direct' AS qualifier
+subject_closure: "equivalentClass|sameAs|type"
+object_closure: "equivalentClass|sameAs|type"

@@ -33,3 +33,4 @@ query: |
         'variant' AS subject_category,
         'phenotype' AS object_category,
         'inferred through model' as qualifier
+subject_closure: "equivalentClass|sameAs|type"
