@@ -26,3 +26,4 @@ query: |
         //     'gene' AS subject_category,
         //     'disease' AS object_category,
         //     'inferred through case' as qualifier
+subject_closure: "equivalentClass|sameAs|type"

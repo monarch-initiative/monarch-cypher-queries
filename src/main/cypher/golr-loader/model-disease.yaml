@@ -6,3 +6,4 @@ query: |
         'model' AS subject_category,
         'disease' AS object_category,
         'direct' AS qualifier
+subject_closure: "equivalentClass|sameAs|type"

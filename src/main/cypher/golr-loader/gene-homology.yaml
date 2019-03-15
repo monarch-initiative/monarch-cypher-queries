@@ -6,4 +6,5 @@ query: |
         'gene' AS subject_category,
         'gene' AS object_category,
         'direct' AS qualifier
-
+subject_closure: "equivalentClass|sameAs|type"
+object_closure: "equivalentClass|sameAs|type"

@@ -6,3 +6,4 @@ query: |
         'gene' AS subject_category,
         'pathway' AS object_category,
         'direct' AS qualifier
+subject_closure: "equivalentClass|sameAs|type"

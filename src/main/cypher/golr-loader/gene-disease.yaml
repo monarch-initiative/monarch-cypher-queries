@@ -20,4 +20,4 @@ query: |
             'gene' AS subject_category,
             'disease' AS object_category,
             'inferred through genotype' as qualifier
-
+subject_closure: "equivalentClass|sameAs|type"

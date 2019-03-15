@@ -6,3 +6,5 @@ query: |
         'case' AS subject_category,
         'variant' AS object_category,
         'inferred through intrinsic genotype' AS qualifier
+subject_closure: "equivalentClass|sameAs|type"
+object_closure: "equivalentClass|sameAs|type"

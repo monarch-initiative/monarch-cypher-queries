@@ -52,3 +52,5 @@ query: |
             'publication' as subject_category,
             'variant' as object_category,
             'inferred' as qualifier
+subject_closure: "equivalentClass|sameAs|type"
+object_closure: "equivalentClass|sameAs|type"

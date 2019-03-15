@@ -6,3 +6,5 @@ query: |
         'variant' AS subject_category,
         'genotype' AS object_category,
         'inferred' AS qualifier
+subject_closure: "equivalentClass|sameAs|type"
+object_closure: "equivalentClass|sameAs|type"
