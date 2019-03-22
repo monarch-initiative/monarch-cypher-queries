@@ -6,3 +6,4 @@ query: |
         'case' AS subject_category,
         'phenotype' AS object_category,
         'direct' AS qualifier
+subject_closure: "equivalentClass|sameAs|type"
