@@ -1,5 +1,5 @@
 query: |
-        MATCH path=(subject:gene)-[relation:RO:HOM0000001!]->(object:gene)
+        MATCH path=(subject:gene)-[relation:RO:HOM0000001!]-(object:gene)
         RETURN path,
         subject, object, relation,
         'gene_homology' as association_type,
