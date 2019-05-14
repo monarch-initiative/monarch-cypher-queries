@@ -342,3 +342,11 @@ cypherResources:
             - name: id
               description: Curie formatted identifier
               paramType: path
+              
+    ## Return all ontology nodes
+    - path: /dynamic/ontologies
+      query: |
+              MATCH path = (:Ontology)
+              RETURN path
+      operations:
+        - summary: Returns all nodes typed as an ontology
