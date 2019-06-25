@@ -1,10 +1,14 @@
 query: |
         MATCH path=(object:genotype)-[relation:BFO:0000051!*]->(subject:variant)
-        RETURN path,
-        subject, object, relation,
-        'variant_genotype' as association_type,
-        'variant' AS subject_category,
-        'genotype' AS object_category,
-        'inferred' AS qualifier
+        RETURN 
+            path,
+            subject,
+            object,
+            relation,
+            'variant_genotype' as association_type,
+            'variant' AS subject_category,
+            'genotype' AS object_category,
+            'direct' AS qualifier
+        ORDER BY subject, object
 subject_closure: "equivalentClass|sameAs|type"
 object_closure: "equivalentClass|sameAs|type"

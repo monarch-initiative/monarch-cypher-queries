@@ -2,27 +2,61 @@
 
 query: |
         MATCH path=(subject:genotype)-[relation:RO:0002200|RO:0002610|RO:0002326|RO:0003302!]->(object:phenotype)
-        RETURN path,
-        subject, object, relation,
-        'genotype_phenotype' as association_type,
-        'genotype' AS subject_category,
-        'phenotype' AS object_category,
-        'direct' as qualifier
-        UNION ALL
-        MATCH path=(subject:genotype)-[:RO:0002200|RO:0002610|RO:0002326|RO:0003302!*2..]->(object:phenotype)
-        RETURN path,
-        subject, object, NULL as relation,
-        'genotype_phenotype' as association_type,
-        'genotype' AS subject_category,
-        'phenotype' AS object_category,
-        'inferred' as qualifier
-        UNION ALL
-        MATCH path=(subject:genotype)<-[:GENO:0000222|RO:0001000*1..2]-(s)-[rel:RO:0002200|RO:0002610|RO:0002326|RO:0003302!*1..2]->(object:phenotype)
-        WHERE NOT ANY (relation in rel where relation.isDefinedBy="https://data.monarchinitiative.org/ttl/udp.ttl")
-        RETURN path,
-        subject, object, NULL as relation,
-        'genotype_phenotype' as association_type,
-        'genotype' AS subject_category,
-        'phenotype' AS object_category,
-        'inferred' as qualifier
+
+        WITH COLLECT ({
+            path:path,
+            relation:relation,
+            subject:subject,
+            object:object,
+            association_type:'genotype_phenotype',
+            subject_category:'genotype',
+            object_category:'phenotype',
+            qualifier:'direct'
+        }) as rows
+
+        // Query returns 0 rows
+        //MATCH (relation:Node{iri:'http://purl.obolibrary.org/obo/RO_0002200'})
+        //WITH relation, rows
+        //MATCH path=(subject:genotype)-[:RO:0002200|RO:0002610|RO:0002326|RO:0003302!*2..]->(object:phenotype)
+
+        //WITH rows + COLLECT ({
+        //    path:path,
+        //    relation:relation,
+        //    subject:subject,
+        //    object:object,
+        //    association_type:'genotype_phenotype',
+        //    subject_category:'genotype',
+        //    object_category:'phenotype',
+        //    qualifier:'inferred'
+        //}) as rows
+
+        MATCH (relation:Node{iri:'http://purl.obolibrary.org/obo/RO_0002200'})
+        WITH relation, rows
+        MATCH path=(subject:genotype)<-[:GENO:0000222|RO:0001000*1..2]-(s)-[rels:RO:0002200|RO:0002610|RO:0002326|RO:0003302!*1..2]->(object:phenotype)
+        WHERE NOT ANY (rel in rels where rel.isDefinedBy="https://data.monarchinitiative.org/ttl/udp.ttl")
+
+        WITH rows + COLLECT ({
+            path:path,
+            relation:relation,
+            subject:subject,
+            object:object,
+            association_type:'genotype_phenotype',
+            subject_category:'genotype',
+            object_category:'phenotype',
+            qualifier:'inferred'
+        }) as rows
+
+        UNWIND rows as row
+        RETURN 
+            row.path as path,
+            row.relation as relation,
+            row.subject as subject,
+            row.object as object,
+            row.association_type as association_type,
+            row.subject_category as subject_category,
+            row.object_category as object_category,
+            row.qualifier as qualifier
+
+        ORDER BY subject, object
+
 subject_closure: "equivalentClass|sameAs|type"

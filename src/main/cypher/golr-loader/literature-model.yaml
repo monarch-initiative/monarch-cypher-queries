@@ -1,20 +1,42 @@
 query: |
         MATCH path=(pub:publication)-[relation:IAO:0000142|IAO:0000136]->(model)-[:RO:0003301]->()
-        RETURN path,
-            pub as subject, relation,
-            model as object,
-            'publication_model' as association_type,
-            'publication' as subject_category,
-            'model' as object_category,
-            'direct' as qualifier 
-        UNION ALL
+
+        WITH COLLECT ({
+            path:path,
+            relation:relation,
+            subject:pub,
+            object:model,
+            association_type:'publication_model',
+            subject_category:'publication',
+            object_category:'model',
+            qualifier:'direct'
+        }) as rows
+
+
         MATCH path=(pub:publication)<-[relation:dc:source]-(association)-[r:OBAN:association_has_object|OBAN:association_has_subject]->(model)-[:RO:0003301]->()
-        RETURN path,
-            pub as subject, relation,
-            model as object,
-            'publication_model' as association_type,
-            'publication' as subject_category,
-            'model' as object_category,
-            'direct' as qualifier
+
+        WITH rows + COLLECT ({
+            path:path,
+            relation:relation,
+            subject:pub,
+            object:model,
+            association_type:'publication_model',
+            subject_category:'publication',
+            object_category:'model',
+            qualifier:'direct'
+        }) as rows
+
+        UNWIND rows as row
+        RETURN 
+            row.path as path,
+            row.relation as relation,
+            row.subject as subject,
+            row.object as object,
+            row.association_type as association_type,
+            row.subject_category as subject_category,
+            row.object_category as object_category,
+            row.qualifier as qualifier
+        ORDER BY subject, object
+
 subject_closure: "equivalentClass|sameAs|type"
 object_closure: "equivalentClass|sameAs|type"

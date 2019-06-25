@@ -1,10 +1,14 @@
 query: |
         MATCH path=(subject:variant)<-[optional:GENO:0000382*0..1]-()-[relation:GENO:0000418|GENO:0000639!]->(object:gene)
-        RETURN path,
-        subject, object, relation,
-        'variant_gene' as association_type,
-        'variant' AS subject_category,
-        'gene' AS object_category,
-        'direct' AS qualifier
+        RETURN 
+            path,
+            subject,
+            object,
+            relation,
+            'variant_gene' as association_type,
+            'variant' AS subject_category,
+            'gene' AS object_category,
+            'direct' AS qualifier
+        ORDER BY subject, object
 subject_closure: "equivalentClass|sameAs|type"
 object_closure: "equivalentClass|sameAs|type"

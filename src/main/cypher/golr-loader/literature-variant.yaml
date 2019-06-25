@@ -1,56 +1,80 @@
 query: |
         MATCH path=(pub:publication)<-[relation:dc:source]-(association)-[r:OBAN:association_has_object|OBAN:association_has_subject]->(genotype:genotype)-[:BFO:0000051!*]->(variant:variant)
-        RETURN path,
-            pub as subject, relation,
-            variant as object,
-            'publication_variant' as association_type,
-            'publication' as subject_category,
-            'variant' as object_category,
-            'indirect' as qualifier
-        UNION ALL
+        WITH COLLECT ({
+            path:path,
+            relation:relation,
+            subject:pub,
+            object:variant,
+            association_type:'publication_variant',
+            subject_category:'publication',
+            object_category:'variant',
+            qualifier:'inferred'
+        }) as rows
+
         MATCH path=(pub:publication)-[relation:IAO:0000142|IAO:0000136]->(genotype:genotype)-[:BFO:0000051!*]->(variant:variant)
-        RETURN path,
-            pub as subject, relation,
-            variant as object,
-            'publication_variant' as association_type,
-            'publication' as subject_category,
-            'variant' as object_category,
-            'inferred' as qualifier
-        UNION ALL
+        WITH rows + COLLECT ({
+            path:path,
+            relation:relation,
+            subject:pub,
+            object:variant,
+            association_type:'publication_variant',
+            subject_category:'publication',
+            object_category:'variant',
+            qualifier:'inferred'
+        }) as rows
+
         MATCH path=(pub:publication)<-[relation:dc:source]-(association)-[r:OBAN:association_has_subject|OBAN:association_has_object]->(variant:variant)
-        RETURN path,
-            pub as subject, relation,
-            variant as object,
-            'publication_variant' as association_type,
-            'publication' as subject_category,
-            'variant' as object_category,
-            'direct' as qualifier
-        UNION ALL
+        WITH rows + COLLECT ({
+            path:path,
+            relation:relation,
+            subject:pub,
+            object:variant,
+            association_type:'publication_variant',
+            subject_category:'publication',
+            object_category:'variant',
+            qualifier:'direct'
+        }) as rows
+
         MATCH path=(pub:publication)-[relation:IAO:0000142|IAO:0000136]->(variant)
-        RETURN path,
-            pub as subject, relation,
-            variant as object,
-            'publication_variant' as association_type,
-            'publication' as subject_category,
-            'variant' as object_category,
-            'inferred' as qualifier
-        UNION ALL
-        MATCH path=(pub:publication)<-[relation:dc:source]-(association)-[r:OBAN:association_has_subject|OBAN:association_has_object]->(person)-[:GENO:0000222|RO:0001000*1..2]->(genotype:genotype)-[:BFO:0000051!*]->(variant:variant)
-        RETURN path,
-            pub as subject, relation,
-            variant as object,
-            'publication_variant' as association_type,
-            'publication' as subject_category,
-            'variant' as object_category,
-            'indirect' as qualifier
-        UNION ALL
+        WITH rows + COLLECT ({
+            path:path,
+            relation:relation,
+            subject:pub,
+            object:variant,
+            association_type:'publication_variant',
+            subject_category:'publication',
+            object_category:'variant',
+            qualifier:'inferred'
+        }) as rows
+
+
+        // This query returns 0 rows as of 6/26/2019
+        //MATCH path=(pub:publication)<-[relation:dc:source]-(association)-[r:OBAN:association_has_subject|OBAN:association_has_object]->(person)-[:GENO:0000222|RO:0001000*1..2]->(genotype:genotype)-[:BFO:0000051!*]->(variant:variant)
+
+
         MATCH path=(pub:publication)-[relation:IAO:0000142|IAO:0000136]->(person)-[:GENO:0000222|RO:0001000*1..2]->(genotype:genotype)-[:BFO:0000051!*]->(variant:variant)
-        RETURN path,
-            pub as subject, relation,
-            variant as object,
-            'publication_variant' as association_type,
-            'publication' as subject_category,
-            'variant' as object_category,
-            'inferred' as qualifier
+        WITH rows + COLLECT ({
+            path:path,
+            relation:relation,
+            subject:pub,
+            object:variant,
+            association_type:'publication_variant',
+            subject_category:'publication',
+            object_category:'variant',
+            qualifier:'inferred'
+        }) as rows
+
+        UNWIND rows as row
+        RETURN 
+            row.path as path,
+            row.relation as relation,
+            row.subject as subject,
+            row.object as object,
+            row.association_type as association_type,
+            row.subject_category as subject_category,
+            row.object_category as object_category,
+            row.qualifier as qualifier
+        ORDER BY subject, object
+
 subject_closure: "equivalentClass|sameAs|type"
 object_closure: "equivalentClass|sameAs|type"

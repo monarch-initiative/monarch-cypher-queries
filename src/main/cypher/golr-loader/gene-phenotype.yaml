@@ -1,53 +1,97 @@
 query: |
+        // Gene to phenotype via allele/variant to phenotype
         MATCH path=(subject:gene)<-[geno:GENO:0000418!*0..1]-(feature)-[relation:RO:0002200|RO:0002326|RO:0003302!]->(object:phenotype)
         WHERE NOT ANY (rel in geno where rel.isDefinedBy="https://data.monarchinitiative.org/ttl/mgi.ttl")
         AND NOT ANY (rel in geno where "https://data.monarchinitiative.org/ttl/mgi.ttl" in rel.isDefinedBy)
-        RETURN path,
-        subject, object, relation,
-        'gene_phenotype' as association_type,
-        'gene' AS subject_category,
-        'phenotype' AS object_category,
-        'direct' as qualifier
-        UNION ALL
+
+        WITH COLLECT ({
+            path:path,
+            relation:relation,
+            subject:subject,
+            object:object,
+            association_type:'gene_phenotype',
+            subject_category:'gene',
+            object_category:'phenotype',
+            qualifier:'direct'
+        }) as rows
+
+        // Gene to phenotype via allele/variant to phenotype inferred from disease to phenotype
         MATCH path=(subject:gene)<-[:GENO:0000418!*0..1]-(feature)-[:RO:0002200|GENO:0000840|RO:0003303]->(disease)-[relation:RO:0002200]->(object:phenotype)
         MATCH (assoc:association)-[:OBAN:association_has_subject]->(disease),
               (assoc)-[:OBAN:association_has_object]->(object),
               (assoc)-[:OBAN:association_has_predicate]->(has_pheno:Node{iri:'http://purl.obolibrary.org/obo/RO_0002200'})
         WHERE NOT (assoc)-[::frequencyOfPhenotype]->(:Node{iri:'http://purl.obolibrary.org/obo/HP_0040284'})
-        RETURN path,
-        subject, object, relation,
-        'gene_phenotype' as association_type,
-        'gene' AS subject_category,
-        'phenotype' AS object_category,
-        'inferred through variant' as qualifier
-        UNION ALL
+
+        WITH rows + COLLECT ({
+            path:path,
+            relation:relation,
+            subject:subject,
+            object:object,
+            association_type:'gene_phenotype',
+            subject_category:'gene',
+            object_category:'phenotype',
+            qualifier:'inferred through variant'
+        }) as rows
+
+        // Gene to phenotype inferred from genotype to phenotype
         MATCH (relation:Node{iri:'http://purl.obolibrary.org/obo/RO_0002200'})
-        WITH relation
+        WITH relation, rows
         MATCH path=(subject:gene)<-[:GENO:0000418!*0..1]-(feature)<-[:BFO:0000051!*]-(genotype:genotype)-[rel:RO:0002200|RO:0002326|RO:0003302!*]->(object:phenotype)
         WHERE NOT ANY (pheno_rel in rel where pheno_rel.isDefinedBy="https://data.monarchinitiative.org/ttl/mgi.ttl" OR pheno_rel.isDefinedBy="https://data.monarchinitiative.org/ttl/zfin.ttl")
-        RETURN path,
-        subject, object, relation,
-        'gene_phenotype' as association_type,
-        'gene' AS subject_category,
-        'phenotype' AS object_category,
-        'inferred' as qualifier
-        UNION ALL
-        MATCH path=(subject:gene)<-[:GENO:0000418]-(allele)-[:BFO:0000051!*]->(feature)-[relation:RO:0002200|RO:0002326|RO:0002610|RO:0003302!]->(object:phenotype)
-        RETURN path,
-        subject, object, relation,
-        'gene_phenotype' as association_type,
-        'gene' AS subject_category,
-        'phenotype' AS object_category,
-        'inferred' as qualifier
-        UNION ALL
+
+        WITH rows + COLLECT ({
+            path:path,
+            relation:relation,
+            subject:subject,
+            object:object,
+            association_type:'gene_phenotype',
+            subject_category:'gene',
+            object_category:'phenotype',
+            qualifier:'inferred'
+        }) as rows
+
+        // 06-2019 This query does not return results
+        // Gene to phenotype via allele/variant inferred from genotype to phenotype
+        // MATCH path=(subject:gene)<-[:GENO:0000418]-(allele)-[:BFO:0000051!*]->(feature)-[relation:RO:0002200|RO:0002326|RO:0002610|RO:0003302!]->(object:phenotype)
+        //
+        //WITH rows + COLLECT ({
+        //    path:path,
+        //    relation:relation,
+        //    subject:subject,
+        //    object:object,
+        //    association_type:'gene_phenotype',
+        //    subject_category:'gene',
+        //    object_category:'phenotype',
+        //    qualifier:'inferred'
+        //}) as rows
+
+        // Gene to phenotype via genotype-model-phenotype
         MATCH (relation:Node{iri:'http://purl.obolibrary.org/obo/RO_0002200'})
-        WITH relation
+        WITH relation, rows
         MATCH path=(subject:gene)<-[:GENO:0000418!*0..1]-(feature)<-[:BFO:0000051!*]-(genotype:genotype)<-[:GENO:0000222|RO:0001000*1..2]-(person)-[rel:RO:0002200|RO:0002326!*]->(object:phenotype)
         WHERE NOT ANY (pheno_rel in rel where pheno_rel.isDefinedBy="https://data.monarchinitiative.org/ttl/udp.ttl")
-        RETURN path,
-        subject, object, relation,
-        'gene_phenotype' as association_type,
-        'gene' AS subject_category,
-        'phenotype' AS object_category,
-        'inferred' as qualifier
+
+        WITH rows + COLLECT ({
+            path:path,
+            relation:relation,
+            subject:subject,
+            object:object,
+            association_type:'gene_phenotype',
+            subject_category:'gene',
+            object_category:'phenotype',
+            qualifier:'inferred'
+        }) as rows
+
+        UNWIND rows as row
+        RETURN 
+            row.path as path,
+            row.relation as relation,
+            row.subject as subject,
+            row.object as object,
+            row.association_type as association_type,
+            row.subject_category as subject_category,
+            row.object_category as object_category,
+            row.qualifier as qualifier
+        ORDER BY subject, object
+
 subject_closure: "equivalentClass|sameAs|type"

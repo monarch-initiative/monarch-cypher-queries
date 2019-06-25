@@ -1,30 +1,42 @@
 query: |
-        MATCH path=(pathway:pathway)<-[:RO:0002331]-()<-[:RO:0002205*0..1]-(gene:gene)<-[:GENO:0000418!]-(variant:variant)-[r:RO:0002200|RO:0002610|RO:0002326!*2..]->(phenotype:phenotype)
-        RETURN path,
-        pathway as subject,
-        phenotype as object,
-        r as relation,
-        'pathway_phenotype' as association_type,
-        'pathway' as subject_category,
-        'phenotype' as object_category,
-        'inferred through joining gene pathway, gene disease, and homology associations' as qualifier
-        UNION ALL
-        MATCH path=(pathway:pathway)<-[:RO:0002331]-()<-[:RO:0002205*0..1]-(gene:gene)<-[:GENO:0000418!]-(variant:variant)<-[:BFO:0000051!*]-(genotype:genotype)-[r:RO:0002200|RO:0002610|RO:0002326!*2..]->(phenotype:phenotype)
-        RETURN path,
-        pathway as subject,
-        phenotype as object,
-        r as relation,
-        'pathway_phenotype' as association_type,
-        'pathway' as subject_category,
-        'phenotype' as object_category,
-        'inferred through joining gene pathway, gene disease, and homology associations' as qualifier
-        UNION ALL
-        MATCH path=(pathway:pathway)<-[:RO:0002331]-()<-[:RO:0002205*0..1]-(gene:gene)<-[:GENO:0000418!]-(variant:variant)<-[:BFO:0000051!*]-(genotype:genotype)<-[:GENO:0000222|RO:0001000*1..2]-(person)-[r:RO:0002200|RO:0002610|RO:0002326!*2..]->(phenotype:phenotype)
-        RETURN path,
-        pathway as subject,
-        phenotype as object,
-        r as relation,
-        'pathway_phenotype' as association_type,
-        'pathway' as subject_category,
-        'phenotype' as object_category,
-        'inferred through joining gene pathway, gene disease, and homology associations' as qualifier
+        MATCH path=(subject:pathway)<-[:RO:0002331]-()<-[:RO:0002205*0..1]-(gene:gene)<-[:GENO:0000418!]-(variant:variant)-[relation:RO:0002200|RO:0002610|RO:0002326!*2..]->(object:phenotype)
+
+        WITH COLLECT ({
+            path:path,
+            relation:relation,
+            subject:subject,
+            object:object,
+            association_type:'pathway_phenotype',
+            subject_category:'pathway',
+            object_category:'phenotype',
+            qualifier:'inferred through joining gene pathway, variant disease, and disease phenotype'
+        }) as rows
+        
+        // returns 0 results
+        // MATCH path=(subject:pathway)<-[:RO:0002331]-()<-[:RO:0002205*0..1]-(gene:gene)<-[:GENO:0000418!]-(variant:variant)<-[:BFO:0000051!*]-(genotype:genotype)-[relation:RO:0002200|RO:0002610|RO:0002326!*2..]->(object:phenotype)
+
+        MATCH path=(subject:pathway)<-[:RO:0002331]-()<-[:RO:0002205*0..1]-(gene:gene)<-[:GENO:0000418!]-(variant:variant)<-[:BFO:0000051!*]-(genotype:genotype)<-[:GENO:0000222|RO:0001000*1..2]-(person)-[relation:RO:0002200|RO:0002610|RO:0002326!*2..]->(object:phenotype)
+
+        WITH rows + COLLECT ({
+            path:path,
+            relation:relation,
+            subject:subject,
+            object:object,
+            association_type:'pathway_phenotype',
+            subject_category:'pathway',
+            object_category:'phenotype',
+            qualifier:'inferred'
+        }) as rows
+
+        UNWIND rows as row
+        RETURN 
+            row.path as path,
+            row.relation as relation,
+            row.subject as subject,
+            row.object as object,
+            row.association_type as association_type,
+            row.subject_category as subject_category,
+            row.object_category as object_category,
+            row.qualifier as qualifier
+        ORDER BY subject, object
+
