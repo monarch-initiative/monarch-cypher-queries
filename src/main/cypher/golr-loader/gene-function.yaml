@@ -1,26 +1,54 @@
 query: |
         MATCH path=(subject:gene)-[relation:RO:0002331]->(object:`biological process`)
-        RETURN path,
-        subject, object, relation,
-        'gene_function' as association_type,
-        'gene' AS subject_category,
-        'biological process' AS object_category,
-        'direct' AS qualifier
-        UNION ALL
+
+        WITH COLLECT ({
+            path:path,
+            relation:relation,
+            subject:subject,
+            object:object,
+            association_type:'gene_function',
+            subject_category:'gene',
+            object_category:'biological process',
+            qualifier:'direct'
+        }) as rows
+
         MATCH path=(subject:gene)-[relation:RO:0002327]->(object:`molecular function`)
-        RETURN path,
-        subject, object, relation,
-        'gene_function' as association_type,
-        'gene' AS subject_category,
-        'biological process' AS object_category,
-        'direct' AS qualifier
-        UNION ALL
+
+        WITH rows + COLLECT ({
+            path:path,
+            relation:relation,
+            subject:subject,
+            object:object,
+            association_type:'gene_function',
+            subject_category:'gene',
+            object_category:'molecular function',
+            qualifier:'direct'
+        }) as rows
+
         MATCH path=(subject:gene)-[relation:BFO:0000050]->(object:`cellular component`)
-        RETURN path,
-        subject, object, relation,
-        'gene_function' as association_type,
-        'gene' AS subject_category,
-        'biological process' AS object_category,
-        'direct' AS qualifier
+
+        WITH rows + COLLECT ({
+            path:path,
+            relation:relation,
+            subject:subject,
+            object:object,
+            association_type:'gene_function',
+            subject_category:'gene',
+            object_category:'cellular component',
+            qualifier:'direct'
+        }) as rows
+
+        UNWIND rows as row
+        RETURN 
+            row.path as path,
+            row.relation as relation,
+            row.subject as subject,
+            row.object as object,
+            row.association_type as association_type,
+            row.subject_category as subject_category,
+            row.object_category as object_category,
+            row.qualifier as qualifier
+        ORDER BY subject, object
+
 subject_closure: "equivalentClass|sameAs|type"
 object_closure: "subClassOf|BFO:0000050"

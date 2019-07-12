@@ -1,11 +1,14 @@
 query: |
         MATCH path=(subject)-[:RO:0001000|GENO:0000222*1..2]->(genotype:genotype)-[:BFO:0000051!*]->(variant:variant)-[rel:GENO:0000418|GENO:0000639!*0..1]->(object:gene)
         WHERE NOT ANY (geno_rel in rel where geno_rel.isDefinedBy="https://data.monarchinitiative.org/ttl/udp.ttl")
-        RETURN path,
-        subject, object,
-        'model_gene' as association_type,
-        'model' AS subject_category,
-        'gene' AS object_category,
-        'inferred through genotype' AS qualifier
+        RETURN 
+            path,
+            subject,
+            object,
+            'model_gene' as association_type,
+            'model' AS subject_category,
+            'gene' AS object_category,
+            'inferred through genotype' AS qualifier
+        ORDER BY subject, object
 subject_closure: "equivalentClass|sameAs|type"
 object_closure: "equivalentClass|sameAs|type"

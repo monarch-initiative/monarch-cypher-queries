@@ -1,18 +1,41 @@
 query: |
-        MATCH path=(subject:disease)<-[:RO:0002200|RO:0002610|RO:0002326!]-(variant:variant)-[:GENO:0000418!*0..1]->(:gene)-[:RO:0002205*0..1]->()-[relation:RO:0002331]->(object:pathway)
-        RETURN path,
-        subject, object, relation,
-        'disease_pathway' as association_type,
-        'disease' AS subject_category,
-        'pathway' AS object_category,
-        'inferred through joining gene disease and gene pathway associations' AS qualifier
-        UNION ALL
-        MATCH path=(subject:disease)<-[relation:RO:0002418!]-(object:pathway)
-        RETURN path,
-        subject, object, relation,
-        'disease_pathway' as association_type,
-        'disease' AS subject_category,
-        'pathway' AS object_category,
-        'direct' AS qualifier
+        MATCH path=(subject:disease)<-[:RO:0002200|RO:0002610|RO:0002326!]-(variant)-[:GENO:0000418!*0..1]->(:gene)-[:RO:0002205*0..1]->()-[relation:RO:0002331]->(object:pathway)
+
+        WITH COLLECT ({
+            path:path,
+            relation:relation,
+            subject:subject,
+            object:object,
+            association_type:'disease_pathway',
+            subject_category:'disease',
+            object_category:'pathway',
+            qualifier:'inferred by joining gene disease and gene pathway associations'
+        }) as rows
+
+        // This query returns 0 rows
+        // MATCH path=(subject:disease)<-[relation:RO:0002418!]-(object:pathway)
+
+        //WITH rows + COLLECT ({
+        //    path:path,
+        //    relation:relation,
+        //    subject:subject,
+        //    object:object,
+        //    association_type:'disease_pathway',
+        //   subject_category:'disease',
+        //    object_category:'pathway',
+        //    qualifier:'direct'
+        //}) as rows
+
+        UNWIND rows as row
+        RETURN 
+            row.path as path,
+            row.relation as relation,
+            row.subject as subject,
+            row.object as object,
+            row.association_type as association_type,
+            row.subject_category as subject_category,
+            row.object_category as object_category,
+            row.qualifier as qualifier
+        ORDER BY subject, object
 
 

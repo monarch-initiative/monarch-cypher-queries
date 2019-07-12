@@ -1,19 +1,29 @@
 query: |
         MATCH path=(pub:publication)<-[relation:dc:source]-(association)-[r:OBAN:association_has_object|OBAN:association_has_subject]->(phenotype:phenotype)
-        RETURN path,
-            pub as subject, relation,
-            phenotype as object,
-            'publication_phenotype' as association_type,
-            'publication' as subject_category,
-            'phenotype' as object_category,
-            'direct' as qualifier
-        UNION ALL
-        MATCH path=(pub:publication)-[relation:IAO:0000142|IAO:0000136]->(phenotype:phenotype)
-        RETURN path,
-            pub as subject, relation,
-            phenotype as object,
-            'publication_phenotype' as association_type,
-            'publication' as subject_category,
-            'phenotype' as object_category,
-            'direct' as qualifier
+        WITH COLLECT ({
+            path:path,
+            relation:relation,
+            subject:pub,
+            object:phenotype,
+            association_type:'publication_phenotype',
+            subject_category:'publication',
+            object_category:'phenotype',
+            qualifier:'direct'
+        }) as rows
+
+        // This query returns 0 rows
+        //MATCH path=(pub:publication)-[relation:IAO:0000142|IAO:0000136]->(phenotype:phenotype)
+
+        UNWIND rows as row
+        RETURN 
+            row.path as path,
+            row.relation as relation,
+            row.subject as subject,
+            row.object as object,
+            row.association_type as association_type,
+            row.subject_category as subject_category,
+            row.object_category as object_category,
+            row.qualifier as qualifier
+        ORDER BY subject, object
+
 subject_closure: "equivalentClass|sameAs|type"

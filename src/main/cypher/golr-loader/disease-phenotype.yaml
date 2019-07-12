@@ -9,9 +9,15 @@ query: |
                        (assoc)-[:OBAN:association_has_object]->(object),
                        (assoc)-[:OBAN:association_has_predicate]->(has_pheno:Node{iri:'http://purl.obolibrary.org/obo/RO_0002200'}),
                        (assoc)-[::frequencyOfPhenotype]->(frequency)
-        RETURN path, onset, frequency,
-        subject, object, relation,
-        'disease_phenotype' as association_type,
-        'disease' AS subject_category,
-        'phenotype' AS object_category,
-        'direct' as qualifier
+        RETURN 
+            path,
+            onset, 
+            frequency,
+            subject,
+            object,
+            relation,
+            'disease_phenotype' as association_type,
+            'disease' AS subject_category,
+            'phenotype' AS object_category,
+            'direct' as qualifier
+        ORDER BY subject, object

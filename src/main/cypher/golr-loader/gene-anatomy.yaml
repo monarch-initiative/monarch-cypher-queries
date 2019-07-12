@@ -1,10 +1,14 @@
 query: |
         MATCH path=(subject:gene)-[relation:RO:0002206]->(object:`anatomical entity`)
-        RETURN path,
-        subject, object, relation,
-        'gene_anatomy' as association_type,
-        'gene' AS subject_category,
-        'anatomical entity' AS object_category,
-        'direct' AS qualifier
+        RETURN 
+            path,
+            subject,
+            object,
+            relation,
+            'gene_anatomy' as association_type,
+            'gene' AS subject_category,
+            'anatomical entity' AS object_category,
+            'direct' AS qualifier
+        ORDER BY subject, object
 subject_closure: "equivalentClass|sameAs|type"
 object_closure: "subClassOf|BFO:0000050"

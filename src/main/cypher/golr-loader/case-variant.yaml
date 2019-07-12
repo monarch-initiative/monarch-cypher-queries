@@ -1,10 +1,14 @@
 query: |
         MATCH path=(model)-[:RO:0001000*0..1]->(subject:case)-[relation:GENO:0000222]->(genotype:genotype)-[:BFO:0000051!*]->(object:variant)
-        RETURN path,
-        subject, object, relation,
-        'case_variant' as association_type,
-        'case' AS subject_category,
-        'variant' AS object_category,
-        'inferred through intrinsic genotype' AS qualifier
+        RETURN 
+            path,
+            subject,
+            object,
+            relation,
+            'case_variant' as association_type,
+            'case' AS subject_category,
+            'variant' AS object_category,
+            'inferred through intrinsic genotype' AS qualifier
+        ORDER BY subject, object
 subject_closure: "equivalentClass|sameAs|type"
 object_closure: "equivalentClass|sameAs|type"

@@ -1,74 +1,96 @@
 query: |
-        MATCH path=(pub:publication)-[relation:IAO:0000142|IAO:0000136]->(x:gene)
-        RETURN path, relation,
-            pub as subject,
-            x as object,
-            'publication_gene' as association_type,
-            'publication' as subject_category,
-            'gene' as object_category,
-            'direct' as qualifier
-        UNION ALL
+        MATCH path=(pub:publication)-[relation:IAO:0000142|IAO:0000136]->(gene:gene)
+
+        WITH COLLECT ({
+            path:path,
+            relation:relation,
+            subject:pub,
+            object:gene,
+            association_type:'publication_gene',
+            subject_category:'publication',
+            object_category:'gene',
+            qualifier:'direct'
+        }) as rows
+
         MATCH path=(pub:publication)<-[relation:dc:source]-(association)-[r:OBAN:association_has_subject|OBAN:association_has_object]->(gene:gene)
-        RETURN path, relation,
-            pub as subject,
-            gene as object,
-            'publication_gene' as association_type,
-            'publication' as subject_category,
-            'gene' as object_category,
-            'direct' as qualifier
-        UNION ALL
+
+        WITH rows + COLLECT ({
+            path:path,
+            relation:relation,
+            subject:pub,
+            object:gene,
+            association_type:'publication_gene',
+            subject_category:'publication',
+            object_category:'gene',
+            qualifier:'direct'
+        }) as rows
+
         MATCH path=(pub:publication)<-[relation:dc:source]-(association)-[r:OBAN:association_has_object|OBAN:association_has_subject]->(genotype:genotype)-[:BFO:0000051!*]->(variant:variant)-[:GENO:0000418!*0..1]->(gene:gene)
-        RETURN path, relation,
-            pub as subject,
-            gene as object,
-            'publication_gene' as association_type,
-            'publication' as subject_category,
-            'gene' as object_category,
-            'indirect' as qualifier
-        UNION ALL
+
+        WITH rows + COLLECT ({
+            path:path,
+            relation:relation,
+            subject:pub,
+            object:gene,
+            association_type:'publication_gene',
+            subject_category:'publication',
+            object_category:'gene',
+            qualifier:'inferred'
+        }) as rows
         MATCH path=(pub:publication)-[relation:IAO:0000142|IAO:0000136]->(genotype:genotype)-[:BFO:0000051!*]->(variant)-[:GENO:0000418!*0..1]->(gene:gene)
-        RETURN path, relation,
-            pub as subject,
-            gene as object,
-            'publication_gene' as association_type,
-            'publication' as subject_category,
-            'gene' as object_category,
-            'inferred' as qualifier
-        UNION ALL
+
+        WITH rows + COLLECT ({
+            path:path,
+            relation:relation,
+            subject:pub,
+            object:gene,
+            association_type:'publication_gene',
+            subject_category:'publication',
+            object_category:'gene',
+            qualifier:'inferred'
+        }) as rows
         MATCH path=(pub:publication)<-[relation:dc:source]-(association)-[r:OBAN:association_has_subject|OBAN:association_has_object]->(variant:variant)-[:GENO:0000418!*0..1]->(gene:gene)
-        RETURN path, relation,
-            pub as subject,
-            gene as object,
-            'publication_gene' as association_type,
-            'publication' as subject_category,
-            'gene' as object_category,
-            'direct' as qualifier
-        UNION ALL
+
+        WITH rows + COLLECT ({
+            path:path,
+            relation:relation,
+            subject:pub,
+            object:gene,
+            association_type:'publication_gene',
+            subject_category:'publication',
+            object_category:'gene',
+            qualifier:'inferred'
+        }) as rows
         MATCH path=(pub:publication)-[relation:IAO:0000142|IAO:0000136]->(variant)-[:GENO:0000418!*0..1]->(gene:gene)
-        RETURN path, relation,
-            pub as subject,
-            gene as object,
-            'publication_gene' as association_type,
-            'publication' as subject_category,
-            'gene' as object_category,
-            'inferred' as qualifier
-        UNION ALL
-        MATCH path=(pub:publication)<-[relation:dc:source]-(association)-[r:OBAN:association_has_subject|OBAN:association_has_object]->(person)-[:GENO:0000222]->(genotype:genotype)-[:BFO:0000051!*]->(variant:variant)-[:GENO:0000418!*0..1]->(gene:gene)
-        RETURN path, relation,
-            pub as subject,
-            gene as object,
-            'publication_gene' as association_type,
-            'publication' as subject_category,
-            'gene' as object_category,
-            'indirect' as qualifier
-        UNION ALL
-        MATCH path=(pub:publication)-[relation:IAO:0000142|IAO:0000136]->(person)-[:GENO:0000222]->(genotype:genotype)-[:BFO:0000051!*]->(variant:variant)-[:GENO:0000418!*0..1]->(gene:gene)
-        RETURN path, relation,
-            pub as subject,
-            gene as object,
-            'publication_gene' as association_type,
-            'publication' as subject_category,
-            'gene' as object_category,
-            'inferred' as qualifier
+
+        WITH rows + COLLECT ({
+            path:path,
+            relation:relation,
+            subject:pub,
+            object:gene,
+            association_type:'publication_gene',
+            subject_category:'publication',
+            object_category:'gene',
+            qualifier:'inferred'
+        }) as rows
+
+        // This query returns 0 results
+        // MATCH path=(pub:publication)<-[relation:dc:source]-(association)-[r:OBAN:association_has_subject|OBAN:association_has_object]->(person)-[:GENO:0000222]->(genotype:genotype)-[:BFO:0000051!*]->(variant:variant)-[:GENO:0000418!*0..1]->(gene:gene)
+
+        // This query returns 0 results
+        // MATCH path=(pub:publication)-[relation:IAO:0000142|IAO:0000136]->(person)-[:GENO:0000222]->(genotype:genotype)-[:BFO:0000051!*]->(variant:variant)-[:GENO:0000418!*0..1]->(gene:gene)
+
+        UNWIND rows as row
+        RETURN 
+            row.path as path,
+            row.relation as relation,
+            row.subject as subject,
+            row.object as object,
+            row.association_type as association_type,
+            row.subject_category as subject_category,
+            row.object_category as object_category,
+            row.qualifier as qualifier
+        ORDER BY subject, object
+
 subject_closure: "equivalentClass|sameAs|type"
 object_closure: "equivalentClass|sameAs|type"

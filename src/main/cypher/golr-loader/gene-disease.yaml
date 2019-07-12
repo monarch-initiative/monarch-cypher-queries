@@ -2,20 +2,45 @@ query: |
         MATCH (relation:Node{iri:'http://purl.obolibrary.org/obo/RO_0003303'})
         WITH relation
         MATCH path=(subject:gene)<-[geno:GENO:0000418|GENO:0000641!*0..1]-(feature)-[rel:RO:0002200|RO:0002610|RO:0002326|RO:0003302!]->(object:disease)
-        WHERE (subject)<-[:GENO:0000418|GENO:0000639!*0..1]-()<-[:BFO:0000051!*0..]-()-[:RO:0002200|RO:0003303|GENO:0000840]->(object)        RETURN path,
-            subject, object, relation,
-            'gene_disease' as association_type,
-            'gene' AS subject_category,
-            'disease' AS object_category,
-            'inferred through variant' as qualifier
-        UNION ALL
+        WHERE (subject)<-[:GENO:0000418|GENO:0000639!*0..1]-()<-[:BFO:0000051!*0..]-()-[:RO:0002200|RO:0003303|GENO:0000840]->(object)
+
+        WITH COLLECT ({
+            path:path,
+            relation:relation,
+            subject:subject,
+            object:object,
+            association_type:'gene_disease',
+            subject_category:'gene',
+            object_category:'disease',
+            qualifier:'inferred through variant'
+        }) as rows
+
         MATCH (relation:Node{iri:'http://purl.obolibrary.org/obo/RO_0003303'})
-        WITH relation
+        WITH relation, rows
         MATCH path=(subject:gene)<-[:GENO:0000418|GENO:0000641!]-(variant)<-[:BFO:0000051!*]-(genotype:genotype)-[rel:RO:0002200|RO:0002610|RO:0002326|RO:0003302!]->(object:disease)
-        WHERE (subject)<-[:GENO:0000418|GENO:0000639!*0..1]-()<-[:BFO:0000051!*0..]-()-[:RO:0002200|RO:0003303|GENO:0000840]->(object)        RETURN path,
-            subject, object, relation,
-            'gene_disease' as association_type,
-            'gene' AS subject_category,
-            'disease' AS object_category,
-            'inferred through genotype' as qualifier
+        WHERE (subject)<-[:GENO:0000418|GENO:0000639!*0..1]-()<-[:BFO:0000051!*0..]-()-[:RO:0002200|RO:0003303|GENO:0000840]->(object)
+
+        WITH rows + COLLECT ({
+            path:path,
+            relation:relation,
+            subject:subject,
+            object:object,
+            association_type:'gene_disease',
+            subject_category:'gene',
+            object_category:'disease',
+            qualifier:'inferred through genotype'
+        }) as rows
+
+        UNWIND rows as row
+        RETURN 
+            row.path as path,
+            row.relation as relation,
+            row.subject as subject,
+            row.object as object,
+            row.association_type as association_type,
+            row.subject_category as subject_category,
+            row.object_category as object_category,
+            row.qualifier as qualifier
+        ORDER BY subject, object
+
 subject_closure: "equivalentClass|sameAs|type"

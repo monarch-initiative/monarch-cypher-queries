@@ -1,17 +1,40 @@
 query: |
         MATCH path=(object:disease)<-[relation:RO:0003301]-(model)-[:RO:0001000]->(subject:case)
-        RETURN path,
-        subject, object, relation,
-        'case_disease' as association_type,
-        'case' AS subject_category,
-        'disease' AS object_category,
-        'direct' AS qualifier
-        UNION ALL
+
+        WITH COLLECT ({
+            path:path,
+            relation:relation,
+            subject:subject,
+            object:object,
+            association_type:'case_disease',
+            subject_category:'case',
+            object_category:'disease',
+            qualifier:'direct'
+        }) as rows
+
         MATCH path=(object:disease)<-[relation:RO:0002200]-(subject:case)
-        RETURN path,
-        subject, object, relation,
-        'case_disease' as association_type,
-        'case' AS subject_category,
-        'disease' AS object_category,
-        'direct' AS qualifier
+
+        WITH rows + COLLECT ({
+            path:path,
+            relation:relation,
+            subject:subject,
+            object:object,
+            association_type:'case_disease',
+            subject_category:'case',
+            object_category:'disease',
+            qualifier:'direct'
+        }) as rows
+
+        UNWIND rows as row
+        RETURN 
+            row.path as path,
+            row.relation as relation,
+            row.subject as subject,
+            row.object as object,
+            row.association_type as association_type,
+            row.subject_category as subject_category,
+            row.object_category as object_category,
+            row.qualifier as qualifier
+        ORDER BY subject, object
+
 subject_closure: "equivalentClass|sameAs|type"
