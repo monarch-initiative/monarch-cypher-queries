@@ -10,5 +10,5 @@ query: |
             'anatomical entity' AS object_category,
             'direct' AS qualifier
         ORDER BY subject, object
-subject_closure: "equivalentClass|sameAs|type"
+subject_closure: "equivalentClass|sameAs"
 object_closure: "subClassOf|BFO:0000050"

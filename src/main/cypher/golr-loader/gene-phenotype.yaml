@@ -94,4 +94,4 @@ query: |
             row.qualifier as qualifier
         ORDER BY subject, object
 
-subject_closure: "equivalentClass|sameAs|type"
+subject_closure: "equivalentClass|sameAs"
