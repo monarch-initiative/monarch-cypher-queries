@@ -12,18 +12,8 @@ query: |
             qualifier:'direct'
         }) as rows
 
-        MATCH path=(pub:publication)-[relation:IAO:0000142|IAO:0000136]->(genotype:genotype)
-
-        WITH rows + COLLECT ({
-            path:path,
-            relation:relation,
-            subject:pub,
-            object:genotype,
-            association_type:'publication_genotype',
-            subject_category:'publication',
-            object_category:'genotype',
-            qualifier:'direct'
-        }) as rows
+        // No rows as of 07 2019 ttl release
+        // MATCH path=(pub:publication)-[relation:IAO:0000142|IAO:0000136]->(genotype:genotype)
 
         MATCH path=(pub:publication)<-[relation:dc:source]-(association)-[r:OBAN:association_has_object|OBAN:association_has_subject]->(person)-[:GENO:0000222|RO:0001000*1..2]->(genotype:genotype)
 
