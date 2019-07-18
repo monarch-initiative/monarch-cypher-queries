@@ -11,17 +11,8 @@ query: |
             qualifier:'inferred'
         }) as rows
 
-        MATCH path=(pub:publication)-[relation:IAO:0000142|IAO:0000136]->(genotype:genotype)-[:BFO:0000051!*]->(variant:variant)
-        WITH rows + COLLECT ({
-            path:path,
-            relation:relation,
-            subject:pub,
-            object:variant,
-            association_type:'publication_variant',
-            subject_category:'publication',
-            object_category:'variant',
-            qualifier:'inferred'
-        }) as rows
+        // No rows as of 07 2019 ttl release
+        //MATCH path=(pub:publication)-[relation:IAO:0000142|IAO:0000136]->(genotype:genotype)-[:BFO:0000051!*]->(variant:variant)
 
         MATCH path=(pub:publication)<-[relation:dc:source]-(association)-[r:OBAN:association_has_subject|OBAN:association_has_object]->(variant:variant)
         WITH rows + COLLECT ({
