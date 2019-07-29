@@ -16,7 +16,7 @@ query: |
         }) as rows
 
         // Gene to phenotype via allele/variant to phenotype inferred from disease to phenotype
-        MATCH path=(subject:gene)<-[:GENO:0000418!*0..1]-(feature)-[:RO:0002200|GENO:0000840|RO:0003303]->(disease)-[relation:RO:0002200]->(object:phenotype)
+        MATCH path=(subject:gene)<-[:GENO:0000418!*0..1]-(feature)-[:RO:0002200|RO:0003303|GENO:0000840|RO:0004011|RO:0004013|RO:0004016|RO:0004012|RO:0004014]->(disease)-[relation:RO:0002200]->(object:phenotype)
         MATCH (assoc:association)-[:OBAN:association_has_subject]->(disease),
               (assoc)-[:OBAN:association_has_object]->(object),
               (assoc)-[:OBAN:association_has_predicate]->(has_pheno:Node{iri:'http://purl.obolibrary.org/obo/RO_0002200'})
