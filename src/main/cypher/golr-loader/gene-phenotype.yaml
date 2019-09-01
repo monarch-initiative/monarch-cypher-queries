@@ -20,7 +20,7 @@ query: |
         MATCH (assoc:association)-[:OBAN:association_has_subject]->(disease),
               (assoc)-[:OBAN:association_has_object]->(object),
               (assoc)-[:OBAN:association_has_predicate]->(has_pheno:Node{iri:'http://purl.obolibrary.org/obo/RO_0002200'})
-        WHERE NOT (assoc)-[::frequencyOfPhenotype]->(:Node{iri:'http://purl.obolibrary.org/obo/HP_0040284'})
+        WHERE (assoc)-[::frequencyOfPhenotype]->(:Node{iri:'http://purl.obolibrary.org/obo/HP_0040280'})
 
         WITH rows + COLLECT ({
             path:path,
