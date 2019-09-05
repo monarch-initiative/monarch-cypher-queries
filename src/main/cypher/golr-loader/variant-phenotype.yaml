@@ -12,6 +12,20 @@ query: |
             qualifier:'direct'
         }) as rows
 
+        // Variant to phenotype inferred via disease-phenotype
+        MATCH path=(subject:variant)-[:RO:0002200|RO:0003303|GENO:0000840|RO:0004011|RO:0004013|RO:0004016|RO:0004012|RO:0004014]->(disease)-[relation:RO:0002200]->(object:phenotype)
+
+        WITH rows + COLLECT ({
+            path:path,
+            relation:relation,
+            subject:subject,
+            object:object,
+            association_type:'variant_phenotype',
+            subject_category:'variant',
+            object_category:'phenotype',
+            qualifier:'inferred through disease'
+        }) as rows
+
         // Variant to phenotype inferred via genotype
         MATCH path=(subject:variant)<-[:BFO:0000051!*]-(genotype)-[relation:RO:0002200|RO:0002610|RO:0002326|RO:0003302!]->(object:phenotype)
 
