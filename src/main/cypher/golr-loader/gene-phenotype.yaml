@@ -1,8 +1,8 @@
 query: |
         // Gene to phenotype via allele/variant to phenotype
         MATCH path=(subject:gene)<-[geno:GENO:0000418!*0..1]-(feature)-[relation:RO:0002200|RO:0002326|RO:0003302!]->(object:phenotype)
-        WHERE NOT ANY (rel in geno where rel.isDefinedBy="https://data.monarchinitiative.org/ttl/mgi.ttl")
-        AND NOT ANY (rel in geno where "https://data.monarchinitiative.org/ttl/mgi.ttl" in rel.isDefinedBy)
+        WHERE NOT ANY (rel in geno where rel.isDefinedBy="https://archive.monarchinitiative.org/201910/rdf/mgi.ttl")
+        AND NOT ANY (rel in geno where "https://archive.monarchinitiative.org/201910/rdf/mgi.ttl" in rel.isDefinedBy)
 
         WITH COLLECT ({
             path:path,
@@ -15,8 +15,27 @@ query: |
             qualifier:'direct'
         }) as rows
 
-        // Gene to phenotype via allele/variant to phenotype inferred from disease to phenotype
+        // Gene to phenotype inferred via pathogenic variant to disease and disease to phenotype
         MATCH path=(subject:gene)<-[:GENO:0000418!*0..1]-(feature)-[:RO:0002200|RO:0003303|RO:0004011|RO:0004013|RO:0004016|RO:0004012|RO:0004014]->(disease)-[relation:RO:0002200]->(object:phenotype)
+
+        WITH rows + COLLECT ({
+            path:path,
+            relation:relation,
+            subject:subject,
+            object:object,
+            association_type:'gene_phenotype',
+            subject_category:'gene',
+            object_category:'phenotype',
+            qualifier:'inferred through variant'
+        }) as rows
+
+        // Gene to phenotype via allele/variant to phenotype inferred from disease to phenotype
+        MATCH path=(subject:gene)<-[:GENO:0000418]-(feature)-[:GENO:0000840]->(disease)-[relation:RO:0002200]->(object:phenotype)
+
+        MATCH (assoc:association)-[:OBAN:association_has_subject]->(feature),
+              (assoc)-[:OBAN:association_has_object]->(disease),
+              (assoc)-[:OBAN:association_has_predicate]->(:Node{iri:'http://purl.obolibrary.org/obo/GENO_0000840'})
+        WHERE assoc.confidence_score > 1
 
         WITH rows + COLLECT ({
             path:path,
@@ -33,7 +52,7 @@ query: |
         MATCH (relation:Node{iri:'http://purl.obolibrary.org/obo/RO_0002200'})
         WITH relation, rows
         MATCH path=(subject:gene)<-[:GENO:0000418!*0..1]-(feature)<-[:BFO:0000051!*]-(genotype:genotype)-[rel:RO:0002200|RO:0002326|RO:0003302!*]->(object:phenotype)
-        WHERE NOT ANY (pheno_rel in rel where pheno_rel.isDefinedBy="https://data.monarchinitiative.org/ttl/mgi.ttl" OR pheno_rel.isDefinedBy="https://data.monarchinitiative.org/ttl/zfin.ttl")
+        WHERE NOT ANY (pheno_rel in rel where pheno_rel.isDefinedBy="https://archive.monarchinitiative.org/201910/rdf/mgi.ttl" OR pheno_rel.isDefinedBy="https://archive.monarchinitiative.org/201910/rdf/zfin.ttl")
 
         WITH rows + COLLECT ({
             path:path,

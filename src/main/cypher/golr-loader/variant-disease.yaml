@@ -1,11 +1,17 @@
 query: |
         MATCH path=(subject:variant)-[relation:RO:0002200|RO:0002610|RO:0002326|RO:0003302!]->(object:disease)
+        WITH subject, relation, relation.iri as rel_iri, object, path
+        
+        MATCH (assoc:association)-[:OBAN:association_has_subject]->(subject),
+              (assoc)-[:OBAN:association_has_object]->(object),
+              (assoc)-[:OBAN:association_has_predicate]->(:Node{iri:rel_iri})
 
         WITH COLLECT ({
             path:path,
             relation:relation,
             subject:subject,
             object:object,
+            confidence_score:assoc.confidence_score,
             association_type:'variant_disease',
             subject_category:'variant',
             object_category:'disease',
@@ -19,6 +25,7 @@ query: |
             relation:relation,
             subject:subject,
             object:object,
+            confidence_score:NULL,
             association_type:'variant_disease',
             subject_category:'variant',
             object_category:'disease',
@@ -32,6 +39,7 @@ query: |
             relation:relation,
             subject:subject,
             object:object,
+            confidence_score:NULL,
             association_type:'variant_disease',
             subject_category:'variant',
             object_category:'disease',
@@ -44,6 +52,7 @@ query: |
             row.relation as relation,
             row.subject as subject,
             row.object as object,
+            row.confidence_score as confidence_score,
             row.association_type as association_type,
             row.subject_category as subject_category,
             row.object_category as object_category,
