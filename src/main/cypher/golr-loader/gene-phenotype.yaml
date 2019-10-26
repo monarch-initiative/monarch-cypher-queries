@@ -1,8 +1,8 @@
 query: |
         // Gene to phenotype via allele/variant to phenotype
         MATCH path=(subject:gene)<-[geno:GENO:0000418!*0..1]-(feature)-[relation:RO:0002200|RO:0002326|RO:0003302!]->(object:phenotype)
-        WHERE NOT ANY (rel in geno where rel.isDefinedBy="https://archive.monarchinitiative.org/201910/rdf/mgi.ttl")
-        AND NOT ANY (rel in geno where "https://archive.monarchinitiative.org/201910/rdf/mgi.ttl" in rel.isDefinedBy)
+        WHERE NOT ANY (rel in geno where rel.isDefinedBy="https://archive.monarchinitiative.org/#mgi")
+        AND NOT ANY (rel in geno where "https://archive.monarchinitiative.org/#mgi" in rel.isDefinedBy)
 
         WITH COLLECT ({
             path:path,
@@ -52,7 +52,7 @@ query: |
         MATCH (relation:Node{iri:'http://purl.obolibrary.org/obo/RO_0002200'})
         WITH relation, rows
         MATCH path=(subject:gene)<-[:GENO:0000418!*0..1]-(feature)<-[:BFO:0000051!*]-(genotype:genotype)-[rel:RO:0002200|RO:0002326|RO:0003302!*]->(object:phenotype)
-        WHERE NOT ANY (pheno_rel in rel where pheno_rel.isDefinedBy="https://archive.monarchinitiative.org/201910/rdf/mgi.ttl" OR pheno_rel.isDefinedBy="https://archive.monarchinitiative.org/201910/rdf/zfin.ttl")
+        WHERE NOT ANY (pheno_rel in rel where pheno_rel.isDefinedBy="https://archive.monarchinitiative.org/#mgi" OR pheno_rel.isDefinedBy="https://archive.monarchinitiative.org/#zfin")
 
         WITH rows + COLLECT ({
             path:path,
