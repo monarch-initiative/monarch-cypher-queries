@@ -1,5 +1,5 @@
 query: |
-        MATCH path=(subject:disease)<-[:RO:0002200|RO:0002610|RO:0002326!]-(variant)-[:GENO:0000418!*0..1]->(:gene)-[:RO:0002205*0..1]->()-[relation:RO:0002331]->(object:pathway)
+        MATCH path=(subject:disease)<-[:RO:0002200|RO:0003303|GENO:0000840|RO:0004011|RO:0004013|RO:0004012|RO:0004014]-(variant)-[:GENO:0000418!*0..1]->(:gene)-[:RO:0002205*0..1]->()-[relation:RO:0002331]->(object:pathway)
 
         WITH COLLECT ({
             path:path,
