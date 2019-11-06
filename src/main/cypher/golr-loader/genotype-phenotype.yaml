@@ -32,7 +32,7 @@ query: |
 
         MATCH (relation:Node{iri:'http://purl.obolibrary.org/obo/RO_0002200'})
         WITH relation, rows
-        MATCH path=(subject:genotype)<-[:GENO:0000222|RO:0001000*1..2]-(s)-[rels:RO:0002200|RO:0002610|RO:0002326|RO:0003302!*1..2]->(object:phenotype)
+        MATCH path=(subject:genotype)<-[:GENO:0000222|RO:0001000*1..2]-(s)-[rels:RO:0002200|RO:0002610|RO:0002326|RO:0003302!]->(object:phenotype)
         WHERE NOT ANY (rel in rels where rel.isDefinedBy="https://data.monarchinitiative.org/ttl/udp.ttl")
 
         WITH rows + COLLECT ({
