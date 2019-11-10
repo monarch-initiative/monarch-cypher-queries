@@ -1,5 +1,5 @@
 query: |
-        MATCH path=(object:disease)<-[relation:RO:0002200|RO:0002610|RO:0002326!]-(person)-[:GENO:0000222|RO:0001000*0..2]->(subject:genotype)
+        MATCH path=(object:disease)<-[relation:RO:0002200|RO:0002610|RO:0002326|RO:0003301!]-(person)-[:GENO:0000222|RO:0001000*0..2]->(subject:genotype)
         WHERE NOT subject.iri STARTS WITH "https://monarchinitiative.org/.well-known"
         RETURN 
             path,
