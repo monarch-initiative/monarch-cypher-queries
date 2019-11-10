@@ -1,20 +1,23 @@
 query: |
-        MATCH path=(object:disease)<-[relation:RO:0003301]-(model)-[:RO:0001000]->(subject:case)
+        // MATCH path=(object:disease)<-[relation:RO:0003301]-(model)-[:RO:0001000]->(subject:case)
+        // WHERE NOT relation.isDefinedBy="https://archive.monarchinitiative.org/#coriell"
 
-        WITH COLLECT ({
-            path:path,
-            relation:relation,
-            subject:subject,
-            object:object,
-            association_type:'case_disease',
-            subject_category:'case',
-            object_category:'disease',
-            qualifier:'direct'
-        }) as rows
+        // WITH COLLECT ({
+        //     path:path,
+        //     relation:relation,
+        //     subject:subject,
+        //     object:object,
+        //     association_type:'case_disease',
+        //     subject_category:'case',
+        //     object_category:'disease',
+        //     qualifier:'direct'
+        // }) as rows */
 
         MATCH path=(object:disease)<-[relation:RO:0002200]-(subject:case)
+        WHERE NOT (relation.isDefinedBy="https://data.monarchinitiative.org/ttl/udp.ttl"
+                  OR subject.iri STARTS WITH "https://monarchinitiative.org/.well-known")
 
-        WITH rows + COLLECT ({
+        WITH COLLECT ({
             path:path,
             relation:relation,
             subject:subject,
