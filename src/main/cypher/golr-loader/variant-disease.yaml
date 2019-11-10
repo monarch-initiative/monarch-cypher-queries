@@ -1,5 +1,5 @@
 query: |
-        MATCH path=(subject:variant)-[relation:RO:0002200|RO:0002610|RO:0002326|RO:0003302!]->(object:disease)
+        MATCH path=(subject:variant)-[relation:RO:0002200|RO:0002610|RO:0002326|RO:0003302|RO:0003301!]->(object:disease)
         WITH subject, relation, relation.iri as rel_iri, object, path
         
         MATCH (assoc:association)-[:OBAN:association_has_subject]->(subject),
