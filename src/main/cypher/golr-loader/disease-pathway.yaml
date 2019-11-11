@@ -1,7 +1,24 @@
 query: |
-        MATCH path=(subject:disease)<-[:RO:0002200|RO:0003303|GENO:0000840|RO:0004011|RO:0004013|RO:0004012|RO:0004014]-(variant)-[:GENO:0000418!*0..1]->(:gene)-[:RO:0002205*0..1]->()-[relation:RO:0002331]->(object:pathway)
-
+        MATCH path=(subject:disease)<-[v_d:RO:0002200|RO:0003303|GENO:0000840|RO:0004011|RO:0004013|RO:0004012|RO:0004014]-(variant)-[:GENO:0000418|GENO:0000641!]->(:gene)-[:RO:0002205*0..1]->()-[relation:RO:0002331]->(object:pathway)
+        MATCH (assoc:association)-[:OBAN:association_has_subject]->(variant),
+              (assoc)-[:OBAN:association_has_object]->(subject),
+              (assoc)-[:OBAN:association_has_predicate]->(:Node{iri:v_d})
+        WHERE NOT (exists(assoc.confidence_score) OR assoc.confidence_score > 1)
+        
         WITH COLLECT ({
+            path:path,
+            relation:relation,
+            subject:subject,
+            object:object,
+            association_type:'disease_pathway',
+            subject_category:'disease',
+            object_category:'pathway',
+            qualifier:'inferred by joining gene disease and gene pathway associations'
+        }) as rows
+        
+        MATCH path=(subject:disease)<-[:RO:0002200|RO:0003303|GENO:0000840|RO:0004011|RO:0004013|RO:0004012|RO:0004014]-(:gene)-[:RO:0002205*0..1]->()-[relation:RO:0002331]->(object:pathway)
+
+        WITH rows + COLLECT ({
             path:path,
             relation:relation,
             subject:subject,
