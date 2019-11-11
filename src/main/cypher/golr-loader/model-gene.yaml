@@ -1,6 +1,6 @@
 query: |
         MATCH path=(subject)-[:RO:0001000|GENO:0000222*1..2]->(genotype:genotype)-[:BFO:0000051!*]->(variant:variant)-[rel:GENO:0000418|GENO:0000639!*0..1]->(object:gene)
-        WHERE NOT ANY (geno_rel in rel where geno_rel.isDefinedBy="https://data.monarchinitiative.org/ttl/udp.ttl")
+        WHERE NOT (ANY (geno_rel in rel where geno_rel.isDefinedBy="https://data.monarchinitiative.org/ttl/udp.ttl") OR subject.iri STARTS WITH "https://monarchinitiative.org/.well-known")
         RETURN 
             path,
             subject,
