@@ -1,5 +1,6 @@
 query: |
         MATCH path=(subject:genotype)-[:BFO:0000051!*]->(variant:variant)-[:GENO:0000418|GENO:0000639!*0..1]->(object:gene)
+        WHERE NOT subject.iri STARTS WITH "https://monarchinitiative.org/.well-known"
         RETURN 
             path,
             subject,
