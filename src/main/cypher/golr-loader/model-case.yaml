@@ -1,5 +1,6 @@
 query: |
         MATCH path=(subject)-[relation:RO:0001000]->(object:case)
+        WHERE NOT subject.iri STARTS WITH "https://monarchinitiative.org/.well-known" OR object.iri STARTS WITH "https://monarchinitiative.org/.well-known"
         RETURN 
             path,
             subject,

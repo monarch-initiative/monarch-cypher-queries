@@ -1,5 +1,6 @@
 query: |
         MATCH path=(subject:case)-[relation:RO:0002200]->(object:phenotype)
+        WHERE NOT subject.iri STARTS WITH "https://monarchinitiative.org/.well-known"
         RETURN 
             path,
             subject,
