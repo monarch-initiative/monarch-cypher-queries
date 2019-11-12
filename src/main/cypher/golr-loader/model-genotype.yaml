@@ -1,5 +1,6 @@
 query: |
         MATCH path=()<-[:RO:0003301]-(subject)-[relation:GENO:0000222]->(object:genotype)
+        WHERE NOT subject.iri STARTS WITH "https://monarchinitiative.org/.well-known" OR object.iri STARTS WITH "https://monarchinitiative.org/.well-known"
 
         WITH COLLECT ({
             path:path,
@@ -13,6 +14,7 @@ query: |
         }) as rows
 
         MATCH path=()<-[:RO:0003301]-(subject)-[:RO:0001000]->(organism)-[relation:GENO:0000222]->(object:genotype)
+        WHERE NOT subject.iri STARTS WITH "https://monarchinitiative.org/.well-known" OR object.iri STARTS WITH "https://monarchinitiative.org/.well-known"
 
         WITH rows + COLLECT ({
             path:path,

@@ -2,6 +2,7 @@
 
 query: |
         MATCH path=(subject:genotype)-[relation:RO:0002200|RO:0002610|RO:0002326|RO:0003302!]->(object:phenotype)
+        WHERE NOT subject.iri STARTS WITH "https://monarchinitiative.org/.well-known"
 
         WITH COLLECT ({
             path:path,
@@ -31,7 +32,7 @@ query: |
         //}) as rows
 
         MATCH path=(subject:genotype)<-[:GENO:0000222|RO:0001000*1..2]-(s)-[relation:RO:0002200|RO:0002610|RO:0002326|RO:0003302!]->(object:phenotype)
-        WHERE NOT relation.isDefinedBy="https://data.monarchinitiative.org/ttl/udp.ttl"
+        WHERE NOT subject.iri STARTS WITH "https://monarchinitiative.org/.well-known"
 
         WITH rows + COLLECT ({
             path:path,

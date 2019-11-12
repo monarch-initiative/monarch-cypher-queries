@@ -1,5 +1,6 @@
 query: |
         MATCH path=(pub:publication)-[relation:IAO:0000142|IAO:0000136]->(model)-[:RO:0003301]->()
+        WHERE NOT model.iri STARTS WITH "https://monarchinitiative.org/.well-known"
 
         WITH COLLECT ({
             path:path,
@@ -14,6 +15,7 @@ query: |
 
 
         MATCH path=(pub:publication)<-[relation:dc:source]-(association)-[r:OBAN:association_has_object|OBAN:association_has_subject]->(model)-[:RO:0003301]->()
+        WHERE NOT model.iri STARTS WITH "https://monarchinitiative.org/.well-known"
 
         WITH rows + COLLECT ({
             path:path,
