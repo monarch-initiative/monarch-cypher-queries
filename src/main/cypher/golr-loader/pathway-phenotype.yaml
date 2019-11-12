@@ -1,5 +1,5 @@
 query: |
-        MATCH path=(subject:pathway)<-[:RO:0002331]-()<-[:RO:0002205*0..1]-(gene:gene)<-[:GENO:0000418!]-(variant:variant)-[relation:RO:0002200|RO:0002610|RO:0002326!*2..]->(object:phenotype)
+        MATCH path=(subject:pathway)<-[:RO:0002331]-()<-[:RO:0002205*0..1]-(gene:gene)-[relation:RO:0002200]->(object:phenotype)
 
         WITH COLLECT ({
             path:path,
@@ -9,13 +9,11 @@ query: |
             association_type:'pathway_phenotype',
             subject_category:'pathway',
             object_category:'phenotype',
-            qualifier:'inferred through joining gene pathway, variant disease, and disease phenotype'
+            qualifier:'inferred through joining gene pathway and gene phenotype'
         }) as rows
         
-        // returns 0 results
-        // MATCH path=(subject:pathway)<-[:RO:0002331]-()<-[:RO:0002205*0..1]-(gene:gene)<-[:GENO:0000418!]-(variant:variant)<-[:BFO:0000051!*]-(genotype:genotype)-[relation:RO:0002200|RO:0002610|RO:0002326!*2..]->(object:phenotype)
 
-        MATCH path=(subject:pathway)<-[:RO:0002331]-()<-[:RO:0002205*0..1]-(gene:gene)<-[:GENO:0000418!]-(variant:variant)<-[:BFO:0000051!*]-(genotype:genotype)<-[:GENO:0000222|RO:0001000*1..2]-(person)-[relation:RO:0002200|RO:0002610|RO:0002326!*2..]->(object:phenotype)
+        MATCH path=(subject:pathway)<-[:RO:0002331]-()<-[:RO:0002205*0..1]-(gene:gene)<-[:GENO:0000418!]-(variant:variant)<-[:BFO:0000051!*]-(genotype:genotype)-[relation:RO:0002200]->(object:phenotype)
 
         WITH rows + COLLECT ({
             path:path,
@@ -25,8 +23,11 @@ query: |
             association_type:'pathway_phenotype',
             subject_category:'pathway',
             object_category:'phenotype',
-            qualifier:'inferred'
+            qualifier:'inferred through joining gene pathway and genotype phenotype'
         }) as rows
+
+        // This returns results but I'm unsure if the inferrences are correct, they appear to over infer
+        //MATCH path=(subject:pathway)<-[:RO:0002331]-()<-[:RO:0002205*0..1]-(gene:gene)<-[:GENO:0000418!]-(variant:variant)<-[:BFO:0000051!*]-(genotype:genotype)<-[:GENO:0000222|RO:0001000*1..2]-(person)-[relation:RO:0002200]->(object:phenotype)
 
         UNWIND rows as row
         RETURN 
