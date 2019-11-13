@@ -2,7 +2,7 @@ query: |
         MATCH (relation:Node{iri:'http://purl.obolibrary.org/obo/GENO_0000222'})
         WITH relation
         MATCH path=(subject)-[rel:RO:0001000|GENO:0000222*1..2]->(genotype:genotype)-[:BFO:0000051!*]->(object:variant)
-        WHERE NOT (ANY (geno_rel in rel where geno_rel.isDefinedBy="https://data.monarchinitiative.org/ttl/udp.ttl") OR subject.iri STARTS WITH "https://monarchinitiative.org/.well-known")
+        WHERE NOT (ANY (geno_rel in rel where geno_rel.isDefinedBy="https://data.monarchinitiative.org/ttl/udp.ttl") OR subject.iri STARTS WITH "https://monarchinitiative.org/.well-known" OR object.iri STARTS WITH "https://monarchinitiative.org/.well-known")
         RETURN 
             path,
             relation,

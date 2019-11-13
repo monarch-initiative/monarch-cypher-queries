@@ -1,6 +1,7 @@
 query: |
         // Direct variant to phenotype
         MATCH path=(subject:variant)-[relation:RO:0002200|RO:0002610|RO:0002326|RO:0003302!]->(object:phenotype)
+        WHERE NOT subject.iri STARTS WITH "https://monarchinitiative.org/.well-known"
         WITH COLLECT ({
             path:path,
             relation:relation,
@@ -14,7 +15,7 @@ query: |
 
         // Variant to phenotype inferred via genotype
         MATCH path=(subject:variant)<-[:BFO:0000051!*]-(genotype)-[relation:RO:0002200|RO:0002610|RO:0002326|RO:0003302!]->(object:phenotype)
-
+        WHERE NOT subject.iri STARTS WITH "https://monarchinitiative.org/.well-known"
         WITH rows + COLLECT ({
             path:path,
             relation:relation,
@@ -28,7 +29,7 @@ query: |
 
         // Variant to phenotype inferred via genotype and model
         MATCH path=(subject:variant)<-[:BFO:0000051!*]-(genotype)<-[:RO:0001000|GENO:0000222*1..2]-(organism)-[relation:RO:0002200|RO:0002610|RO:0002326!]->(object:phenotype)
-        WHERE NOT relation.isDefinedBy="https://data.monarchinitiative.org/ttl/udp.ttl"
+        WHERE NOT subject.iri STARTS WITH "https://monarchinitiative.org/.well-known" OR relation.isDefinedBy="https://data.monarchinitiative.org/ttl/udp.ttl"
 
         WITH rows + COLLECT ({
             path:path,
