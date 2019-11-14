@@ -11,4 +11,4 @@ query: |
             'direct' AS qualifier
         ORDER BY subject, object
 subject_closure: "equivalentClass|sameAs"
-object_closure: "subClassOf|BFO:0000050"
+object_closure: "subClassOf|BFO:0000050|equivalentClass|sameAs"
