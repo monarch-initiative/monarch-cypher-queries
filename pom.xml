@@ -36,54 +36,6 @@
 				</executions>
 			</plugin>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-antrun-plugin</artifactId>
-				<version>1.8</version>
-				<executions>
-					<execution>
-						<phase>generate-test-sources</phase>
-						<goals>
-							<goal>run</goal>
-						</goals>
-						<configuration>
-							<target>
-								 <property name="curieOriginalFileName" value="curie_map.yaml"/>
- 								 <property name="queriesOriginalFileName" value="cypher.yaml"/>
-
-								<!-- add indentation to the curie mapping -->
-								<replaceregexp file="${project.build.directory}/generated-resources/${curieOriginalFileName}"
-									match="^" replace="        " byline="true" />
-								<!-- add the header curie: for yaml synthax -->
-								<concat destfile="${project.build.directory}/generated-resources/curie_map_formatted.yaml">
-									<header>curies:${line.separator}</header>
-									<filelist dir="${project.build.directory}/generated-resources/" files="${curieOriginalFileName}" />
-								</concat>
-								<!-- copy the template load file to the build directory -->
-								<copy file="${basedir}/src/test/resources/test-load.yaml.tmpl" tofile="${project.build.directory}/generated-resources/final-test-config.yaml" />
-								<!-- load the curie file ant and injecting the curie in the right
-									placeholder -->
-								<property name="curie-filename"
-									value="${project.build.directory}/generated-resources/curie_map_formatted.yaml" />
-								<loadfile property="curie-file" srcfile="${curie-filename}" />
-								<replace file="${project.build.directory}/generated-resources/final-test-config.yaml">
-									<replacefilter token="INJECT_CURIES" value="${curie-file}" />
-								</replace>
-
-								<!-- copy the queries file to work with -->
-								<copy file="${basedir}/src/main/cypher/dynamic-queries/${queriesOriginalFileName}" tofile="${project.build.directory}/generated-resources/queries_copy.yaml" />
-								<!-- add indentation to the queries -->
-								<replaceregexp file="${project.build.directory}/generated-resources/queries_copy.yaml" match="^" replace="    " byline="true" />
-								<!-- add the header cypherResources: for yaml synthax -->
-								<concat destfile="${project.build.directory}/generated-resources/queries_monarch.yaml">
-									<header>cypherResources:${line.separator}</header>
-									<filelist dir="${project.build.directory}/generated-resources/" files="queries_copy.yaml" />
-								</concat>
-							</target>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>build-helper-maven-plugin</artifactId>
 				<executions>
