@@ -2,6 +2,8 @@ query: |
         MATCH path=(subject:variant)-[relation:RO:0002200|RO:0002610|RO:0002326|RO:0003302|RO:0003301!]->(object:disease)
         WITH subject, relation, relation.iri as rel_iri, object, path
         
+        WHERE NOT subject.iri STARTS WITH "https://monarchinitiative.org/.well-known"
+        
         MATCH (assoc:association)-[:OBAN:association_has_subject]->(subject),
               (assoc)-[:OBAN:association_has_object]->(object),
               (assoc)-[:OBAN:association_has_predicate]->(:Node{iri:rel_iri})
@@ -19,6 +21,7 @@ query: |
         }) as rows
 
         MATCH path=(subject:variant)<-[:BFO:0000051!*]-(genotype:genotype)-[relation:RO:0002200|RO:0002610|RO:0002326|RO:0003302!]->(object:disease)
+        WHERE NOT subject.iri STARTS WITH "https://monarchinitiative.org/.well-known"
 
         WITH rows + COLLECT ({
             path:path,
@@ -33,7 +36,8 @@ query: |
         }) as rows
 
         MATCH path=(subject:variant)<-[:BFO:0000051!*]-(genotype:genotype)<-[:RO:0001000|GENO:0000222*1..2]-(organism)-[relation:RO:0002200|RO:0002610|RO:0002326!]->(object:disease)
-
+        WHERE NOT subject.iri STARTS WITH "https://monarchinitiative.org/.well-known"
+        
         WITH rows + COLLECT ({
             path:path,
             relation:relation,
