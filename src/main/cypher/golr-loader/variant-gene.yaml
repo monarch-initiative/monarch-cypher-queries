@@ -1,5 +1,5 @@
 query: |
-        MATCH path=(subject:variant)<-[optional:GENO:0000382*0..1]-()-[relation:GENO:0000418|GENO:0000639!]->(object:gene)
+        MATCH path=(subject:variant)<-[optional:GENO:0000382*0..1]-()-[relation:GENO:0000418!]->(object:gene)
         WHERE NOT subject.iri STARTS WITH "https://monarchinitiative.org/.well-known"
         RETURN 
             path,
