@@ -1,6 +1,6 @@
 query: |
         MATCH path=(subject:gene)-[rel:RO:0002200|RO:0002610|RO:0002326|RO:0003302|RO:0004010!]->(object:disease)
-        WHERE (subject)<-[:GENO:0000418|GENO:0000639!*0..1]-()<-[:BFO:0000051!*0..]-()-[:RO:0002200|RO:0003303|GENO:0000840|RO:0004011|RO:0004013|RO:0004012|RO:0004014]->(object)
+        WHERE (subject)-[:RO:0002200|RO:0003303|RO:0004011|RO:0004013|RO:0004012|RO:0004014]->(object)
 
         WITH COLLECT ({
             path:path,
@@ -13,7 +13,7 @@ query: |
             qualifier:'direct'
         }) as rows
 
-        MATCH path=(subject:gene)<-[geno:GENO:0000418|GENO:0000641!]-(feature)-[rel:RO:0002200|RO:0002610|RO:0002326|RO:0003302|RO:0004010!]->(object:disease)
+        MATCH path=(subject:gene)<-[geno:GENO:0000418|GENO:0000641!*0..1]-(feature)-[rel:RO:0002200|RO:0002610|RO:0002326|RO:0003302|RO:0004010!]->(object:disease)
         WITH rows, subject, feature, rel, rel.iri as rel_iri, object, path
 
         MATCH (assoc:association)-[:OBAN:association_has_subject]->(feature),
