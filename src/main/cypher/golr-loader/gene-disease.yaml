@@ -21,7 +21,7 @@ query: |
               (assoc)-[:OBAN:association_has_predicate]->(:Node{iri:rel_iri})
 
         WHERE ((NOT exists(assoc.confidence_score) OR assoc.confidence_score > 1) AND
-              (subject)<-[:GENO:0000418|GENO:0000639!*0..1]-()<-[:BFO:0000051!*0..]-()-[:RO:0002200|RO:0003303|GENO:0000840|RO:0004011|RO:0004013|RO:0004012|RO:0004014]->(object))
+              (subject)-[:RO:0002200|RO:0003303|RO:0004011|RO:0004013|RO:0004012|RO:0004014]->(object))
 
         WITH rows + COLLECT ({
             path:path,
@@ -36,7 +36,7 @@ query: |
 
 
         MATCH path=(subject:gene)<-[:GENO:0000418|GENO:0000641!]-(variant)<-[:BFO:0000051!*]-(genotype:genotype)-[rel:RO:0002200|RO:0002610|RO:0002326|RO:0003302|RO:0004010!]->(object:disease)
-        WHERE (subject)<-[:GENO:0000418|GENO:0000639!*0..1]-()<-[:BFO:0000051!*0..]-()-[:RO:0002200|RO:0003303|GENO:0000840|RO:0004011|RO:0004013|RO:0004012|RO:0004014]->(object)
+        WHERE (subject)-[:RO:0002200|RO:0003303|RO:0004011|RO:0004013|RO:0004012|RO:0004014]->(object)
 
         WITH rows + COLLECT ({
             path:path,
