@@ -1,168 +1,4 @@
 cypherResources:
-    ##################
-    ### PHENOTYPES
-    ##################
-
-    ## Genes from phenotype
-    - path: /dynamic/phenotypes/{phenotype_id}/genes
-      query: |
-              START phenotype = node:node_auto_index(iri={phenotype_id})
-              MATCH path = (gene:gene)<-[:GENO:0000410!*0..1]-(feature)-[:RO:0002200|RO:0002610|RO:0002326!*]->(actualPhenotype)-[:subClassOf|equivalentClass*0..]->(equivalence)-[:equivalentClass*0..]-(phenotype)
-              RETURN path
-              UNION
-              START phenotype = node:node_auto_index(iri={phenotype_id})
-              MATCH path = (gene:gene)<-[:GENO:0000410!*0..1]-(feature)<-[:BFO:0000051!*]-(genotype)-[:RO:0002200|RO:0002610|RO:0002326!*]->(actualPhenotype)-[:subClassOf|equivalentClass*0..]->(equivalence)-[:equivalentClass*0..]-(phenotype)
-              RETURN path
-      operations:
-        - summary: Get genes related to a phenotype
-          notes: Genes may be related to phenotypes through a feature or a genotype.
-          parameters:
-            - name: phenotype_id
-              description: The ID of the phenotype # try HP:0000528
-              paramType: path
-
-    ## Diseases from phenotype
-    - path: /dynamic/phenotypes/{phenotype_id}/diseases
-      query: |
-              START phenotype = node:node_auto_index(iri={phenotype_id})
-              MATCH path = (disease:disease)<-[:subClassOf*0..]-(:disease)-[:RO:0002200|RO:0002610|RO:0002326!]->(actualPhenotype:Phenotype)-[:subClassOf|equivalentClass*0..]->(equivalence)-[:equivalentClass*0..]-(phenotype)
-              RETURN path, disease
-      operations:
-        - summary: Get diseases for a phenotype
-          parameters:
-            - name: phenotype_id
-              description: The ID of the phenotype # HP:0000963
-              paramType: path
-
-    ## Features from phenotype
-    - path: /dynamic/phenotypes/{phenotype_id}/features
-      query: |
-              START phenotype = node:node_auto_index(iri={phenotype_id})
-              MATCH path = (phenotype)-[:equivalentClass*0..]-(equivalence)<-[:subClassOf|equivalentClass*0..]-(actualPhenotype)<-[:RO:0002200|RO:0002610|RO:0002326!*]-(feature)
-              RETURN path
-              UNION
-              START phenotype = node:node_auto_index(iri={phenotype_id})
-              MATCH path = (phenotype)-[:equivalentClass*0..]-(equivalence)<-[:subClassOf|equivalentClass*0..]-(actualPhenotype)<-[:RO:0002200|RO:0002610|RO:0002326!*]-(genotype)-[:BFO:0000051!*]->(feature)-[:GENO:0000410!*0..1]->(gene:gene)
-              RETURN path
-              UNION
-              START phenotype = node:node_auto_index(iri={phenotype_id})
-              MATCH path = (phenotype)-[:equivalentClass*0..]-(equivalence)<-[:subClassOf|equivalentClass*0..]-(actualPhenotype)<-[:RO:0002200|RO:0002610|RO:0002326!*]-(person)-[:GENO:0000222]->(genotype)-[:BFO:0000051!*]->(feature)
-              RETURN path
-      operations:
-        - summary: Get features for a phenotype
-          parameters:
-            - name: phenotype_id
-              description: The ID of the phenotype
-              paramType: path
-
-    ## Genotypes from phenotype
-    - path: /dynamic/phenotypes/{phenotype_id}/genotypes
-      query: |
-              START phenotype = node:node_auto_index(iri={phenotype_id})
-              MATCH path = (phenotype)-[:equivalentClass*0..]-(equivalence)<-[:subClassOf|equivalentClass*0..]-(actualPhenotype)<-[:RO:0002200|RO:0002610|RO:0002326!*]-(genotype:genotype)
-              RETURN path
-              UNION
-              START phenotype = node:node_auto_index(iri={phenotype_id})
-              MATCH path = (phenotype)-[:equivalentClass*0..]-(equivalence)<-[:subClassOf|equivalentClass*0..]-(actualPhenotype)<-[:RO:0002200|RO:0002610|RO:0002326!*]-(person)-[:GENO:0000222]->(genotype:genotype)
-              RETURN path
-              UNION
-              START phenotype = node:node_auto_index(iri={phenotype_id})
-              MATCH path = (phenotype)-[:equivalentClass*0..]-(equivalence)<-[:subClassOf|equivalentClass*0..]-(actualPhenotype)<-[:RO:0002200|RO:0002610|RO:0002326!*]-(variant)-[:GENO:0000382|GENO:0000532]->(genotype:genotype)
-              RETURN path
-      operations:
-        - summary: Get genotypes for a phenotype
-          parameters:
-            - name: phenotype_id
-              description: The ID of the phenotype
-              paramType: path
-
-
-    ##################
-    ### GENOTYPES
-    ##################
-
-    ## Features from genotype
-    - path: /dynamic/genotypes/{genotype_id}/features
-      query: |
-              START genotype=node:node_auto_index(iri={genotype_id})
-              MATCH path = (f)<-[:GENO:0000408*0..1]-(feature)<-[:BFO:0000051!*]-(genotype)
-              RETURN path
-      operations:
-        - summary: Get features for a genotype
-          parameters:
-            - name: genotype_id
-              description: The ID of the genotype
-              paramType: path
-
-    ## Phenotypes from genotype
-    - path: /dynamic/genotypes/{genotype_id}/phenotypes
-      query: |
-              START genotype=node:node_auto_index(iri={genotype_id})
-              MATCH path = (genotype)-[hasP:RO:0002200|RO:0002610|RO:0002326!*]->(phenotype)
-              RETURN path
-      operations:
-        - summary: Get direct phenotypes for a genotype
-          parameters:
-            - name: genotype_id
-              description: The ID of the genotype
-              paramType: path
-
-
-
-    ##################
-    ### DISEASES
-    ##################
-
-    ## Phenotypes from disease
-    - path: /dynamic/diseases/{disease_id}/phenotypes
-      query: |
-              START disease = node:node_auto_index(iri={disease_id})
-              MATCH path = (disease)<-[:subClassOf*0..]-()-[:RO:0002200|RO:0002610|RO:0002326!]->(phenotype)
-              RETURN distinct path
-      operations:
-        - summary: Get phenotype for a disease
-          parameters:
-            - name: disease_id
-              description: The ID of the disease # DOID:2490
-              paramType: path
-              type: string
-
-    ##################
-    ### GENES
-    ##################
-
-    ## Genotypes from gene
-    - path: /dynamic/genes/{gene_id}/genotypes
-      query: |
-              START genotypeClass = node:node_auto_index(iri='GENO:0000000'),
-                    gene = node:node_auto_index(iri={gene_id})
-                    MATCH (gene)-[equiv:equivalentClass*0..1]-(ge:gene)<-[geno:GENO:0000408]-(variantLocus)<-[part:BFO:0000051!*]-(genotype)-[:type]->(genotypeClass)
-                    RETURN distinct gene, equiv, ge, geno, variantLocus, part, genotype
-      operations:
-        - summary: Get genotypes for a gene
-          parameters:
-            - name: gene_id
-              description: The ID of the gene # MGI:3583900
-              required: true
-              type: string
-              paramType: path
-
-    ## Genotypes from gene
-    - path: /dynamic/genes/{gene_id}/genotypes/targets
-      query: |
-              PLANNER RULE
-              START genotypeClass = node:node_auto_index(iri='GENO:0000000'),
-                    gene = node:node_auto_index(iri={gene_id})
-                    MATCH (gene)-[equiv:equivalentClass*0..1]-(ge:gene)<-[geno:GENO:0000408]-(ve)-[:sameAs*0..1]-(variantLocus)<-[part:BFO:0000051!*]-(genotype)-[:type]->(genotypeClass)
-                    RETURN genotype
-      operations:
-        - summary: Get genotypes for a gene
-          parameters:
-            - name: gene_id
-              description: The ID of the gene # MGI:3583900
-              required: true
-              type: string
-              paramType: path
 
     ## Homologs from gene
     - path: /dynamic/genes/{gene_id}/homologs
@@ -177,67 +13,6 @@ cypherResources:
               paramType: path
             - name: homolog_id
               description: The homolog relationship # RO:HOM0000017
-              paramType: query
-
-    ##################
-    ### FEATURES
-    ##################
-
-    ## Phenotypes from feature
-    - path: /dynamic/features/{feature_id}/phenotypes
-      query: |
-              START f=node:node_auto_index(iri={feature_id})
-              MATCH (f)<-[seqVar:GENO:0000408*0..1]-(feature)
-              OPTIONAL MATCH (feature)-[hasP1:RO:0002200|RO:0002610|RO:0002326!*]->(phenotype:Phenotype)
-              OPTIONAL MATCH (feature)<-[hasPart:BFO:0000051!*]-(genotype)-[hasP2:RO:0002200|RO:0002610|RO:0002326!*]->(phenotype2:Phenotype)
-              OPTIONAL MATCH (feature)<-[hasPart2:BFO:0000051!*]-(genotype2)<-[hasGenotype:GENO:0000222]-(person)-[hasP3:RO:0002200|RO:0002610|RO:0002326!*]->(phenotype3:Phenotype)
-              RETURN DISTINCT f, seqVar, feature, hasP1, phenotype, hasPart, genotype, hasP2, phenotype2, hasPart2, genotype2, hasGenotype, person, hasP3, phenotype3
-      operations:
-        - summary: Get phenotypes for a feature
-          parameters:
-            - name: feature_id
-              description: The ID of the feature
-              paramType: path
-
-    ## Genotypes from feature
-    - path: /dynamic/features/{feature_id}/genotypes
-      query: |
-              START f=node:node_auto_index(iri={feature_id})
-              MATCH (f)<-[seqVar:GENO:0000408*0..1]-(feature)<-[hasPart:BFO:0000051!*]-(genotype)
-              RETURN DISTINCT f, seqVar, feature, hasPart, genotype
-      operations:
-        - summary: Get genotypes for a feature
-          parameters:
-            - name: feature_id
-              description: The ID of the feature
-              paramType: path
-
-    ##################
-    ### EVIDENCE
-    ##################
-
-    ## Evidence connecting subject_id to object_id
-    - path: /dynamic/evidence/{subject_id}/{object_id}
-      query: |
-              PLANNER RULE
-              START subject = node:node_auto_index(iri={subject_id}),
-              object = node:node_auto_index(iri={object_id}),
-              evidenceCode = node:node_auto_index(iri={evidence_code})
-              MATCH path = (subject)-[:equivalentClass*0..1]-(se)<-[:subClassOf*]-(actualSubject)<-[:OBAN:association_has_subject]-(annotation)-[:OBAN:association_has_object]->(actualObject)-[:subClassOf*]->(object),
-              (annotation)-[:RO:0002558]->(actualCode)-[:subClassOf*]->(evidenceCode)
-              OPTIONAL MATCH path2 = (annotation)-[:source]->(sn)
-              RETURN path, path2
-      operations:
-        - summary: Get evidence for a pair of ids
-          parameters:
-            - name: subject_id
-              description: The subject of the evidence # DOID:2490
-              paramType: path
-            - name: object_id
-              description: The object of the evidence # HP:0002060
-              paramType: path
-            - name: evidence_code
-              description: The type of evidence to include # ECO:0000501
               paramType: query
 
     ##################
@@ -307,8 +82,7 @@ cypherResources:
     ## CliqueLeader service
     - path: /dynamic/cliqueLeader/{id}
       query: |
-              START start = node:node_auto_index(iri={id})
-              MATCH (start)-[:equivalentClass|sameAs*0..1]-(leader:cliqueLeader)
+              MATCH (start:Node{iri:'${id}'})-[:equivalentClass|sameAs*0..1]-(leader:cliqueLeader)
               RETURN leader
       operations:
         - summary: Returns the clique leader.
@@ -320,8 +94,7 @@ cypherResources:
     ## Clique service
     - path: /dynamic/clique/{id}
       query: |
-              START start = node:node_auto_index(iri={id})
-              MATCH path = (start)-[:equivalentClass|sameAs*]-(eq:Node)
+              MATCH path = (start:Node{iri:'${id}'})-[:equivalentClass|sameAs*]-(eq:Node)
               RETURN path
       operations:
         - summary: Returns the id and all its equivalents
@@ -333,8 +106,7 @@ cypherResources:
     ## Candidate Clique Service
     - path: /dynamic/candidateClique/{id}
       query: |
-              START start = node:node_auto_index(iri={id})
-              MATCH path = (start)-[:equivalentClass|sameAs|OIO:hasDbXref*]-(eq:Node)
+              MATCH path = (start:Node{iri:'${id}'})-[:equivalentClass|sameAs|OIO:hasDbXref*]-(eq:Node)
               RETURN path
       operations:
         - summary: Returns ids that are equivalent and potentially equivalent (xrefs)
@@ -350,3 +122,11 @@ cypherResources:
               RETURN path
       operations:
         - summary: Returns all nodes typed as an ontology
+        
+    ## Get dataset info
+    - path: /dynamic/datasets
+      query: |
+              MATCH path = (:dataset)-[]->()
+              RETURN path
+      operations:
+        - summary: Returns all dataset nodes and outgoing neighbors
