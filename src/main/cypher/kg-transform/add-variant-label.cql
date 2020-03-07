@@ -4,5 +4,5 @@ SET node:variant, node.category =
    CASE 
      WHEN node.category + "" = node.category
        THEN [node.category, "variant"]
-     ELSE node.category + variant
+     ELSE node.category + "variant"
    END;
