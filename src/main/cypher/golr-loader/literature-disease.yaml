@@ -1,5 +1,5 @@
 query: |
-        MATCH path=(pub:publication)<-[relation:dc:source]-(association)-[r:OBAN:association_has_object|OBAN:association_has_subject]->(disease:disease)
+        MATCH path=(pub:publication)<-[relation:dcterms:source]-(association)-[r:OBAN:association_has_object|OBAN:association_has_subject]->(disease:disease)
 
         WITH COLLECT ({
             path:path,
@@ -38,7 +38,7 @@ query: |
             qualifier:'inferred'
         }) as rows
 
-        MATCH path=(pub:publication)<-[relation:dc:source]-(association)-[r:OBAN:association_has_object|OBAN:association_has_subject]->(model)-[:RO:0003301]->(disease:disease)
+        MATCH path=(pub:publication)<-[relation:dcterms:source]-(association)-[r:OBAN:association_has_object|OBAN:association_has_subject]->(model)-[:RO:0003301]->(disease:disease)
         
         WITH rows + COLLECT ({
             path:path,
