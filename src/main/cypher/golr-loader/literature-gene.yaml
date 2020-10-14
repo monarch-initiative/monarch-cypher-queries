@@ -12,7 +12,7 @@ query: |
             qualifier:'direct'
         }) as rows
 
-        MATCH path=(pub:publication)<-[relation:dcterms:source]-(association)-[r:OBAN:association_has_subject|OBAN:association_has_object]->(gene:gene)
+        MATCH path=(pub:publication)<-[relation:dc:source]-(association)-[r:OBAN:association_has_subject|OBAN:association_has_object]->(gene:gene)
 
         WITH rows + COLLECT ({
             path:path,
@@ -25,7 +25,7 @@ query: |
             qualifier:'direct'
         }) as rows
 
-        MATCH path=(pub:publication)<-[relation:dcterms:source]-(association)-[r:OBAN:association_has_object|OBAN:association_has_subject]->(genotype:genotype)-[:BFO:0000051!*]->(variant:variant)-[:GENO:0000418!*0..1]->(gene:gene)
+        MATCH path=(pub:publication)<-[relation:dc:source]-(association)-[r:OBAN:association_has_object|OBAN:association_has_subject]->(genotype:genotype)-[:BFO:0000051!*]->(variant:variant)-[:GENO:0000418!*0..1]->(gene:gene)
 
         WITH rows + COLLECT ({
             path:path,
@@ -41,7 +41,7 @@ query: |
         // No rows as of 07 2019 ttl release
         // MATCH path=(pub:publication)-[relation:IAO:0000142|IAO:0000136]->(genotype:genotype)-[:BFO:0000051!*]->(variant)-[:GENO:0000418!*0..1]->(gene:gene)
 
-        MATCH path=(pub:publication)<-[relation:dcterms:source]-(association)-[r:OBAN:association_has_subject|OBAN:association_has_object]->(variant:variant)-[:GENO:0000418!*0..1]->(gene:gene)
+        MATCH path=(pub:publication)<-[relation:dc:source]-(association)-[r:OBAN:association_has_subject|OBAN:association_has_object]->(variant:variant)-[:GENO:0000418!*0..1]->(gene:gene)
 
         WITH rows + COLLECT ({
             path:path,
@@ -67,7 +67,7 @@ query: |
         }) as rows
 
         // This query returns 0 results
-        // MATCH path=(pub:publication)<-[relation:dcterms:source]-(association)-[r:OBAN:association_has_subject|OBAN:association_has_object]->(person)-[:GENO:0000222]->(genotype:genotype)-[:BFO:0000051!*]->(variant:variant)-[:GENO:0000418!*0..1]->(gene:gene)
+        // MATCH path=(pub:publication)<-[relation:dc:source]-(association)-[r:OBAN:association_has_subject|OBAN:association_has_object]->(person)-[:GENO:0000222]->(genotype:genotype)-[:BFO:0000051!*]->(variant:variant)-[:GENO:0000418!*0..1]->(gene:gene)
 
         // This query returns 0 results
         // MATCH path=(pub:publication)-[relation:IAO:0000142|IAO:0000136]->(person)-[:GENO:0000222]->(genotype:genotype)-[:BFO:0000051!*]->(variant:variant)-[:GENO:0000418!*0..1]->(gene:gene)

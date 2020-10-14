@@ -1,5 +1,5 @@
 query: |
-        MATCH path=(pub:publication)<-[relation:dcterms:source]-(association)-[r:OBAN:association_has_object|OBAN:association_has_subject]->(genotype:genotype)-[:BFO:0000051!*]->(variant:variant)
+        MATCH path=(pub:publication)<-[relation:dc:source]-(association)-[r:OBAN:association_has_object|OBAN:association_has_subject]->(genotype:genotype)-[:BFO:0000051!*]->(variant:variant)
         WHERE NOT variant.iri STARTS WITH "https://monarchinitiative.org/.well-known"
         WITH COLLECT ({
             path:path,
@@ -15,7 +15,7 @@ query: |
         // No rows as of 07 2019 ttl release
         //MATCH path=(pub:publication)-[relation:IAO:0000142|IAO:0000136]->(genotype:genotype)-[:BFO:0000051!*]->(variant:variant)
 
-        MATCH path=(pub:publication)<-[relation:dcterms:source]-(association)-[r:OBAN:association_has_subject|OBAN:association_has_object]->(variant:variant)
+        MATCH path=(pub:publication)<-[relation:dc:source]-(association)-[r:OBAN:association_has_subject|OBAN:association_has_object]->(variant:variant)
         WHERE NOT variant.iri STARTS WITH "https://monarchinitiative.org/.well-known"
         WITH rows + COLLECT ({
             path:path,
@@ -43,7 +43,7 @@ query: |
 
 
         // This query returns 0 rows as of 6/26/2019
-        //MATCH path=(pub:publication)<-[relation:dcterms:source]-(association)-[r:OBAN:association_has_subject|OBAN:association_has_object]->(person)-[:GENO:0000222|RO:0001000*1..2]->(genotype:genotype)-[:BFO:0000051!*]->(variant:variant)
+        //MATCH path=(pub:publication)<-[relation:dc:source]-(association)-[r:OBAN:association_has_subject|OBAN:association_has_object]->(person)-[:GENO:0000222|RO:0001000*1..2]->(genotype:genotype)-[:BFO:0000051!*]->(variant:variant)
 
 
         MATCH path=(pub:publication)-[relation:IAO:0000142|IAO:0000136]->(person)-[:GENO:0000222|RO:0001000*1..2]->(genotype:genotype)-[:BFO:0000051!*]->(variant:variant)
