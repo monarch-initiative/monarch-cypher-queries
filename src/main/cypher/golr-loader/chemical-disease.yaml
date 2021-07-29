@@ -1,8 +1,9 @@
 query: |
-        MATCH path=(subject)-[:RO:0002606]->(object:disease)
+        MATCH path=(subject)-[relation:RO:0002606]->(object:disease)
         RETURN 
             path,
             subject,
+            relation,
             object,
             'chemical_disease' as association_type,
             'chemical' AS subject_category,
